@@ -5,4 +5,7 @@
 - Once a full stack app version (say v1.0) is ready, kindly merge `Staging` into `Master` post Testing!
 - Remember, don't forget to **test**!
 
+#### NetWorthy - Git Development Rules 
+![dev_flow drawio](https://user-images.githubusercontent.com/25534792/192035654-fc7d4cdd-7849-4e0e-80b1-61e48ac111b6.png)
+
 **Happy Coding Folks!**
