@@ -7,11 +7,15 @@ import "../../styles/app.scss";
 
 // Components
 import About from "../About";
+import { Counter } from "../Test/counter";
+import Header from "../Header/header";
 
 const App = () => {
   return (
     <div className="app">
-      <Paper className="app__title">NetWorthy-App</Paper>
+      {/* <Paper className="app__title">NetWorthy-App</Paper> */}
+      {/* <Counter /> */}
+      <Header />
       <br />
       <Router>
         <Routes>
