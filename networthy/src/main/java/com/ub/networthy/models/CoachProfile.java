@@ -1,24 +1,21 @@
-package com.networthy.webapp.models;
+package com.ub.networthy.models;
 
 
-import java.util.Date;
-
-import javax.validation.constraints.NotBlank;
-
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.bson.types.Binary;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import java.util.Date;
 
 
 @Document(collection = "coachprofile")
 public class CoachProfile {
 
     @Id
-    private String id;
-
-    @Field("COA_CLIENT_ID")
     @NotBlank
     private String username;
 
@@ -66,6 +63,18 @@ public class CoachProfile {
     @NotBlank
     private boolean profileStatus;
 
+    @Field("COA_RESUME")
+    @NotBlank
+    private Binary resume;
+
+    @Field("COA_LOR1")
+    @NotBlank
+    private Binary lor1;
+
+    @Field("COA_LOR2")
+    @NotBlank
+    private Binary lor2;
+
     public CoachProfile() {
 
     }
@@ -73,7 +82,7 @@ public class CoachProfile {
     public CoachProfile(@NotBlank String userId, @NotBlank String emailId, @NotBlank String firstName,
                         @NotBlank String lastName, @NotBlank Date dateOfBirth, @NotBlank String gender, @NotBlank String occupation,
                         @NotBlank String education, @NotBlank String university, @NotBlank String location, String credentials,
-                        @NotBlank boolean profileStatus) {
+                        @NotBlank boolean profileStatus, @NotNull Binary resume, @NotNull Binary lor1, @NotNull Binary lor2) {
         super();
         this.username = userId;
         this.emailId = emailId;
@@ -87,6 +96,9 @@ public class CoachProfile {
         this.location = location;
         this.credentials = credentials;
         this.profileStatus = profileStatus;
+        this.resume = resume;
+        this.lor1 = lor1;
+        this.lor2 = lor2;
     }
 
     public String getUsername() {
@@ -185,5 +197,27 @@ public class CoachProfile {
         this.profileStatus = profileStatus;
     }
 
+    public void setResume(Binary resume) {
+        this.resume = resume;
+    }
 
+    public Binary getResume() {
+        return this.resume;
+    }
+
+    public void setLor1(Binary lor1) {
+        this.lor1 = lor1;
+    }
+
+    public Binary getLor1() {
+        return this.lor1;
+    }
+
+    public void setLor2(Binary lor2) {
+        this.lor2 = lor2;
+    }
+
+    public Binary getLor2() {
+        return this.lor2;
+    }
 }
