@@ -14,7 +14,7 @@ public class ClientProfileRequest {
 		  
 		@Field("CLI_CLIENT_ID")
 		@NotBlank
-		private String userId;
+		private String username;
 		
 		@Field("CLI_EMAIL")
 		@NotBlank
@@ -78,12 +78,12 @@ public class ClientProfileRequest {
 		
 		
 
-		public String getUserId() {
-			return userId;
+		public String getUsername() {
+			return username;
 		}
 
-		public void setUserId(String userId) {
-			this.userId = userId;
+		public void setUsername(String userId) {
+			this.username = username;
 		}
 
 		public String getEmailId() {

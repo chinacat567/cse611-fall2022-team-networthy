@@ -16,6 +16,7 @@ import com.ub.networthy.models.ClientProfile;
 import com.ub.networthy.models.ERole;
 import com.ub.networthy.models.Role;
 import com.ub.networthy.models.User;
+import com.ub.networthy.payload.request.ClientProfileRequest;
 import com.ub.networthy.payload.response.MessageResponse;
 import com.ub.networthy.repository.ClientProfileRepository;
 import com.ub.networthy.repository.UserRepository;
@@ -118,7 +119,7 @@ public class ClientController {
 	
 	@PutMapping("/edit/clientProfile")
 	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<?> editClientProfile(@RequestBody ClientProfile clientProfileRequest) {
+	public ResponseEntity<?> editClientProfile(@RequestBody ClientProfileRequest clientProfileRequest) {
 		
 		ClientProfile existingClientProfile = clientProfileRepository.findByUsername(clientProfileRequest.getUsername());
 		
