@@ -129,9 +129,23 @@ public class ClientController {
 					.badRequest()
 					.body(new MessageResponse("Error: User Does Not Exist"));
 		}
-		//TO-DO : Update All POJOS
-		existingClientProfile.setDateOfBirth(clientProfileRequest.getDateOfBirth());
-				
+		//Note :- Do not update Username, Email and Profile Status from the PUT call.
+		// Username and email can never be changed.
+		// Profile Status can only be set by Admin.
+		if(clientProfileRequest.getFirstName() != null) existingClientProfile.setFirstName(clientProfileRequest.getFirstName());
+		if(clientProfileRequest.getLastName() != null) existingClientProfile.setLastName(clientProfileRequest.getLastName());
+		if(clientProfileRequest.getDateOfBirth() != null) existingClientProfile.setDateOfBirth(clientProfileRequest.getDateOfBirth());
+		if(clientProfileRequest.getGender() != null) existingClientProfile.setGender(clientProfileRequest.getGender());
+		if(clientProfileRequest.getOccupation() != null) existingClientProfile.setOccupation(clientProfileRequest.getOccupation());
+		if(clientProfileRequest.getEducation() != null) existingClientProfile.setEducation(clientProfileRequest.getEducation());
+		if(clientProfileRequest.getUniversity() != null) existingClientProfile.setUniversity(clientProfileRequest.getUniversity());
+		if(clientProfileRequest.getLocation() != null) existingClientProfile.setLocation(clientProfileRequest.getLocation());
+		if(clientProfileRequest.getFinancialLevel() != 0) existingClientProfile.setFinancialLevel(clientProfileRequest.getFinancialLevel());
+		if(clientProfileRequest.getLearningMethod() != null) existingClientProfile.setLearningMethod(clientProfileRequest.getLearningMethod());
+		if(clientProfileRequest.getIncome() != 0) existingClientProfile.setIncome(clientProfileRequest.getIncome());
+		if(clientProfileRequest.getDebt() != 0) existingClientProfile.setDebt(clientProfileRequest.getDebt());
+		if(clientProfileRequest.getGeneral() != null) existingClientProfile.setGeneral(clientProfileRequest.getGeneral());
+		
 		clientProfileRepository.save(existingClientProfile);
 		return ResponseEntity.ok(new MessageResponse("Client Profile Updated Successfully"));
 		
