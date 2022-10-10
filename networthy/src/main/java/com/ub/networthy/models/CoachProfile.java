@@ -107,6 +107,7 @@ public class CoachProfile {
                 dateOfBirth, gender, occupation,
                 education, university, location,
                 credentials, profileStatus);
+
         this.resume = resume;
         this.lor1 = lor1;
         this.lor2 = lor2;
@@ -232,3 +233,4 @@ public class CoachProfile {
         return this.lor2;
     }
 }
+
