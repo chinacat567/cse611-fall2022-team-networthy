@@ -1,11 +1,13 @@
 package com.ub.networthy.controllers;
 
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -118,7 +120,6 @@ public class ClientController {
 	}
 	
 	@PutMapping("/edit/clientProfile")
-	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> editClientProfile(@RequestBody ClientProfileRequest clientProfileRequest) {
 		
 		ClientProfile existingClientProfile = clientProfileRepository.findByUsername(clientProfileRequest.getUsername());
@@ -149,5 +150,11 @@ public class ClientController {
 		clientProfileRepository.save(existingClientProfile);
 		return ResponseEntity.ok(new MessageResponse("Client Profile Updated Successfully"));
 		
+	}
+	@GetMapping("/getAll")
+	//@PreAuthorize("hasAuthority('ROLE_ADMIN')")
+	public List<ClientProfile> getAllClientProfile(){
+		
+		return clientProfileRepository.findAll();
 	}
 }
