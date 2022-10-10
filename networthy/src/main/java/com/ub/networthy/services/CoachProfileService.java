@@ -35,6 +35,17 @@ public class CoachProfileService {
         coachRepo.save(coachProfile);
     }
 
+    public void addCoach(@NotBlank String userId, @NotBlank String emailId, @NotBlank String firstName,
+                         @NotBlank String lastName, @NotNull Date dateOfBirth, @NotBlank String gender, @NotBlank String occupation,
+                         @NotBlank String education, @NotBlank String university, @NotBlank String location, String credentials,
+                         @NotBlank boolean profileStatus) throws IOException {
+
+        CoachProfile coachProfile = new CoachProfile(userId, emailId, firstName, lastName, dateOfBirth,
+                                                     gender, occupation, education, university, location,
+                                                     credentials, profileStatus);
+        coachRepo.save(coachProfile);
+    }
+
     public Binary getCoachResume(String username) {
         return coachRepo.findByUsername(username).getResume();
     }
@@ -45,5 +56,9 @@ public class CoachProfileService {
 
     public Binary getLor2(String username) {
         return coachRepo.findByUsername(username).getLor2();
+    }
+
+    public CoachProfile getCoachData(String username) {
+        return coachRepo.findByUsername(username);
     }
 }

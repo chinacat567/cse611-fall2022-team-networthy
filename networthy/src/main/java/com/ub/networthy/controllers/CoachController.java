@@ -1,5 +1,6 @@
 package com.ub.networthy.controllers;
 
+import com.ub.networthy.models.CoachProfile;
 import com.ub.networthy.services.CoachProfileService;
 import org.bson.types.Binary;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.util.Date;
 
@@ -22,17 +22,47 @@ public class CoachController {
     @Autowired
     CoachProfileService coachProfileService;
 
-    @PostMapping("/coach/add")
-    public void addCoach(@RequestParam String userId, @RequestParam String emailId, @RequestParam String firstName, @RequestParam String lastName, @RequestParam @DateTimeFormat(pattern="MMddyyyy") Date dob, @RequestParam String gender,
-                         @RequestParam String occupation, @RequestParam String education, @RequestParam String university, @RequestParam String location, @RequestParam String credentials,
-                         @RequestParam Boolean profileStatus, @RequestParam MultipartFile resume, @RequestParam MultipartFile lor1, @RequestParam MultipartFile lor2) throws IOException {
+    @PostMapping("/coach/add/profile")
+    public void addCoachProfileComplete(@RequestParam String userId, @RequestParam String emailId, @RequestParam String firstName,
+                         @RequestParam String lastName, @RequestParam @DateTimeFormat(pattern="MMddyyyy") Date dob,
+                         @RequestParam String gender, @RequestParam String occupation, @RequestParam String education,
+                         @RequestParam String university, @RequestParam String location, @RequestParam String credentials,
+                         @RequestParam Boolean profileStatus, @RequestParam MultipartFile resume,
+                         @RequestParam MultipartFile lor1, @RequestParam MultipartFile lor2) throws IOException {
 
         try {
-            coachProfileService.addCoach(userId, emailId, firstName, lastName, dob, gender, occupation, education, university, location, credentials, profileStatus, resume, lor1,  lor2);
+            coachProfileService.addCoach(userId, emailId, firstName, lastName,
+                                        dob, gender, occupation, education,
+                                        university, location, credentials,
+                                        profileStatus, resume, lor1,  lor2);
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
 
+    @PostMapping("/coach/add/data")
+    public void addCoachProfile(@RequestParam String userId, @RequestParam String emailId, @RequestParam String firstName,
+                         @RequestParam String lastName, @RequestParam @DateTimeFormat(pattern="MMddyyyy") Date dob,
+                         @RequestParam String gender, @RequestParam String occupation, @RequestParam String education,
+                         @RequestParam String university, @RequestParam String location, @RequestParam String credentials,
+                         @RequestParam Boolean profileStatus) throws IOException {
+
+        try {
+            coachProfileService.addCoach(userId, emailId, firstName, lastName,
+                                         dob, gender, occupation, education,
+                                         university, location, credentials,
+                                         profileStatus);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @GetMapping("/coach/profile/{username}")
+    public ResponseEntity<CoachProfile> getCoachData(@PathVariable String username) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        CoachProfile coachProfile = coachProfileService.getCoachData(username);
+        return new ResponseEntity<>(coachProfile, headers, HttpStatus.OK);
     }
 
     @GetMapping("/coach/resume/{username}")

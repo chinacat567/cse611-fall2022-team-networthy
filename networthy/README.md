@@ -90,3 +90,84 @@ Note :- All APIs After this will need a valid JWT token to be passed in the head
 				{
 					"message": "Client Profile Updated Successfully"
 				}
+	
+6. Add Coach Profile (POST) :-
+    URL :- http://localhost:8080/coach/add/profile
+    	Request Body (to be sent as multipart/form-data from the front-end) :- 
+    				{
+    					"userId" : "sumantra94",
+    					"emailId" : "sumantra@buffalo.edu",
+    					"firstName" : "Sumantra",
+    					"lastName": "Sharma",
+    					"dob" : "12101994",
+    					"gender" : "Male",
+    					"occupation" : "Student",
+    					"education" : "Masters",
+    					"university" : "University at Buffalo",
+    					"location" : "Buffalo, NY",
+    					"credentials" : "AWS Security Specialist",
+    					"profileStatus" : "0",
+    					"resume" : <blob>
+    					"lor1" : <blob>
+    					"lor2" : <blob>
+    				}
+    				
+    	Response :- None    
+    	
+7. Add Coach Data (POST) :-
+    URL :- http://localhost:8080/coach/add/data
+    	Request Body (JSON) :- 
+    				{
+    					"userId" : "sumantra94",
+    					"emailId" : "sumantra@buffalo.edu",
+    					"firstName" : "Sumantra",
+    					"lastName": "Sharma",
+    					"dob" : "12101994",
+    					"gender" : "Male",
+    					"occupation" : "Student",
+    					"education" : "Masters",
+    					"university" : "University at Buffalo",
+    					"location" : "Buffalo, NY",
+    					"credentials" : "AWS Security Specialist",
+    					"profileStatus" : "0",
+    					
+    				}
+    				
+    	Response :- None 
+    	
+8. Get Coach Resume (GET) :-
+ URL :- http://localhost:8080/coach/resume/{username}
+    	Request Body  :-  None
+    	Response :- PDF File 
+
+9. Get Coach LOR1 (GET) :-
+ URL :- http://localhost:8080/coach/lor1/{username}
+    	Request Body  :-  None
+    	Response :- PDF File 
+    	
+10. Get Coach LOR2 (GET) :-
+ URL :- http://localhost:8080/coach/lor2/{username}
+    	Request Body  :-  None
+    	Response :- PDF File 
+    	
+11. Get Coach Data (GET) :-
+ URL :- http://localhost:8080/coach/{username}
+    	Request Body  :-  None
+    	Response :- 
+    	             {
+            			"userId" : "sumantra94",
+            			"emailId" : "sumantra@buffalo.edu",
+            			"firstName" : "Sumantra",co
+            			"lastName": "Sharma",
+            			"dob" : "12101994",
+            			"gender" : "Male",
+            			"occupation" : "Student",
+            			"education" : "Masters",
+            			"university" : "University at Buffalo",
+            			"location" : "Buffalo, NY",
+            			"credentials" : "AWS Security Specialist",
+            			"profileStatus" : "0",
+            			"resume" : <blob>
+            			"lor1" : <blob>
+            			"lor2" : <blob>
+            		}
