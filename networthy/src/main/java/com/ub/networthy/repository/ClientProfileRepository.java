@@ -5,7 +5,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
 import com.ub.networthy.models.ClientProfile;
-import com.ub.networthy.models.User;
+import java.util.List;
 
 @EnableMongoRepositories
 public interface ClientProfileRepository extends MongoRepository<ClientProfile, String> {
@@ -13,4 +13,6 @@ public interface ClientProfileRepository extends MongoRepository<ClientProfile, 
 	ClientProfile findByUsername(String username);
 	
 	boolean existsByUsername(String username);
+	
+	List<ClientProfile> findAll();
 }
