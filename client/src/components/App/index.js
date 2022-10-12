@@ -9,6 +9,7 @@ import "../../styles/app.scss";
 import About from "../About";
 // import { Counter } from "../Test/counter";
 import Header from "../Header/header";
+import Footer from "../Footer/footer";
 import AuthWizard from "../AuthWizard";
 import { LOGIN_CONFIG } from "../AuthWizard/config";
 import { ROUTES } from "./routeConfig";
