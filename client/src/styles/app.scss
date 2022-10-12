@@ -1,12 +1,16 @@
 @import "./common_styles/index.scss";
 
 .app {
-  margin: 20px;
+  width: 100vw;
+  height: 100vh;
   &__title {
     padding: 20px;
     width: 200px;
     border-radius: 0px !important;
     border: 1px solid $--nw-primary;
     color: $--nw-secondary !important;
+  }
+  &__content {
+    margin-top: 80px;
   }
 }

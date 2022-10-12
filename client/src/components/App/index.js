@@ -12,39 +12,55 @@ import Header from "../Header/header";
 import AuthWizard from "../AuthWizard";
 import { LOGIN_CONFIG } from "../AuthWizard/config";
 import { ROUTES } from "./routeConfig";
+import Home from "../Home";
 
 const App = () => {
   return (
     <div className="app">
       {/* <Paper className="app__title">NetWorthy-App</Paper> */}
       {/* <Counter /> */}
-      {/* <Header /> */}
-      <br />
-      <Router>
-        <Routes>
-          <Route path={ROUTES.ABOUT} element={<About />} />
-          <Route
-            path={ROUTES.LOGIN}
-            element={<AuthWizard state={LOGIN_CONFIG.LOGIN} />}
-          />
-          <Route
-            path={ROUTES.SIGNUP}
-            element={<AuthWizard state={LOGIN_CONFIG.SIGNUP} />}
-          />
-          <Route
-            path={ROUTES.COACH_LOGIN}
-            element={<AuthWizard state={LOGIN_CONFIG.COACH_LOGIN} />}
-          />
-          <Route
-            path={ROUTES.COACH_SIGNUP}
-            element={<AuthWizard state={LOGIN_CONFIG.COACH_SIGNUP} />}
-          />
-          <Route
-            path={ROUTES.ADMIN}
-            element={<AuthWizard state={LOGIN_CONFIG.ADMIN} />}
-          />
-        </Routes>
-      </Router>
+      <Header />
+      <div className="app__content">
+        <Router>
+          <Routes>
+            <Route path={ROUTES.ABOUT} element={<About />} />
+            <Route
+              path={ROUTES.LOGIN}
+              element={
+                <Home authWizard={<AuthWizard state={LOGIN_CONFIG.LOGIN} />} />
+              }
+            />
+            <Route
+              path={ROUTES.SIGNUP}
+              element={
+                <Home authWizard={<AuthWizard state={LOGIN_CONFIG.SIGNUP} />} />
+              }
+            />
+            <Route
+              path={ROUTES.COACH_LOGIN}
+              element={
+                <Home
+                  authWizard={<AuthWizard state={LOGIN_CONFIG.COACH_LOGIN} />}
+                />
+              }
+            />
+            <Route
+              path={ROUTES.COACH_SIGNUP}
+              element={
+                <Home
+                  authWizard={<AuthWizard state={LOGIN_CONFIG.COACH_SIGNUP} />}
+                />
+              }
+            />
+            <Route
+              path={ROUTES.ADMIN}
+              element={
+                <Home authWizard={<AuthWizard state={LOGIN_CONFIG.ADMIN} />} />
+              }
+            />
+          </Routes>
+        </Router>
+      </div>
     </div>
   );
 };

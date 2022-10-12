@@ -1,0 +1,22 @@
+@import "./common_styles/index.scss";
+
+.header {
+  width: 100vw;
+  display: flex;
+  justify-content: space-between;
+
+  .logo {
+    height: 50px;
+    margin-right: 10px;
+  }
+
+  &__left {
+    display: flex;
+    align-items: center;
+  }
+
+  &__title {
+    font-weight: bold;
+    font-size: 24px;
+  }
+}
