@@ -13,22 +13,21 @@ import "../../styles/footer.scss";
 
 export default function App() {
   return (
-    <footer class="footer-distributed">
-      <div class="footer-right">
+    <footer class="footer">
+      <div class="footer__left">
+        <Tabs>
+          <Tab icon={<LocationOnIcon />} label="Company Address"></Tab>
+          <Tab icon={<PhoneIcon />} label="(716)-481-4091"></Tab>
+          <Tab icon={<MarkunreadIcon />} label="siblum@buffalo.edu"></Tab>
+        </Tabs>
+      </div>
+
+      <div class="footer__right">
         <Tabs>
           <Tab icon={<FacebookRoundedIcon />}></Tab>
           <Tab icon={<LinkedInIcon />}></Tab>
           <Tab icon={<TwitterIcon />}></Tab>
           <Tab icon={<InstagramIcon />}></Tab>
-        </Tabs>
-      </div>
-
-      <div class="footer-left">
-        <Tabs>
-          <Tab icon={<LocationOnIcon />} label="Company Address"></Tab>
-
-          <Tab icon={<PhoneIcon />} label="(716)-481-4091"></Tab>
-          <Tab icon={<MarkunreadIcon />} label="siblum@buffalo.edu"></Tab>
         </Tabs>
       </div>
     </footer>
