@@ -9,6 +9,7 @@ import "../../styles/app.scss";
 import About from "../About";
 import { Counter } from "../Test/counter";
 import Header from "../Header/header";
+import Footer from "../Footer/footer";
 
 const App = () => {
   return (
@@ -16,6 +17,7 @@ const App = () => {
       {/* <Paper className="app__title">NetWorthy-App</Paper> */}
       {/* <Counter /> */}
       <Header />
+      <Footer />
       <br />
       <Router>
         <Routes>
