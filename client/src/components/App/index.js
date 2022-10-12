@@ -18,7 +18,7 @@ const App = () => {
     <div className="app">
       {/* <Paper className="app__title">NetWorthy-App</Paper> */}
       {/* <Counter /> */}
-      <Header />
+      {/* <Header /> */}
       <br />
       <Router>
         <Routes>

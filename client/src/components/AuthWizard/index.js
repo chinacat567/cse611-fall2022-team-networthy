@@ -1,12 +1,13 @@
 import React from "react";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { Formik, Form } from "formik";
 import TextField from "@mui/material/TextField";
-import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
 import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
 import { ROUTES } from "../App/routeConfig";
 import { LOGIN_CONFIG } from "./config";
+
+import "../../styles/authWizard.scss";
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string()
@@ -30,10 +31,9 @@ const SignupSchema = Yup.object().shape({
   ),
 });
 
-const VAILDATION_SCHEMA = {
-  [LOGIN_CONFIG.LOGIN || LOGIN_CONFIG.COACH_LOGIN || LOGIN_CONFIG.ADMIN]:
-    LoginSchema,
-  [LOGIN_CONFIG.SIGNUP || LOGIN_CONFIG.COACH_SIGNUP]: SignupSchema,
+const getValidationSchema = (state) => {
+  if (state.includes("LOGIN") || state.includes("ADMIN")) return LoginSchema;
+  else return SignupSchema;
 };
 
 const getInitialValues = (state) => {
@@ -66,101 +66,154 @@ const AuthWizard = ({ state }) => {
   };
 
   return (
-    <div>
+    <div className="authWizard">
       <Formik
         initialValues={getInitialValues(state)}
-        validationSchema={VAILDATION_SCHEMA[state]}
-        onSubmit={(values) => {
+        validationSchema={getValidationSchema(state)}
+        onSubmit={(values, { resetForm }) => {
           submitForm(values);
+          resetForm();
         }}
       >
-        {({ touched, values, errors, handleChange }) => (
-          <Form>
+        {({ values, errors, setFieldValue, handleChange, resetForm }) => (
+          <Form className="authWizard__form">
             {(isLogin || isCoachLogin || isAdminLogin) && (
               <>
-                {isCoachLogin && <p>Coach Login</p>}
-                {isAdminLogin && <p>Admin Login</p>}
-                <TextField
-                  name="email"
-                  placeholder="Email*"
-                  value={values.email}
-                  onChange={handleChange}
-                  error={touched.email && Boolean(errors.email)}
-                  helperText={touched.email && errors.email}
-                />
-                <TextField
-                  name="password"
-                  placeholder="Password*"
-                  value={values.password}
-                  onChange={handleChange}
-                  error={touched.password && Boolean(errors.password)}
-                  helperText={touched.password && errors.password}
-                />
-                <Button type="submit">Login</Button>
-                {isLogin && (
-                  <>
-                    <Link to={ROUTES.SIGNUP}>Not a registered user?</Link>
-                    <Link to={ROUTES.COACH_LOGIN}>Are you a coach?</Link>
-                  </>
-                )}
+                {isLogin && <p className="authWizard__title">Client Login</p>}
                 {isCoachLogin && (
-                  <>
-                    <Link to={ROUTES.COACH_SIGNUP}>
-                      Not a registered coach?
-                    </Link>
-                    <Link to={ROUTES.LOGIN}>Are you a client?</Link>
-                  </>
+                  <p className="authWizard__title">Coach Login</p>
                 )}
                 {isAdminLogin && (
-                  <>
-                    <Link to={ROUTES.LOGIN}>Are you a client?</Link>
-                    <Link to={ROUTES.COACH_LOGIN}>Are you a coach?</Link>
-                  </>
+                  <p className="authWizard__title">Admin Login</p>
+                )}
+                <TextField
+                  name="email"
+                  placeholder="Email"
+                  className="authWizard__formField"
+                  value={values.email}
+                  onChange={handleChange}
+                  error={Boolean(errors.email)}
+                  helperText={errors.email}
+                />
+
+                <TextField
+                  name="password"
+                  placeholder="Password"
+                  type="password"
+                  className="authWizard__formField"
+                  value={values.password}
+                  onChange={handleChange}
+                  error={Boolean(errors.password)}
+                  helperText={errors.password}
+                />
+                <Button
+                  type="submit"
+                  className="authWizard_button"
+                  variant="contained"
+                  disabled={Boolean(errors.password) || Boolean(errors.email)}
+                >
+                  Login
+                </Button>
+                {isLogin && (
+                  <div className="authWizard__redirection">
+                    <Link to={ROUTES.SIGNUP} onClick={resetForm}>
+                      Not a registered user?
+                    </Link>
+                    <Link to={ROUTES.COACH_LOGIN} onClick={resetForm}>
+                      Are you a coach?
+                    </Link>
+                  </div>
+                )}
+                {isCoachLogin && (
+                  <div className="authWizard__redirection">
+                    <Link to={ROUTES.COACH_SIGNUP} onClick={resetForm}>
+                      Not a registered coach?
+                    </Link>
+                    <Link to={ROUTES.LOGIN} onClick={resetForm}>
+                      Are you a client?
+                    </Link>
+                  </div>
+                )}
+                {isAdminLogin && (
+                  <div className="authWizard__redirection">
+                    <Link to={ROUTES.LOGIN} onClick={resetForm}>
+                      Are you a client?
+                    </Link>
+                    <Link to={ROUTES.COACH_LOGIN} onClick={resetForm}>
+                      Are you a coach?
+                    </Link>
+                  </div>
                 )}
               </>
             )}
 
             {(isSignup || isCoachSignup) && (
               <>
-                {isCoachSignup && <p>Coach Signup</p>}
+                {isSignup && <p className="authWizard__title">Client Signup</p>}
+                {isCoachSignup && (
+                  <p className="authWizard__title">Coach Signup</p>
+                )}
                 <TextField
                   name="email"
-                  placeholder="Email*"
+                  placeholder="Email"
+                  className="authWizard__formField"
                   value={values.email}
                   onChange={handleChange}
-                  error={touched.email && Boolean(errors.email)}
-                  helperText={touched.email && errors.email}
+                  error={Boolean(errors.email)}
+                  helperText={errors.email}
                 />
                 <TextField
                   name="password"
-                  placeholder="Password*"
+                  placeholder="Password"
+                  type="password"
+                  className="authWizard__formField"
                   value={values.password}
                   onChange={handleChange}
-                  error={touched.password && Boolean(errors.password)}
-                  helperText={touched.password && errors.password}
+                  error={Boolean(errors.password)}
+                  helperText={errors.password}
                 />
                 <TextField
                   name="confirmPassword"
-                  placeholder="Confirm Password*"
+                  placeholder="Confirm Password"
+                  type="password"
+                  className="authWizard__formField"
                   value={values.confirmPassword}
                   onChange={handleChange}
-                  error={
-                    touched.confirmPassword && Boolean(errors.confirmPassword)
-                  }
-                  helperText={touched.confirmPassword && errors.confirmPassword}
+                  error={Boolean(errors.confirmPassword)}
+                  helperText={errors.confirmPassword}
                 />
-                <Button type="submit">Signup</Button>
+                <Button
+                  type="submit"
+                  className="authWizard_button"
+                  variant="contained"
+                  disabled={
+                    Boolean(errors.password) ||
+                    Boolean(errors.confirmPassword) ||
+                    values.password != values.confirmPassword ||
+                    Boolean(errors.email)
+                  }
+                >
+                  Signup
+                </Button>
                 {isSignup && (
-                  <>
-                    <Link to={ROUTES.LOGIN}>Already registered?</Link>
-                    <Link to={ROUTES.COACH_SIGNUP}>Are you a coach?</Link>
-                  </>
+                  <div className="authWizard__redirection">
+                    <Link to={ROUTES.LOGIN} onClick={resetForm}>
+                      Already registered?
+                    </Link>
+                    <Link to={ROUTES.COACH_SIGNUP} onClick={resetForm}>
+                      Are you a coach?
+                    </Link>
+                  </div>
                 )}
                 {isCoachSignup && (
-                  <>
-                    <Link to={ROUTES.COACH_LOGIN}>Already registered?</Link>
-                    <Link to={ROUTES.SIGNUP}>Are you a client?</Link>
-                  </>
+                  <div className="authWizard__redirection">
+                    <Link to={ROUTES.COACH_LOGIN} onClick={resetForm}>
+                      Already registered?
+                    </Link>
+                    <Link to={ROUTES.SIGNUP} onClick={resetForm}>
+                      Are you a client?
+                    </Link>
+                  </div>
                 )}
               </>
             )}
