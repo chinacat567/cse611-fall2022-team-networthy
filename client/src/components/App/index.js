@@ -11,6 +11,7 @@ import About from "../About";
 import Header from "../Header/header";
 import AuthWizard from "../AuthWizard";
 import { LOGIN_CONFIG } from "../AuthWizard/config";
+import { ROUTES } from "./routeConfig";
 
 const App = () => {
   return (
@@ -21,25 +22,25 @@ const App = () => {
       <br />
       <Router>
         <Routes>
-          <Route path="/about" element={<About />} />
+          <Route path={ROUTES.ABOUT} element={<About />} />
           <Route
-            path="/login"
+            path={ROUTES.LOGIN}
             element={<AuthWizard state={LOGIN_CONFIG.LOGIN} />}
           />
           <Route
-            path="/signup"
+            path={ROUTES.SIGNUP}
             element={<AuthWizard state={LOGIN_CONFIG.SIGNUP} />}
           />
           <Route
-            path="/coach/login"
+            path={ROUTES.COACH_LOGIN}
             element={<AuthWizard state={LOGIN_CONFIG.COACH_LOGIN} />}
           />
           <Route
-            path="/coach/signup"
+            path={ROUTES.COACH_SIGNUP}
             element={<AuthWizard state={LOGIN_CONFIG.COACH_SIGNUP} />}
           />
           <Route
-            path="/admin"
+            path={ROUTES.ADMIN}
             element={<AuthWizard state={LOGIN_CONFIG.ADMIN} />}
           />
         </Routes>
