@@ -5,18 +5,18 @@ import Tab from "@mui/material/Tab";
 import logo from "../../assests/Images/NWlogo.webp";
 
 import "../../styles/header.scss";
+import { ROUTES } from "../App/routeConfig";
 
 export default function IconLabelTabs() {
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = React.useState(
+    parseInt(localStorage.getItem("TAB"))
+  );
 
   const handleChange = (event, newValue) => {
-    console.log(event);
-    setValue(newValue);
+    localStorage.setItem("TAB", newValue);
+    if (newValue == 1) window.location.href = ROUTES.ABOUT;
+    if (newValue == 0) window.location.href = ROUTES.HOME;
   };
-
-  React.useEffect(() => {
-    console.log(value);
-  }, [value]);
 
   return (
     <div className="header">
@@ -32,7 +32,6 @@ export default function IconLabelTabs() {
         >
           <Tab label="Home" />
           <Tab label="About" />
-          <Tab label="Login" />
         </Tabs>
       </div>
     </div>
