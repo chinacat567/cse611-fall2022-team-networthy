@@ -2,6 +2,9 @@
 
 .header {
   width: 100vw;
+  position: fixed;
+  background-color: $--gray-2;
+  top: 0;
   display: flex;
   justify-content: space-between;
 
