@@ -18,7 +18,7 @@ import landingImg from "../../assests/Images/NWlanding.webp";
 export default function IconLabelTabs() {
   const [value, setValue] = React.useState(0);
 
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+  const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 

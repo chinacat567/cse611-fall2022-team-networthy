@@ -5,6 +5,10 @@
 
 $--nw-primary: #d75893;
 $--nw-secondary: #9b4dca;
+$--white: #fff;
+$--gray: #d8d8d8;
+$--slightly-dark-gray: #666666;
+$--background: #f3f3f3;
 
 * {
   margin: 0px;
@@ -13,6 +17,7 @@ $--nw-secondary: #9b4dca;
 
 html {
   font-family: "Roboto", sans-serif;
+  background-color: $--background;
 }
 
 .font-link {
