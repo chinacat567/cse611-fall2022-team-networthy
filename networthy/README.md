@@ -10,6 +10,7 @@ API List :-
 	URL :- http://localhost:8080/api/auth/signup
 	
 	Request Body :- 
+	
 				{
 					"username" : "amolghar",
 					"email" : "amolghar@buffalo.edu",
@@ -17,13 +18,16 @@ API List :-
 					"roles" :["ROLE_CLIENT"]
 				}
 	Response :- 
+	
 				{
 					"message": "User registered successfully!"
 				}
+				
 2. Verify Email (GET):- 
 	URL :- http://localhost:8080/api/auth/verify/amolghar
 	
 	Response :- 
+	
 				{
 					"message": "User verification successfully!"
 				}
@@ -31,11 +35,13 @@ API List :-
 	URL :- http://localhost:8080/api/auth/signin
 	
 	Request Body :- 
+	
 				{
 					"username" : "amolghar",
 					"password" : "password"
 				}
 	Response :- 
+	
 				{
 					"id": "633f66992282f02bf6ede393",
 					"username": "amolghar",
@@ -60,12 +66,14 @@ Note :- All APIs After this will need a valid JWT token to be passed in the head
 	URL :- http://localhost:8080/api/user/changePassword
 	
 	Request Body :- 
+	
 				{
 					"username" : "amolghar",
 					"oldPassword" : "password",
 					"newPassword" : "password123"
 				}
 	Response :- 
+	
 				{
 					"message": "Password Updated Successfully"
 				}
@@ -74,6 +82,7 @@ Note :- All APIs After this will need a valid JWT token to be passed in the head
 	URL :- http://localhost:8080/api/client/add/clientProfile
 	
 	Request Body :- 
+	
 				{
 					"username" : "amolghar",
 					"emailId" : "amolghar@buffalo.edu",
@@ -147,12 +156,13 @@ Note :- All APIs After this will need a valid JWT token to be passed in the head
  URL :- http://localhost:8080/coach/resume/{username}
  
     	Request Body  :-  None
+    	
     	Response :- PDF File 
 
 9. Get Coach LOR1 (GET) :-
  URL :- http://localhost:8080/coach/lor1/{username}
  
-    	`Request Body  :-  None`
+    	Request Body  :-  None
     	
     	Response :- PDF File 
     	
@@ -191,6 +201,7 @@ Note :- All APIs After this will need a valid JWT token to be passed in the head
 	URL :- http://localhost:8080/api/admin/edit/coachProfile
 	
 	Request Body(JSON) :-
+	
 	    			{
     					"userId" : "abhinav95",
     					"emailId" : "ashukla8@buffalo.edu",
