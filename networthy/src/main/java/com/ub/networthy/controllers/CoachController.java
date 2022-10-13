@@ -1,10 +1,15 @@
 package com.ub.networthy.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ub.networthy.models.CoachProfile;
-import com.ub.networthy.payload.request.ClientProfileRequest;
+import com.ub.networthy.payload.request.CoachDataRequest;
 import com.ub.networthy.payload.request.CoachProfileRequest;
+import com.ub.networthy.payload.response.MessageResponse;
 import com.ub.networthy.services.CoachProfileService;
 import org.bson.types.Binary;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
@@ -14,93 +19,167 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.util.Date;
 
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping(value = "/")
+@RequestMapping("/api/coach")
 public class CoachController {
 
     @Autowired
     CoachProfileService coachProfileService;
 
-    @PostMapping("/coach/add/profile")
-    public void addCoachProfileComplete(@RequestParam String userId, @RequestParam String emailId, @RequestParam String firstName,
-                         @RequestParam String lastName, @RequestParam @DateTimeFormat(pattern="MMddyyyy") Date dob,
-                         @RequestParam String gender, @RequestParam String occupation, @RequestParam String education,
-                         @RequestParam String university, @RequestParam String location, @RequestParam String credentials,
-                         @RequestParam Boolean profileStatus, @RequestParam MultipartFile resume,
-                         @RequestParam MultipartFile lor1, @RequestParam MultipartFile lor2) throws IOException {
+    private Logger logger = LoggerFactory.getLogger(AuthController.class);
 
+    /* ADD COACH PROFILE : Add/Update the entire CoachProfile object (including resume, LORs)
+     Function handles POST requests of type "multipart/form-data" */
+    @PostMapping("/add/profile")
+    public void addCoachProfile(@NotNull @RequestParam (value = "coachData") String coachDataRequestString,
+                                @NotNull @RequestPart (value="resume") MultipartFile resumeFile,
+                                @NotNull  @RequestPart (value="lor1") MultipartFile lor1File,
+                                @NotNull @RequestPart (value="lor2") MultipartFile lor2File) throws IOException {
+
+        CoachDataRequest coachDataRequest = new CoachDataRequest();
         try {
-            coachProfileService.addCoach(userId, emailId, firstName, lastName,
-                                        dob, gender, occupation, education,
-                                        university, location, credentials,
-                                        profileStatus, resume, lor1,  lor2);
-        } catch (IOException e) {
+            ObjectMapper objectMapper = new ObjectMapper();
+            coachDataRequest = objectMapper.readValue(coachDataRequestString, CoachDataRequest.class);
+        } catch (JsonProcessingException e) {
             e.printStackTrace();
+            logger.error("Error: Failed to deserialize coachData, check JSON formatting" + coachDataRequest.getUsername());
         }
+        try {
+            coachProfileService.addCoachProfile(coachDataRequest, resumeFile, lor1File, lor2File);
+        } catch (IOException e) {
+            e.printStackTrace(); // to be removed
+            logger.error("Error: Failed to add Coach Profile for CoachId  " + coachDataRequest.getUsername());
+        }
+        logger.info("Success : Added Coach Profile SuccessFully for CoachId - " + coachDataRequest.getUsername());
     }
 
-    @PostMapping("/coach/add/data")
-    public void addCoachProfile(@RequestParam String userId, @RequestParam String emailId, @RequestParam String firstName,
-                         @RequestParam String lastName, @RequestParam @DateTimeFormat(pattern="MMddyyyy") Date dob,
-                         @RequestParam String gender, @RequestParam String occupation, @RequestParam String education,
-                         @RequestParam String university, @RequestParam String location, @RequestParam String credentials,
-                         @RequestParam Boolean profileStatus) throws IOException {
+    /* ADD COACH DATA : Add/Update the CoachProfile excluding resume, LORs
+    Function handles POST request of type "application/json" */
+    @PostMapping("/add/data")
+    public void addCoachData(@RequestBody CoachDataRequest coachDataRequest) throws IOException {
 
         try {
-            coachProfileService.addCoach(userId, emailId, firstName, lastName,
-                                         dob, gender, occupation, education,
-                                         university, location, credentials,
-                                         profileStatus);
+            coachProfileService.addCoachData(coachDataRequest);
         } catch (IOException e) {
             e.printStackTrace();
+            logger.error("Error: Failed to add Coach Data for CoachId  " + coachDataRequest.getUsername());
         }
+        logger.info("Success : Added Coach Data SuccessFully for CoachId - " + coachDataRequest.getUsername());
     }
 
-    @PostMapping("/coach/add")
-    public void addCoachProfile(@RequestBody CoachProfileRequest coachProfileRequest) throws IOException {
-
-        try {
-            coachProfileService.addCoach(coachProfileRequest);
-        } catch (IOException e) {
-            e.printStackTrace();
+    /* GET COACH PROFILE : Get the entire CoachProfile document
+     Function handles GET requests of type "application/json" */
+    @GetMapping("/get/profile/{username}")
+    public ResponseEntity<?> getCoachData(@PathVariable String username) {
+        /*return if coach does not already exists*/
+        if (!coachProfileService.coachExists(username)) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: Coach does not exists !"));
         }
-    }
 
-    @GetMapping("/coach/profile/{username}")
-    public ResponseEntity<CoachProfile> getCoachData(@PathVariable String username) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        CoachProfile coachProfile = coachProfileService.getCoachData(username);
+        CoachProfile coachProfile;
+        try {
+             coachProfile = coachProfileService.getCoachProfile(username);
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("Error: Failed to Get Coach Data for CoachId  " + username);
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: Failed to Get Coach Data from DB !"));
+        }
         return new ResponseEntity<>(coachProfile, headers, HttpStatus.OK);
     }
 
-    @GetMapping("/coach/resume/{username}")
-    public ResponseEntity<byte[]> getResume(@PathVariable String username) {
+    @GetMapping("/get/resume/{username}")
+    public ResponseEntity<?> getResume(@PathVariable String username) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
-        Binary resume = coachProfileService.getCoachResume(username);
-        byte[] resumeByteArray = resume.getData();
-        return new ResponseEntity<>(resumeByteArray, headers, HttpStatus.OK);
+        Binary resume;
+        try {
+             resume = coachProfileService.getCoachResume(username);
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("Error: Failed to Get Resume for CoachId  " + username);
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: Failed to Get Resume for Coach !"));
+        }
+
+        if (resume != null) {
+            byte[] resumeByteArray = resume.getData();
+            return new ResponseEntity<>(resumeByteArray, headers, HttpStatus.OK);
+        }
+        else {
+            logger.error("Error: Failed to Get Resume for CoachId  " + username);
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: Failed to Get Resume for Coach !"));
+        }
+
+
+
+
     }
 
-    @GetMapping("/coach/lor1/{username}")
-    public ResponseEntity<byte[]> getLor1(@PathVariable String username) {
+    @GetMapping("/get/lor1/{username}")
+    public ResponseEntity<?> getLor1(@PathVariable String username) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
-        Binary resume = coachProfileService.getLor1(username);
-        byte[] resumeByteArray = resume.getData();
-        return new ResponseEntity<>(resumeByteArray, headers, HttpStatus.OK);
+        Binary lor1;
+        try {
+            lor1 = coachProfileService.getLor1(username);
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("Error: Failed to Get Lor1 for CoachId  " + username);
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: Failed to Get Lor1 for Coach !"));
+        }
+
+        if (lor1 != null) {
+            byte[] resumeByteArray = lor1.getData();
+            return new ResponseEntity<>(resumeByteArray, headers, HttpStatus.OK);
+        }
+        else {
+            logger.error("Error: Failed to Get Lor1 for CoachId  " + username);
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: Failed to Get Lor1 for Coach !"));
+        }
     }
 
-    @GetMapping("/coach/lor2/{username}")
-    public ResponseEntity<byte[]> getLor2(@PathVariable String username) {
+    @GetMapping("/get/lor2/{username}")
+    public ResponseEntity<?> getLor2(@PathVariable String username) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
-        Binary resume = coachProfileService.getLor2(username);
-        byte[] resumeByteArray = resume.getData();
-        return new ResponseEntity<>(resumeByteArray, headers, HttpStatus.OK);
+        Binary lor2;
+        try {
+            lor2 = coachProfileService.getLor2(username);
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("Error: Failed to Get Lor2 for CoachId  " + username);
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: Failed to Get Lor2 for Coach !"));
+        }
+
+        if (lor2 != null) {
+            byte[] resumeByteArray = lor2.getData();
+            return new ResponseEntity<>(resumeByteArray, headers, HttpStatus.OK);
+        }
+        else {
+            logger.error("Error: Failed to Get Lor2 for CoachId  " + username);
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: Failed to Get Lor2 for Coach !"));
+        }
     }
 }

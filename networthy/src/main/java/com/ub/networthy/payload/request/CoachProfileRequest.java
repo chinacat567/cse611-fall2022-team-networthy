@@ -1,145 +1,59 @@
 package com.ub.networthy.payload.request;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import org.bson.types.Binary;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Field;
 
-import javax.validation.constraints.NotBlank;
-import java.util.Date;
+import javax.validation.constraints.NotNull;
 
-/* payload without the PDF files */
 public class CoachProfileRequest {
 
-        @NotBlank
-        private String username;
+    @NotNull
+    private CoachDataRequest coachData;
 
-        @NotBlank
-        private String emailId;
+    @NotNull
+    private Binary resume;
 
-        @NotBlank
-        private String firstName;
+    @NotNull
+    private Binary lor1;
 
-        @NotBlank
-        private String lastName;
+    @NotNull
+    private Binary lor2;
 
-        @NotBlank
-        private Date dateOfBirth;
+    public CoachProfileRequest(@NotNull CoachDataRequest coachData, @NotNull Binary resume, @NotNull Binary lor1, @NotNull Binary lor2) {
+        this.coachData = coachData;
+        this.resume = resume;
+        this.lor1 = lor1;
+        this.lor2 = lor2;
+    }
 
-        @NotBlank
-        private String gender;
+    public CoachDataRequest getCoachData() {
+        return coachData;
+    }
 
-        @NotBlank
-        private String occupation;
+    public void setCoachData(CoachDataRequest coachData) {
+        this.coachData = coachData;
+    }
 
-        @NotBlank
-        private String education;
+    public Binary getResume() {
+        return resume;
+    }
 
-        @NotBlank
-        private String university;
+    public void setResume(Binary resume) {
+        this.resume = resume;
+    }
 
-        @NotBlank
-        private String location;
+    public Binary getLor1() {
+        return lor1;
+    }
 
-        @NotBlank
-        private String credentials;
+    public void setLor1(Binary lor1) {
+        this.lor1 = lor1;
+    }
 
-        @NotBlank
-        private boolean profileStatus;
+    public Binary getLor2() {
+        return lor2;
+    }
 
-        public String getUsername() {
-                return username;
-        }
-
-        public void setUsername(String username) {
-                this.username = username;
-        }
-
-        public String getEmailId() {
-                return emailId;
-        }
-
-        public void setEmailId(String emailId) {
-                this.emailId = emailId;
-        }
-
-        public String getFirstName() {
-                return firstName;
-        }
-
-        public void setFirstName(String firstName) {
-                this.firstName = firstName;
-        }
-
-        public String getLastName() {
-                return lastName;
-        }
-
-        public void setLastName(String lastName) {
-                this.lastName = lastName;
-        }
-
-        public Date getDateOfBirth() {
-                return dateOfBirth;
-        }
-
-        public void setDateOfBirth(Date dateOfBirth) {
-                this.dateOfBirth = dateOfBirth;
-        }
-
-        public String getGender() {
-                return gender;
-        }
-
-        public void setGender(String gender) {
-                this.gender = gender;
-        }
-
-        public String getOccupation() {
-                return occupation;
-        }
-
-        public void setOccupation(String occupation) {
-                this.occupation = occupation;
-        }
-
-        public String getEducation() {
-                return education;
-        }
-
-        public void setEducation(String education) {
-                this.education = education;
-        }
-
-        public String getUniversity() {
-                return university;
-        }
-
-        public void setUniversity(String university) {
-                this.university = university;
-        }
-
-        public String getLocation() {
-                return location;
-        }
-
-        public void setLocation(String location) {
-                this.location = location;
-        }
-
-        public void setCredentials(String credentials) {
-                this.credentials = credentials;
-        }
-
-        public String getCredentials() {
-                return this.credentials;
-        }
-
-        public boolean isProfileStatus() {
-                return profileStatus;
-        }
-
-        public void setProfileStatus(boolean profileStatus) {
-                this.profileStatus = profileStatus;
-        }
+    public void setLor2(Binary lor2) {
+        this.lor2 = lor2;
+    }
 }

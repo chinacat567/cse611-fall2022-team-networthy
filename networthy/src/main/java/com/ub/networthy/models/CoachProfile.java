@@ -11,7 +11,6 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
-
 @Document(collection = "coachprofile")
 public class CoachProfile {
 
@@ -56,6 +55,7 @@ public class CoachProfile {
     @NotBlank
     private String location;
 
+    /* credentials can be left blank */
     @Field("COA_CREDS")
     private String credentials;
 
@@ -63,22 +63,21 @@ public class CoachProfile {
     @NotBlank
     private boolean profileStatus;
 
+    /* resume, lor1, lor2 can be NULL */
     @Field("COA_RESUME")
-    @NotBlank
     private Binary resume;
 
     @Field("COA_LOR1")
-    @NotBlank
     private Binary lor1;
 
     @Field("COA_LOR2")
-    @NotBlank
     private Binary lor2;
 
     public CoachProfile() {
 
     }
 
+    /* constructor for POSTING "application/json" */
     public CoachProfile(@NotBlank String username, @NotBlank String emailId, @NotBlank String firstName,
                         @NotBlank String lastName, @NotBlank Date dateOfBirth, @NotBlank String gender, @NotBlank String occupation,
                         @NotBlank String education, @NotBlank String university, @NotBlank String location, String credentials,
@@ -98,15 +97,14 @@ public class CoachProfile {
         this.profileStatus = profileStatus;
     }
 
+    /* constructor for POSTING "multipart/form-data" */
     public CoachProfile(@NotBlank String userId, @NotBlank String emailId, @NotBlank String firstName,
                         @NotBlank String lastName, @NotBlank Date dateOfBirth, @NotBlank String gender, @NotBlank String occupation,
                         @NotBlank String education, @NotBlank String university, @NotBlank String location, String credentials,
                         @NotBlank boolean profileStatus, @NotNull Binary resume, @NotNull Binary lor1, @NotNull Binary lor2) {
 
-        this(userId, emailId, firstName, lastName,
-                dateOfBirth, gender, occupation,
-                education, university, location,
-                credentials, profileStatus);
+        this(userId, emailId, firstName, lastName, dateOfBirth, gender, occupation,
+                education, university, location, credentials, profileStatus);
 
         this.resume = resume;
         this.lor1 = lor1;

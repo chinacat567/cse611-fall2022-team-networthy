@@ -1,24 +1,19 @@
 package com.ub.networthy.models;
 
 
-import java.util.Date;
-
-import javax.validation.constraints.NotBlank;
-
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-import com.fasterxml.jackson.annotation.JacksonAnnotation;
-import com.fasterxml.jackson.annotation.JsonFormat;
+import javax.validation.constraints.NotBlank;
+import java.util.Date;
 
 
 @Document(collection = "clientprofile")
 public class ClientProfile {
 
 	@Id
-	private String id;
-	  
 	@Field("CLI_CLIENT_ID")
 	@NotBlank
 	private String username;
@@ -76,8 +71,8 @@ public class ClientProfile {
 	@NotBlank
 	private int debt;
 	
+	/* General field can be blank */
 	@Field("CLI_GENERAL")
-	@NotBlank
 	private String general;
 	
 	@Field("CLI_PROFILE_STATUS")
@@ -88,11 +83,15 @@ public class ClientProfile {
 		
 	}
 
+	public ClientProfile(@NotBlank String username) {
+		this.username = username;
+	}
+
 	public ClientProfile(@NotBlank String userId, @NotBlank String emailId, @NotBlank String firstName,
-			@NotBlank String lastName, @NotBlank Date dateOfBirth, @NotBlank String gender, @NotBlank String occupation,
-			@NotBlank String education, @NotBlank String university, @NotBlank String location,
-			@NotBlank int financialLevel, @NotBlank String learningMethod, @NotBlank int income, @NotBlank int debt,
-			@NotBlank String general, @NotBlank boolean profileStatus) {
+						 @NotBlank String lastName, @NotBlank Date dateOfBirth, @NotBlank String gender, @NotBlank String occupation,
+						 @NotBlank String education, @NotBlank String university, @NotBlank String location,
+						 @NotBlank int financialLevel, @NotBlank String learningMethod, @NotBlank int income, @NotBlank int debt,
+						 String general, @NotBlank boolean profileStatus) {
 		super();
 		this.username = userId;
 		this.emailId = emailId;
@@ -116,17 +115,17 @@ public class ClientProfile {
 		return username;
 	}
 
-	/*
-	 * public void setUserId(String userId) { this.userId = userId; }
-	 */
+	public void setUsername(String username) {
+		this.username = username;
+	}
 
 	public String getEmailId() {
 		return emailId;
 	}
 
-	/*
-	 * public void setEmailId(String emailId) { this.emailId = emailId; }
-	 */
+	public void setEmailId(String emailId) {
+		this.emailId = emailId;
+	}
 
 	public String getFirstName() {
 		return firstName;
@@ -239,6 +238,4 @@ public class ClientProfile {
 	public void setProfileStatus(boolean profileStatus) {
 		this.profileStatus = profileStatus;
 	}
-	
-	
 }
