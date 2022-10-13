@@ -79,12 +79,12 @@ public class CoachProfile {
 
     }
 
-    public CoachProfile(@NotBlank String userId, @NotBlank String emailId, @NotBlank String firstName,
+    public CoachProfile(@NotBlank String username, @NotBlank String emailId, @NotBlank String firstName,
                         @NotBlank String lastName, @NotBlank Date dateOfBirth, @NotBlank String gender, @NotBlank String occupation,
                         @NotBlank String education, @NotBlank String university, @NotBlank String location, String credentials,
                         @NotBlank boolean profileStatus) {
         super();
-        this.username = userId;
+        this.username = username;
         this.emailId = emailId;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -117,17 +117,17 @@ public class CoachProfile {
         return username;
     }
 
-    /*
-     * public void setUserId(String userId) { this.userId = userId; }
-     */
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
     public String getEmailId() {
         return emailId;
     }
 
-    /*
-     * public void setEmailId(String emailId) { this.emailId = emailId; }
-     */
+    public void setEmailId(String emailId) {
+        this.emailId = emailId;
+    }
 
     public String getFirstName() {
         return firstName;

@@ -31,34 +31,23 @@ public class ClientCoachRelationService {
     }
 
     public List<CoachProfile> getAllCoachesForClient(String clientId) {
-        List<CoachProfile> coachProfiles = new ArrayList<>();
-        try {
-            coachProfiles = clientCoachRelationRepo.findAllByClientUserId(clientId).stream()
-                                                    .map(a -> coachProfileRepo.findByUsername(a.getCoachUserId()))
-                                                    .collect(Collectors.toList());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        List<CoachProfile> coachProfiles;
+        coachProfiles = clientCoachRelationRepo.findAllByClientUserId(clientId).stream()
+                                               .map(a -> coachProfileRepo.findByUsername(a.getCoachUserId()))
+                                               .collect(Collectors.toList());
+
         return coachProfiles;
     }
 
     public List<ClientProfile> getAllClientsForCoach(String coachId) {
-        List<ClientProfile> clientProfiles = new ArrayList<>();
-        try {
-            clientProfiles = clientCoachRelationRepo.findAllByCoachUserId(coachId).stream()
-                                                    .map(a -> clientProfileRepo.findByUsername(a.getClientUserId()))
-                                                    .collect(Collectors.toList());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        List<ClientProfile> clientProfiles;
+        clientProfiles = clientCoachRelationRepo.findAllByCoachUserId(coachId).stream()
+                                                .map(a -> clientProfileRepo.findByUsername(a.getClientUserId()))
+                                                .collect(Collectors.toList());
         return clientProfiles;
     }
 
     public void deleteClientCoachRelation(String clientId, String coachId) {
-        try {
-            clientCoachRelationRepo.deleteClientAndCoachRelationByClientUserIdAndCoachUserId(clientId, coachId);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        clientCoachRelationRepo.deleteClientAndCoachRelationByClientUserIdAndCoachUserId(clientId, coachId);
     }
 }

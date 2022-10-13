@@ -64,7 +64,7 @@ public class ClientProfile {
 	@NotBlank
 	private int financialLevel;
 	
-	@Field("CLI_LERNING_METHOD")
+	@Field("CLI_LEARNING_METHOD")
 	@NotBlank
 	private String learningMethod;
 	

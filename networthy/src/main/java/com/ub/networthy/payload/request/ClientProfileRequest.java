@@ -9,7 +9,6 @@ import org.springframework.data.mongodb.core.mapping.Field;
 
 public class ClientProfileRequest {
 
-
 	@NotBlank
 	private String username;
 
@@ -185,7 +184,4 @@ public class ClientProfileRequest {
 	public void setProfileStatus(boolean profileStatus) {
 		this.profileStatus = profileStatus;
 	}
-
-	
-
 }

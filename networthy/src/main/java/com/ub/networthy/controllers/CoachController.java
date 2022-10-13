@@ -1,6 +1,8 @@
 package com.ub.networthy.controllers;
 
 import com.ub.networthy.models.CoachProfile;
+import com.ub.networthy.payload.request.ClientProfileRequest;
+import com.ub.networthy.payload.request.CoachProfileRequest;
 import com.ub.networthy.services.CoachProfileService;
 import org.bson.types.Binary;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,6 +59,16 @@ public class CoachController {
         }
     }
 
+    @PostMapping("/coach/add")
+    public void addCoachProfile(@RequestBody CoachProfileRequest coachProfileRequest) throws IOException {
+
+        try {
+            coachProfileService.addCoach(coachProfileRequest);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     @GetMapping("/coach/profile/{username}")
     public ResponseEntity<CoachProfile> getCoachData(@PathVariable String username) {
         HttpHeaders headers = new HttpHeaders();
@@ -91,5 +103,4 @@ public class CoachController {
         byte[] resumeByteArray = resume.getData();
         return new ResponseEntity<>(resumeByteArray, headers, HttpStatus.OK);
     }
-
 }
