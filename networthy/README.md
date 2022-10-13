@@ -8,6 +8,7 @@ API List :-
 
 1. Sign Up (POST)
 	URL :- http://localhost:8080/api/auth/signup
+	
 	Request Body :- 
 				{
 					"username" : "amolghar",
@@ -21,12 +22,14 @@ API List :-
 				}
 2. Verify Email (GET):- 
 	URL :- http://localhost:8080/api/auth/verify/amolghar
+	
 	Response :- 
 				{
 					"message": "User verification successfully!"
 				}
 3. Sign In (POST) :- 
 	URL :- http://localhost:8080/api/auth/signin
+	
 	Request Body :- 
 				{
 					"username" : "amolghar",
@@ -45,6 +48,7 @@ API List :-
 					"tokenType": "Bearer"
 				}
 Note :- All APIs After this will need a valid JWT token to be passed in the header.
+
 		"header": [
 					{
 						"key": "Authorization",
@@ -54,6 +58,7 @@ Note :- All APIs After this will need a valid JWT token to be passed in the head
 				]
 4. Change password (POST) :- 
 	URL :- http://localhost:8080/api/user/changePassword
+	
 	Request Body :- 
 				{
 					"username" : "amolghar",
@@ -67,6 +72,7 @@ Note :- All APIs After this will need a valid JWT token to be passed in the head
 
 5. Add Client Profile (POST) :- 
 	URL :- http://localhost:8080/api/client/add/clientProfile
+	
 	Request Body :- 
 				{
 					"username" : "amolghar",
@@ -93,6 +99,7 @@ Note :- All APIs After this will need a valid JWT token to be passed in the head
 	
 6. Add Coach Profile (POST) :-
     URL :- http://localhost:8080/coach/add/profile
+    
     	Request Body (to be sent as multipart/form-data from the front-end) :- 
     				{
     					"userId" : "sumantra94",
@@ -116,6 +123,7 @@ Note :- All APIs After this will need a valid JWT token to be passed in the head
     	
 7. Add Coach Data (POST) :-
     URL :- http://localhost:8080/coach/add/data
+    
     	Request Body (JSON) :- 
     				{
     					"userId" : "sumantra94",
@@ -137,22 +145,30 @@ Note :- All APIs After this will need a valid JWT token to be passed in the head
     	
 8. Get Coach Resume (GET) :-
  URL :- http://localhost:8080/coach/resume/{username}
+ 
     	Request Body  :-  None
     	Response :- PDF File 
 
 9. Get Coach LOR1 (GET) :-
  URL :- http://localhost:8080/coach/lor1/{username}
-    	Request Body  :-  None
+ 
+    	`Request Body  :-  None`
+    	
     	Response :- PDF File 
     	
 10. Get Coach LOR2 (GET) :-
  URL :- http://localhost:8080/coach/lor2/{username}
-    	Request Body  :-  None
-    	Response :- PDF File 
+ 
+    `	Request Body  :-  None`
+    
+    `	Response :- PDF File `
     	
 11. Get Coach Data (GET) :-
  URL :- http://localhost:8080/coach/{username}
+ 
+ 
     	Request Body  :-  None
+    
     	Response :- 
     	             {
             			"userId" : "sumantra94",
@@ -171,3 +187,86 @@ Note :- All APIs After this will need a valid JWT token to be passed in the head
             			"lor1" : <blob>
             			"lor2" : <blob>
             		}
+12. Update Coach profile (PUT) :-
+	URL :- http://localhost:8080/api/admin/edit/coachProfile
+	
+	Request Body(JSON) :-
+	    			{
+    					"userId" : "abhinav95",
+    					"emailId" : "ashukla8@buffalo.edu",
+    					"firstName" : "Abhinav",
+    					"lastName": "Shukla",
+    					"dob" : "09091995",
+    					"gender" : "Male",
+    					"occupation" : "Student",
+    					"education" : "Masters",
+    					"university" : "University at Buffalo",
+    					"location" : "Buffalo, NY",
+    					"credentials" : "AWS Security Specialist",
+    					"profileStatus" : "0"
+    				}
+    	Response :- 
+				{
+					"message": "Coach Profile Updated Successfully"
+				}		
+				
+13. Update Client profile (PUT) :-
+	URL :- http://localhost:8080/api/admin/edit/clientProfile
+	
+	Request Body(JSON) :-
+				
+				{
+				    	"userId" : "abhinav95",
+    					"emailId" : "ashukla8@buffalo.edu",
+    					"firstName" : "Abhinav",
+    					"lastName": "Shukla",
+    					"dob" : "09091995",
+    					"gender" : "Male",
+    					"occupation" : "Student",
+    					"education" : "Masters",
+    					"university" : "University at Buffalo",
+    					"location" : "Buffalo, NY",
+    					"credentials" : "AWS Security Specialist",
+    					"profileStatus" : "0"
+				}
+	Response :-
+				
+				{
+					"message": "Client Profile Updated Successfully"
+				}
+				
+14. Delete Coach Profile (DEL) :-
+	URL :- http://localhost:8080/api/admin/remove/coachProfile/{username}
+	
+	Request Body :- `None`
+	
+	Response :- 
+				
+				{
+					"message": "Coach Profile Deleted Successfully"
+				}
+
+15. Delete Client Profile (DEL) :-
+	URL :- http://localhost:8080/api/admin/remove/clientProfile/{username}
+	
+	Request Body :- `None`
+	
+	Response :-
+				
+				{
+					"message": "Client Profile Deleted Successfully"
+				}
+				
+				
+				
+16. Approve Coach (PUT) :-
+	URL :- http://localhost:8080/api/admin/edit/coachProfile/{username}
+	
+	Request Body :- `None`
+	
+	Response :- 
+	
+				{
+					"message": "Coach Profile Approved Successfully"
+				}
+	
