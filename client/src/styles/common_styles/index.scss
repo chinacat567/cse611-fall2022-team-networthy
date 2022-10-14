@@ -3,8 +3,8 @@
 @import "@fontsource/roboto/500.css";
 @import "@fontsource/roboto/700.css";
 
-$--nw-primary: #d75893;
-$--nw-secondary: #9b4dca;
+$--nw-primary: #415d32;
+$--nw-secondary: #8ba872;
 $--white: #fff;
 $--gray: #d8d8d8;
 $--gray-1: #d6d6d6;
@@ -20,8 +20,15 @@ $--background: #f3f3f3;
 }
 
 html {
-  font-family: "Roboto", sans-serif;
-  background-color: $--background;
+  // font-family: "Roboto", sans-serif;
+  font-family: "Catamaran", sans-serif;
+  background: rgb(65, 93, 50);
+  background: linear-gradient(
+    90deg,
+    rgba(65, 93, 50, 0.8113839285714286) 0%,
+    rgba(139, 168, 114, 0.8590029761904762) 39%,
+    rgba(126, 228, 24, 0.444437149859944) 100%
+  );
 }
 
 .font-link {

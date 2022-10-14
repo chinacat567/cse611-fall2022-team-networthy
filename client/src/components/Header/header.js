@@ -2,7 +2,7 @@ import * as React from "react";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 
-import logo from "../../assests/Images/NWlogo.webp";
+import logo from "../../assets/Images/NWlogo.webp";
 
 import "../../styles/header.scss";
 import { ROUTES } from "../App/routeConfig";

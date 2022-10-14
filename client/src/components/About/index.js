@@ -5,7 +5,7 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import aboutImg from "../../assests/Images/NWabout.webp";
+import aboutImg from "../../assets/Images/NWabout.webp";
 
 const About = () => {
   return (
@@ -37,8 +37,6 @@ const About = () => {
           </Typography>
         </CardContent>
         <CardActions></CardActions>
-        <Button size="small">Share</Button>
-        <Button size="small">Connect</Button>
       </Card>
     </div>
   );

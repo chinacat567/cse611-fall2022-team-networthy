@@ -5,3 +5,9 @@ export const LOGIN_CONFIG = {
   COACH_SIGNUP: "COACH_SIGNUP",
   ADMIN: "ADMIN",
 };
+
+export const ROLE_CONFIG = {
+  CLIENT: "ROLE_CLIENT",
+  COACH: "ROLE_COACH",
+  ADMIN: "ROLE_ADMIN",
+};

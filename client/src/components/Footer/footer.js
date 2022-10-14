@@ -15,20 +15,27 @@ export default function App() {
   return (
     <footer class="footer">
       <div class="footer__left">
-        <Tabs>
-          <Tab icon={<LocationOnIcon />} label="Company Address"></Tab>
-          <Tab icon={<PhoneIcon />} label="(716)-481-4091"></Tab>
-          <Tab icon={<MarkunreadIcon />} label="siblum@buffalo.edu"></Tab>
-        </Tabs>
+        <div className="companyInfo">
+          <LocationOnIcon className="companyInfo__icon" />
+          <span>Company Address</span>
+        </div>
+        <div className="companyInfo">
+          <PhoneIcon className="companyInfo__icon" />
+          <span>+1 (716)-481-4091</span>
+        </div>
+        <div className="companyInfo">
+          <MarkunreadIcon className="companyInfo__icon" />
+          <span>siblum@buffalo.edu</span>
+        </div>
       </div>
 
+      <div className="footer__center">&copy; 2022 By NetWorthy</div>
+
       <div class="footer__right">
-        <Tabs>
-          <Tab icon={<FacebookRoundedIcon />}></Tab>
-          <Tab icon={<LinkedInIcon />}></Tab>
-          <Tab icon={<TwitterIcon />}></Tab>
-          <Tab icon={<InstagramIcon />}></Tab>
-        </Tabs>
+        <FacebookRoundedIcon className="socialIcon" />
+        <LinkedInIcon className="socialIcon" />
+        <TwitterIcon className="socialIcon" />
+        <InstagramIcon className="socialIcon" />
       </div>
     </footer>
   );

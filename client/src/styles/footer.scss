@@ -1,20 +1,52 @@
 @import "./common_styles/index.scss";
 
 .footer {
-  background-color: $--gray-1;
+  // background-color: $--gray-1;
+  background: rgb(144, 144, 144);
+  background: linear-gradient(
+    90deg,
+    rgba(144, 144, 144, 1) 0%,
+    rgba(185, 185, 185, 1) 39%,
+    rgba(191, 191, 191, 0.6097032563025211) 100%
+  );
   margin-top: 150px;
   text-align: left;
-  padding: 40px 10px;
+  padding: 60px 40px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: relative;
 
   &__left {
     color: $--black;
     font-size: 14px;
     margin: 0;
+
+    .companyInfo {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      margin-bottom: 10px;
+
+      &__icon {
+        margin-right: 12px;
+      }
+    }
+  }
+
+  &__center {
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   &__right {
+    .socialIcon {
+      margin-right: 10px;
+    }
   }
 }

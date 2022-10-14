@@ -5,7 +5,7 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import landingImg from "../../assests/Images/NWlanding.webp";
+import landingImg from "../../assets/Images/NWlanding.webp";
 
 import "../../styles/home.scss";
 
@@ -23,30 +23,25 @@ const Home = ({ authWizard }) => {
           <Typography
             textAlign="center"
             gutterBottom
-            variant="body1"
+            variant="h6"
             component="div"
+            marginTop={"16px"}
+            marginBottom={"24px"}
           >
             Making Personal Finance
           </Typography>
           <Typography
-            textAlign="center"
-            gutterBottom
-            variant="body1"
-            component="div"
+            variant="body2"
+            color="text.secondary"
+            textAlign={"center"}
+            fontSize={"15px"}
           >
-            Personal
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
             We are a University at Buffalo Startup dedicated to helping young
             alumni achieve financial wellness. We forge close relationships with
             our clients and work with them throughout their journey towards
             achieving financial freedom.
           </Typography>
         </CardContent>
-        <CardActions>
-          <Button size="small">Share</Button>
-          <Button size="small">Learn More</Button>
-        </CardActions>
       </Card>
       {authWizard}
     </div>

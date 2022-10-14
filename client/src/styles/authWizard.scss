@@ -4,6 +4,7 @@
   min-width: 400px;
   background-color: $--white;
   padding: 40px 20px;
+  border-radius: 6px;
 
   &__form {
     width: 100%;
@@ -22,7 +23,6 @@
     font-size: 18px;
     text-align: center;
     margin-bottom: 24px;
-    font-weight: bold;
   }
 
   &__redirection {

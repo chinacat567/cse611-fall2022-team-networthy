@@ -5,20 +5,21 @@ import * as Yup from "yup";
 import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
 import { ROUTES } from "../App/routeConfig";
-import { LOGIN_CONFIG } from "./config";
+import { LOGIN_CONFIG, ROLE_CONFIG } from "./config";
 
 import "../../styles/authWizard.scss";
+import { useDispatch } from "react-redux";
+import { signup } from "../../redux/slices/authSlice";
 
 const LoginSchema = Yup.object().shape({
-  email: Yup.string()
-    .email("Please enter a valid email")
-    .required("Please enter an email"),
+  username: Yup.string().required("Please enter your username"),
   password: Yup.string()
     .required("Please provide a password")
     .min(8, "Password should have minimum 8 characters"),
 });
 
 const SignupSchema = Yup.object().shape({
+  username: Yup.string().required("Please enter your username"),
   email: Yup.string()
     .email("Please enter a valid email")
     .required("Please enter an email"),
@@ -40,11 +41,12 @@ const getInitialValues = (state) => {
   switch (state) {
     case LOGIN_CONFIG.LOGIN || LOGIN_CONFIG.COACH_LOGIN || LOGIN_CONFIG.ADMIN:
       return {
-        email: "",
+        username: "",
         password: "",
       };
     case LOGIN_CONFIG.SIGNUP || LOGIN_CONFIG.COACH_SIGNUP:
       return {
+        username: "",
         email: "",
         password: "",
         confirmPassword: "",
@@ -55,6 +57,8 @@ const getInitialValues = (state) => {
 };
 
 const AuthWizard = ({ state }) => {
+  const dispatch = useDispatch();
+
   const isLogin = state == LOGIN_CONFIG.LOGIN,
     isSignup = state == LOGIN_CONFIG.SIGNUP,
     isCoachLogin = state == LOGIN_CONFIG.COACH_LOGIN,
@@ -62,7 +66,15 @@ const AuthWizard = ({ state }) => {
     isAdminLogin = state == LOGIN_CONFIG.ADMIN;
 
   const submitForm = (data) => {
-    console.log(data);
+    if (isSignup) {
+      // Client Signup
+      dispatch(
+        signup({
+          ...data,
+          roles: [ROLE_CONFIG.CLIENT],
+        })
+      );
+    }
   };
 
   return (
@@ -87,13 +99,13 @@ const AuthWizard = ({ state }) => {
                   <p className="authWizard__title">Admin Login</p>
                 )}
                 <TextField
-                  name="email"
-                  placeholder="Email"
+                  name="username"
+                  placeholder="Username"
                   className="authWizard__formField"
-                  value={values.email}
+                  value={values.username}
                   onChange={handleChange}
-                  error={Boolean(errors.email)}
-                  helperText={errors.email}
+                  error={Boolean(errors.username)}
+                  helperText={errors.username}
                 />
 
                 <TextField
@@ -153,6 +165,15 @@ const AuthWizard = ({ state }) => {
                 {isCoachSignup && (
                   <p className="authWizard__title">Coach Signup</p>
                 )}
+                <TextField
+                  name="username"
+                  placeholder="Username"
+                  className="authWizard__formField"
+                  value={values.username}
+                  onChange={handleChange}
+                  error={Boolean(errors.username)}
+                  helperText={errors.username}
+                />
                 <TextField
                   name="email"
                   placeholder="Email"
