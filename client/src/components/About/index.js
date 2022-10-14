@@ -19,7 +19,7 @@ const About = () => {
             variant="h4"
             component="div"
           >
-            Who We Are
+            Who we are?
           </Typography>
           <br></br>
           <Typography variant="body2" color="text.secondary">
