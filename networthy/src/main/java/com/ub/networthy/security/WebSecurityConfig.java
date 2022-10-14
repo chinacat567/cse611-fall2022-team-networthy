@@ -1,5 +1,9 @@
 package com.ub.networthy.security;
 
+import java.util.Collections;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,6 +14,7 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 //import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 //import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -18,13 +23,15 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
 
 import com.ub.networthy.security.jwt.AuthEntryPointJwt;
 import com.ub.networthy.security.jwt.AuthTokenFilter;
 import com.ub.networthy.services.UserDetailsServiceImpl;
 
 @Configuration
-//@EnableWebSecurity
+@EnableWebSecurity
 @EnableGlobalMethodSecurity(
 		// securedEnabled = true,
 		// jsr250Enabled = true,
@@ -87,7 +94,18 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
 				.antMatchers("/api/auth/**", "/api/client/**", "/api/user/**", "/api/coach/**", "/api/admin/**").permitAll().antMatchers("/api/test/**").permitAll()
 				.anyRequest().authenticated();
+		http.cors().configurationSource(new CorsConfigurationSource() {
 
+		    @Override
+		    public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
+		        CorsConfiguration config = new CorsConfiguration();
+		        config.setAllowedHeaders(Collections.singletonList("*"));
+		        config.setAllowedMethods(Collections.singletonList("*"));
+		        config.addAllowedOrigin("*");
+		        config.setAllowCredentials(true);
+		        return config;
+		    }
+		});
 		http.authenticationProvider(authenticationProvider());
 
 		http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
