@@ -2,18 +2,17 @@ package com.ub.networthy.services;
 
 import com.ub.networthy.models.CoachProfile;
 import com.ub.networthy.payload.request.CoachDataRequest;
-import com.ub.networthy.payload.request.CoachProfileRequest;
 import com.ub.networthy.repository.CoachProfileRepository;
 import org.bson.BsonBinarySubType;
 import org.bson.types.Binary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
+import java.util.Optional;
 
 @Service
 public class CoachProfileService {
@@ -32,20 +31,6 @@ public class CoachProfileService {
                                                      coachDataRequest.getCredentials(), coachDataRequest.isProfileStatus());
         coachRepo.save(coachProfile);
     }
-
-//    /* function for handling POST requests of type "multipart/form-data" */
-//    public void addCoachProfile(@RequestBody CoachProfileRequest coachProfileRequest) throws IOException {
-//
-//        CoachProfile coachProfile = new CoachProfile(coachProfileRequest.getUsername(), coachProfileRequest.getEmailId(),
-//                                                     coachProfileRequest.getFirstName(), coachProfileRequest.getLastName(),
-//                                                     coachProfileRequest.getDateOfBirth(), coachProfileRequest.getGender(),
-//                                                     coachProfileRequest.getOccupation(), coachProfileRequest.getEducation(),
-//                                                     coachProfileRequest.getUniversity(), coachProfileRequest.getLocation(),
-//                                                     coachProfileRequest.getCredentials(), coachProfileRequest.isProfileStatus(),
-//                                                     coachProfileRequest.getResume(), coachProfileRequest.getLor1(),
-//                                                     coachProfileRequest.getLor2());
-//        coachRepo.save(coachProfile);
-//    }
 
     /* function for handling POST requests of type "multipart/form-data" */
     public void addCoachProfile(@NotNull CoachDataRequest coachDataRequest,
@@ -69,22 +54,46 @@ public class CoachProfileService {
 
     /* function for handling GET request of type "application/json" */
     public Binary getCoachResume(String username) {
-        return coachRepo.findByUsername(username).getResume();
+
+        if (!coachExists(username)) {
+            return null;
+        }
+        Optional<CoachProfile> coachProfile = coachRepo.findById(username);
+        return coachProfile.map(CoachProfile::getResume).orElse(null);
     }
 
     public Binary getLor1(String username) {
-        return coachRepo.findByUsername(username).getLor1();
+
+        if (!coachExists(username)) {
+            return null;
+        }
+        Optional<CoachProfile> coachProfile = coachRepo.findById(username);
+        return coachProfile.map(CoachProfile::getLor1).orElse(null);
     }
 
     public Binary getLor2(String username) {
-        return coachRepo.findByUsername(username).getLor2();
+
+        if (!coachExists(username)) {
+            return null;
+        }
+        Optional<CoachProfile> coachProfile = coachRepo.findById(username);
+        return coachProfile.map(CoachProfile::getLor2).orElse(null);
     }
 
     public CoachProfile getCoachProfile(String username) {
-        return coachRepo.findByUsername(username);
+
+        if (!coachExists(username)) {
+            return null;
+        }
+        Optional<CoachProfile> coachProfile = coachRepo.findById(username);
+        if (coachProfile.isPresent()) {
+            return  coachProfile.get();
+        }
+        return null;
     }
 
-    public boolean coachExists(String username) {
-        return coachRepo.existsByUsername(username);
+    public boolean coachExists(@NotNull String username) {
+        return coachRepo.existsById(username);
     }
+
 }

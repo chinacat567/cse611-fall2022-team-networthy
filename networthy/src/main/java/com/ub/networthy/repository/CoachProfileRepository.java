@@ -7,12 +7,13 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 import com.ub.networthy.models.CoachProfile;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @EnableMongoRepositories
     public interface CoachProfileRepository extends MongoRepository<CoachProfile, String> {
 
-    CoachProfile findByUsername(String username);
+    Optional<CoachProfile> findById(String username);
 
     boolean existsByUsername(String username);
 

@@ -21,6 +21,8 @@ import com.ub.networthy.repository.ClientProfileRepository;
 import com.ub.networthy.repository.CoachProfileRepository;
 import com.ub.networthy.services.CoachProfileService;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping(value = "/api/admin")
 public class AdminController
@@ -30,14 +32,14 @@ public class AdminController
 	
 	@Autowired
 	CoachProfileRepository coachProfileRepository;
-	
+
 	CoachProfile coachProfile;
-	
+
 	CoachProfileService coachProfileService;
-	
+
 	Logger logger = LoggerFactory.getLogger(ClientController.class);
 
-	
+
 	@PutMapping("/edit/clientProfile")
 	public ResponseEntity<?> editClientProfile(@RequestBody ClientProfileRequest clientProfileRequest) {
 		
@@ -51,7 +53,7 @@ public class AdminController
 		}
 		
 		//cannot change the username, email id and user type
-		
+
 		if(!clientProfileRequest.getFirstName().equals(existingClientProfile.getFirstName())) existingClientProfile.setFirstName(clientProfileRequest.getFirstName());
 		if(!clientProfileRequest.getLastName().equals(existingClientProfile.getLastName())) existingClientProfile.setLastName(clientProfileRequest.getLastName());
 		if(!clientProfileRequest.getDateOfBirth().equals(existingClientProfile.getDateOfBirth())) existingClientProfile.setDateOfBirth(clientProfileRequest.getDateOfBirth());
@@ -78,50 +80,57 @@ public class AdminController
 	public ResponseEntity<?> editCoachProfile(CoachProfile coachProfileRequest) {
 		
 		System.out.println("Coach user name "+coachProfileRequest.getUsername());
-		
-		CoachProfile existingCoachProfile = coachProfileRepository.findByUsername(coachProfileRequest.getUsername());
-		
-		
-		
-		if(existingCoachProfile == null) {
-			logger.error("Error: Coach Profile doesnot exist for - " +coachProfileRequest.getUsername());
+		try {
+
+			Optional<CoachProfile> existingCoachProfile = coachProfileRepository.findById(coachProfileRequest.getUsername());
+
+			if(existingCoachProfile.isEmpty()) {
+				logger.error("Error: Coach Profile does not exist for - " +coachProfileRequest.getUsername());
+				return ResponseEntity
+						.badRequest()
+						.body(new MessageResponse("Error: User Does Not Exist"));
+			}
+
+			if(!coachProfileRequest.getFirstName().equals(existingCoachProfile.get().getFirstName())) existingCoachProfile.get().setFirstName(coachProfileRequest.getFirstName());
+			if(!coachProfileRequest.getLastName().equals(existingCoachProfile.get().getLastName())) existingCoachProfile.get().setLastName(coachProfileRequest.getLastName());
+			if(coachProfileRequest.getDateOfBirth()!= null) existingCoachProfile.get().setDateOfBirth(coachProfileRequest.getDateOfBirth());
+			if(!coachProfileRequest.getGender().equals(existingCoachProfile.get().getGender())) existingCoachProfile.get().setGender(coachProfileRequest.getGender());
+			if(!coachProfileRequest.getOccupation().equals(existingCoachProfile.get().getOccupation())) existingCoachProfile.get().setOccupation(coachProfileRequest.getOccupation());
+			if(!coachProfileRequest.getEducation().equals(existingCoachProfile.get().getEducation())) existingCoachProfile.get().setEducation(coachProfileRequest.getEducation());
+			if(!coachProfileRequest.getUniversity().equals(existingCoachProfile.get().getUniversity())) existingCoachProfile.get().setUniversity(coachProfileRequest.getUniversity());
+			if(!coachProfileRequest.getLocation().equals(existingCoachProfile.get().getLocation())) existingCoachProfile.get().setLocation(coachProfileRequest.getLocation());
+			if(!coachProfileRequest.getCredentials().equals(existingCoachProfile.get().getCredentials())) existingCoachProfile.get().setCredentials(coachProfileRequest.getCredentials());
+
+			coachProfileRepository.save(existingCoachProfile.get());
+
+			return ResponseEntity.ok(new MessageResponse("Coach Profile Updated Successfully"));
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("Error: Failed to read Coach Profile for - " +coachProfileRequest.getUsername());
 			return ResponseEntity
 					.badRequest()
-					.body(new MessageResponse("Error: User Does Not Exist"));
-		}
-		
-				
-		if(!coachProfileRequest.getFirstName().equals(existingCoachProfile.getFirstName())) existingCoachProfile.setFirstName(coachProfileRequest.getFirstName());
-		if(!coachProfileRequest.getLastName().equals(existingCoachProfile.getLastName())) existingCoachProfile.setLastName(coachProfileRequest.getLastName());
-		if(coachProfileRequest.getDateOfBirth()!= null) existingCoachProfile.setDateOfBirth(coachProfileRequest.getDateOfBirth());
-		if(!coachProfileRequest.getGender().equals(existingCoachProfile.getGender())) existingCoachProfile.setGender(coachProfileRequest.getGender());
-		if(!coachProfileRequest.getOccupation().equals(existingCoachProfile.getOccupation())) existingCoachProfile.setOccupation(coachProfileRequest.getOccupation());
-		if(!coachProfileRequest.getEducation().equals(existingCoachProfile.getEducation())) existingCoachProfile.setEducation(coachProfileRequest.getEducation());
-		if(!coachProfileRequest.getUniversity().equals(existingCoachProfile.getUniversity())) existingCoachProfile.setUniversity(coachProfileRequest.getUniversity());
-		if(!coachProfileRequest.getLocation().equals(existingCoachProfile.getLocation())) existingCoachProfile.setLocation(coachProfileRequest.getLocation());
-		if(!coachProfileRequest.getCredentials().equals(existingCoachProfile.getCredentials())) existingCoachProfile.setCredentials(coachProfileRequest.getCredentials());
+					.body(new MessageResponse("Error: Failed to read Data"));
 
-		coachProfileRepository.save(existingCoachProfile);
-		
-		
-		return ResponseEntity.ok(new MessageResponse("Coach Profile Updated Successfully"));
+		}
+
+
 	}
 	
 	@DeleteMapping("/remove/coachProfile/{userId}")
 	public ResponseEntity<?> deleteCoachProfile(@PathVariable String userId)
 	{
-		
-		CoachProfile existingCoachProfile = coachProfileRepository.findByUsername(userId);
-		
-		if(existingCoachProfile == null) {
+
+		Optional<CoachProfile> existingCoachProfile = coachProfileRepository.findById(userId);
+
+		if(existingCoachProfile.isEmpty()) {
 			logger.error("Error: Coach Profile doesnot exist for - " +userId);
 			return ResponseEntity
 					.badRequest()
 					.body(new MessageResponse("Error: User Does Not Exist"));
 		}
-		
+
 		coachProfileRepository.deleteById(userId);
-		
+
 		return ResponseEntity.ok(new MessageResponse("Coach Profile Deleted Successfully"));
 	}
 	
@@ -147,21 +156,20 @@ public class AdminController
 	@PutMapping("/edit/coachProfile/{userId}")
 	public ResponseEntity<?> approveCoachProfile(@PathVariable String userId)
 	{
-		CoachProfile existingCoachProfile = coachProfileRepository.findByUsername(userId);
+		Optional<CoachProfile> existingCoachProfile = coachProfileRepository.findById(userId);
 		
-		if(existingCoachProfile == null) {
+		if(existingCoachProfile.isEmpty()) {
 			logger.error("Error: Coach Profile doesnot exist for - " +userId);
 			return ResponseEntity
 					.badRequest()
 					.body(new MessageResponse("Error: User Does Not Exist"));
 		}
 		
-		existingCoachProfile.setProfileStatus(true);
+		existingCoachProfile.get().setProfileStatus(true);
 		
-		coachProfileRepository.save(existingCoachProfile);
+		coachProfileRepository.save(existingCoachProfile.get());
 		
 		return ResponseEntity.ok(new MessageResponse("Coach Profile Approved Successfully"));
-		
 	}
 	
 	

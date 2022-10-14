@@ -33,10 +33,10 @@ public class CoachController {
 
     private Logger logger = LoggerFactory.getLogger(AuthController.class);
 
-    /* ADD COACH PROFILE : Add/Update the entire CoachProfile object (including resume, LORs)
+    /* ADD COACH PROFILE : Add the entire CoachProfile object (including resume, LORs)
      Function handles POST requests of type "multipart/form-data" */
     @PostMapping("/add/profile")
-    public void addCoachProfile(@NotNull @RequestParam (value = "coachData") String coachDataRequestString,
+    public ResponseEntity<?> addCoachProfile(@NotNull @RequestParam (value = "coachData") String coachDataRequestString,
                                 @NotNull @RequestPart (value="resume") MultipartFile resumeFile,
                                 @NotNull  @RequestPart (value="lor1") MultipartFile lor1File,
                                 @NotNull @RequestPart (value="lor2") MultipartFile lor2File) throws IOException {
@@ -45,49 +45,65 @@ public class CoachController {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             coachDataRequest = objectMapper.readValue(coachDataRequestString, CoachDataRequest.class);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            logger.error("Error: Failed to deserialize coachData, check JSON formatting" + coachDataRequest.getUsername());
-        }
-        try {
+            if (coachProfileService.coachExists(coachDataRequest.getUsername())) {
+                logger.error("Error: Coach already exists for Coach Username  " + coachDataRequest.getUsername());
+                return ResponseEntity
+                        .badRequest()
+                        .body(new MessageResponse("Error: Coach Already Exists !"));
+            }
             coachProfileService.addCoachProfile(coachDataRequest, resumeFile, lor1File, lor2File);
-        } catch (IOException e) {
-            e.printStackTrace(); // to be removed
+        } catch (Exception e) {
+            e.printStackTrace();
             logger.error("Error: Failed to add Coach Profile for CoachId  " + coachDataRequest.getUsername());
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: Failed to add Coach Profile"));
         }
         logger.info("Success : Added Coach Profile SuccessFully for CoachId - " + coachDataRequest.getUsername());
+        return ResponseEntity.ok(new MessageResponse("User Profile Added Successfully!"));
     }
 
-    /* ADD COACH DATA : Add/Update the CoachProfile excluding resume, LORs
+    /* ADD COACH DATA : Add the CoachProfile excluding resume, LORs
     Function handles POST request of type "application/json" */
     @PostMapping("/add/data")
-    public void addCoachData(@RequestBody CoachDataRequest coachDataRequest) throws IOException {
+    public ResponseEntity<?>  addCoachData(@RequestBody CoachDataRequest coachDataRequest) throws IOException {
 
         try {
+            if (coachProfileService.coachExists(coachDataRequest.getUsername())) {
+                logger.error("Error: Coach already exists for Coach Username  " + coachDataRequest.getUsername());
+                return ResponseEntity
+                        .badRequest()
+                        .body(new MessageResponse("Error: Coach Already Exists !"));
+            }
             coachProfileService.addCoachData(coachDataRequest);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             logger.error("Error: Failed to add Coach Data for CoachId  " + coachDataRequest.getUsername());
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: Failed to add Coach Data"));
         }
         logger.info("Success : Added Coach Data SuccessFully for CoachId - " + coachDataRequest.getUsername());
+        return ResponseEntity.ok(new MessageResponse("Coach Data Added Successfully!"));
     }
 
     /* GET COACH PROFILE : Get the entire CoachProfile document
      Function handles GET requests of type "application/json" */
     @GetMapping("/get/profile/{username}")
     public ResponseEntity<?> getCoachData(@PathVariable String username) {
-        /*return if coach does not already exists*/
-        if (!coachProfileService.coachExists(username)) {
-            return ResponseEntity
-                    .badRequest()
-                    .body(new MessageResponse("Error: Coach does not exists !"));
-        }
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
         CoachProfile coachProfile;
+        HttpHeaders headers = new HttpHeaders();
+
         try {
-             coachProfile = coachProfileService.getCoachProfile(username);
+            /*return if coach does not already exists*/
+            if (!coachProfileService.coachExists(username)) {
+                return ResponseEntity
+                        .badRequest()
+                        .body(new MessageResponse("Error: Coach does not exists !"));
+            }
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            coachProfile = coachProfileService.getCoachProfile(username);
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("Error: Failed to Get Coach Data for CoachId  " + username);

@@ -33,7 +33,7 @@ public class ClientCoachRelationService {
     public List<CoachProfile> getAllCoachesForClient(String clientId) {
         List<CoachProfile> coachProfiles;
         coachProfiles = clientCoachRelationRepo.findAllByClientUserId(clientId).stream()
-                                               .map(a -> coachProfileRepo.findByUsername(a.getCoachUserId()))
+                                               .map(a -> coachProfileRepo.findById(a.getCoachUserId()).get())
                                                .collect(Collectors.toList());
 
         return coachProfiles;
