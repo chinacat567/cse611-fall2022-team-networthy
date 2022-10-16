@@ -6,20 +6,11 @@ export const httpService = axios.create({
 });
 
 httpService.interceptors.request.use((config) => {
-  /*config.headers = {
-    "Access-Control-Allow-Origin": "*"
-    //"cache-control": "no-cache",
-  };*/
-
-  console.log(config);
-
   return config;
 });
 
 httpService.interceptors.response.use(
   (response) => {
-	  console.log("Response");
-    console.log(response);
     return response;
   },
   (error) => {
