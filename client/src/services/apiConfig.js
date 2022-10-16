@@ -5,5 +5,5 @@ export const getApi = (api) => {
 export const BASE_URI = "http://localhost:8080";
 
 export const API = {
-  CLIENT_SIGNUP: "/auth/signup",
+  CLIENT_SIGNUP: "/api/auth/signup",
 };
