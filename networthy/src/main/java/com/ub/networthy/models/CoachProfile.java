@@ -15,6 +15,9 @@ import java.util.Date;
 public class CoachProfile {
 
     @Id
+    private String id;
+
+    @Field("COA_COACH_ID")
     @NotBlank
     private String username;
 

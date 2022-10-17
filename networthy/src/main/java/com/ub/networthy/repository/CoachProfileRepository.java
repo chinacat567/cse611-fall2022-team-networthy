@@ -13,7 +13,9 @@ import java.util.Optional;
 @EnableMongoRepositories
     public interface CoachProfileRepository extends MongoRepository<CoachProfile, String> {
 
-    Optional<CoachProfile> findById(String username);
+    Optional<CoachProfile> findById(String id);
+
+    Optional<CoachProfile> findByUsername(String username);
 
     boolean existsByUsername(String username);
 

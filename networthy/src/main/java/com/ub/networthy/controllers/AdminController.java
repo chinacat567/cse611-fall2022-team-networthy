@@ -19,7 +19,6 @@ import com.ub.networthy.payload.request.ClientProfileRequest;
 import com.ub.networthy.payload.response.MessageResponse;
 import com.ub.networthy.repository.ClientProfileRepository;
 import com.ub.networthy.repository.CoachProfileRepository;
-import com.ub.networthy.services.CoachProfileService;
 
 import java.util.Optional;
 
@@ -32,10 +31,6 @@ public class AdminController
 	
 	@Autowired
 	CoachProfileRepository coachProfileRepository;
-
-	CoachProfile coachProfile;
-
-	CoachProfileService coachProfileService;
 
 	Logger logger = LoggerFactory.getLogger(ClientController.class);
 

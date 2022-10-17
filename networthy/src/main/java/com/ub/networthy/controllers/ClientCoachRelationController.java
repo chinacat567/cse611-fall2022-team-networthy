@@ -3,7 +3,6 @@ package com.ub.networthy.controllers;
 import com.ub.networthy.models.ClientProfile;
 import com.ub.networthy.models.CoachProfile;
 import com.ub.networthy.services.ClientCoachRelationService;
-import com.ub.networthy.services.CoachProfileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

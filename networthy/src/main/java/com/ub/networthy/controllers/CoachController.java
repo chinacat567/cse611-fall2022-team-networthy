@@ -1,17 +1,19 @@
 package com.ub.networthy.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ub.networthy.models.CoachProfile;
+import com.ub.networthy.models.ERole;
+import com.ub.networthy.models.Role;
+import com.ub.networthy.models.User;
 import com.ub.networthy.payload.request.CoachDataRequest;
-import com.ub.networthy.payload.request.CoachProfileRequest;
 import com.ub.networthy.payload.response.MessageResponse;
-import com.ub.networthy.services.CoachProfileService;
+import com.ub.networthy.repository.CoachProfileRepository;
+import com.ub.networthy.repository.UserRepository;
+import org.bson.BsonBinarySubType;
 import org.bson.types.Binary;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -21,7 +23,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
-import java.util.Date;
+import java.util.Optional;
+import java.util.Set;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -29,56 +32,45 @@ import java.util.Date;
 public class CoachController {
 
     @Autowired
-    CoachProfileService coachProfileService;
+    private CoachProfileRepository coachProfileRepo;
+
+    @Autowired
+    private UserRepository userRepository;
 
     private Logger logger = LoggerFactory.getLogger(AuthController.class);
 
-    /* ADD COACH PROFILE : Add the entire CoachProfile object (including resume, LORs)
-     Function handles POST requests of type "multipart/form-data" */
-    @PostMapping("/add/profile")
-    public ResponseEntity<?> addCoachProfile(@NotNull @RequestParam (value = "coachData") String coachDataRequestString,
-                                @NotNull @RequestPart (value="resume") MultipartFile resumeFile,
-                                @NotNull  @RequestPart (value="lor1") MultipartFile lor1File,
-                                @NotNull @RequestPart (value="lor2") MultipartFile lor2File) throws IOException {
-
-        CoachDataRequest coachDataRequest = new CoachDataRequest();
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            coachDataRequest = objectMapper.readValue(coachDataRequestString, CoachDataRequest.class);
-            if (coachProfileService.coachExists(coachDataRequest.getUsername())) {
-                logger.error("Error: Coach already exists for Coach Username  " + coachDataRequest.getUsername());
-                return ResponseEntity
-                        .badRequest()
-                        .body(new MessageResponse("Error: Coach Already Exists !"));
-            }
-            coachProfileService.addCoachProfile(coachDataRequest, resumeFile, lor1File, lor2File);
-        } catch (Exception e) {
-            e.printStackTrace();
-            logger.error("Error: Failed to add Coach Profile for CoachId  " + coachDataRequest.getUsername());
-            return ResponseEntity
-                    .badRequest()
-                    .body(new MessageResponse("Error: Failed to add Coach Profile"));
-        }
-        logger.info("Success : Added Coach Profile SuccessFully for CoachId - " + coachDataRequest.getUsername());
-        return ResponseEntity.ok(new MessageResponse("User Profile Added Successfully!"));
-    }
+    private Object IOException;
 
     /* ADD COACH DATA : Add the CoachProfile excluding resume, LORs
     Function handles POST request of type "application/json" */
     @PostMapping("/add/data")
-    public ResponseEntity<?>  addCoachData(@RequestBody CoachDataRequest coachDataRequest) throws IOException {
-
+    public ResponseEntity<?>  addCoachData(@RequestBody CoachDataRequest coachDataRequest) {
         try {
-            if (coachProfileService.coachExists(coachDataRequest.getUsername())) {
+            /* perform AuthN */
+            if (!authN(coachDataRequest.getUsername(), ERole.ROLE_COACH)) {
+                return ResponseEntity
+                        .badRequest()
+                        .body(new MessageResponse("Error: User not authorized for coach profile!"));
+            }
+
+            if (coachProfileRepo.existsByUsername(coachDataRequest.getUsername())) {
                 logger.error("Error: Coach already exists for Coach Username  " + coachDataRequest.getUsername());
                 return ResponseEntity
                         .badRequest()
                         .body(new MessageResponse("Error: Coach Already Exists !"));
             }
-            coachProfileService.addCoachData(coachDataRequest);
+
+            CoachProfile coachProfile = new CoachProfile(coachDataRequest.getUsername(), coachDataRequest.getEmailId(),
+                    coachDataRequest.getFirstName(), coachDataRequest.getLastName(),
+                    coachDataRequest.getDateOfBirth(), coachDataRequest.getGender(),
+                    coachDataRequest.getOccupation(), coachDataRequest.getEducation(),
+                    coachDataRequest.getUniversity(), coachDataRequest.getLocation(),
+                    coachDataRequest.getCredentials(), coachDataRequest.isProfileStatus());
+
+            coachProfileRepo.save(coachProfile);
         } catch (Exception e) {
             e.printStackTrace();
-            logger.error("Error: Failed to add Coach Data for CoachId  " + coachDataRequest.getUsername());
+            logger.error("Error: Failed to add Coach Data for Coach " + coachDataRequest.getUsername());
             return ResponseEntity
                     .badRequest()
                     .body(new MessageResponse("Error: Failed to add Coach Data"));
@@ -87,40 +79,110 @@ public class CoachController {
         return ResponseEntity.ok(new MessageResponse("Coach Data Added Successfully!"));
     }
 
+    /* ADD COACH PROFILE : Add the entire CoachProfile object (including resume, LORs)
+     Function handles POST requests of type "multipart/form-data" */
+    @PostMapping("/add/profile")
+    public ResponseEntity<?> addCoachProfile(@NotNull @RequestParam (value = "coachData") String coachDataRequestString,
+                                @NotNull @RequestPart (value="resume") MultipartFile resumeFile,
+                                @NotNull  @RequestPart (value="lor1") MultipartFile lor1File,
+                                @NotNull @RequestPart (value="lor2") MultipartFile lor2File) {
+
+        CoachDataRequest coachDataRequest = new CoachDataRequest();
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            coachDataRequest = objectMapper.readValue(coachDataRequestString, CoachDataRequest.class);
+
+            /* perform AuthN */
+            if (!authN(coachDataRequest.getUsername(), ERole.ROLE_COACH)) {
+                return ResponseEntity
+                        .badRequest()
+                        .body(new MessageResponse("Error: User not authorized for client profile!"));
+            }
+
+            if (coachProfileRepo.existsByUsername(coachDataRequest.getUsername())) {
+                logger.error("Error: Coach already exists for Coach Username  " + coachDataRequest.getUsername());
+                return ResponseEntity
+                        .badRequest()
+                        .body(new MessageResponse("Error: Coach Already Exists !"));
+            }
+
+            Binary resume = new Binary(BsonBinarySubType.BINARY, resumeFile.getBytes());
+            Binary lor1 = new Binary(BsonBinarySubType.BINARY, lor1File.getBytes());
+            Binary lor2 = new Binary(BsonBinarySubType.BINARY, lor2File.getBytes());
+
+            CoachProfile coachProfile = new CoachProfile(coachDataRequest.getUsername(), coachDataRequest.getEmailId(),
+                    coachDataRequest.getFirstName(), coachDataRequest.getLastName(),
+                    coachDataRequest.getDateOfBirth(), coachDataRequest.getGender(),
+                    coachDataRequest.getOccupation(), coachDataRequest.getEducation(),
+                    coachDataRequest.getUniversity(), coachDataRequest.getLocation(),
+                    coachDataRequest.getCredentials(), coachDataRequest.isProfileStatus(),
+                    resume, lor1, lor2);
+
+            coachProfileRepo.save(coachProfile);
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("Error: Failed to add Coach Profile for Coach " + coachDataRequest.getUsername());
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: Failed to add Coach Profile"));
+        }
+        logger.info("Success : Added Coach Profile SuccessFully for Coach " + coachDataRequest.getUsername());
+        return ResponseEntity.ok(new MessageResponse("User Profile Added Successfully!"));
+    }
+
     /* GET COACH PROFILE : Get the entire CoachProfile document
      Function handles GET requests of type "application/json" */
     @GetMapping("/get/profile/{username}")
     public ResponseEntity<?> getCoachData(@PathVariable String username) {
-
-        CoachProfile coachProfile;
-        HttpHeaders headers = new HttpHeaders();
-
         try {
+            /* AuthN : Give access irrespective of Role */
+            if(!userRepository.existsByUsername(username)) {
+                logger.error("Error: User Does Not Exist! - " + username);
+                return ResponseEntity
+                        .badRequest()
+                        .body(new MessageResponse("Error: User not authorized for coach profile!"));
+            }
+
             /*return if coach does not already exists*/
-            if (!coachProfileService.coachExists(username)) {
+            if (!coachProfileRepo.existsByUsername(username)) {
                 return ResponseEntity
                         .badRequest()
                         .body(new MessageResponse("Error: Coach does not exists !"));
             }
+            HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
-            coachProfile = coachProfileService.getCoachProfile(username);
+            Optional<CoachProfile> coachData = coachProfileRepo.findByUsername(username);
+            if (coachData.isPresent()) {
+                return new ResponseEntity<>(coachData, headers, HttpStatus.OK);
+            }
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
         } catch (Exception e) {
             e.printStackTrace();
-            logger.error("Error: Failed to Get Coach Data for CoachId  " + username);
+            logger.error("Error: Failed to Get Coach Data for Coach " + username);
             return ResponseEntity
                     .badRequest()
                     .body(new MessageResponse("Error: Failed to Get Coach Data from DB !"));
         }
-        return new ResponseEntity<>(coachProfile, headers, HttpStatus.OK);
     }
 
     @GetMapping("/get/resume/{username}")
     public ResponseEntity<?> getResume(@PathVariable String username) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_PDF);
-        Binary resume;
         try {
-             resume = coachProfileService.getCoachResume(username);
+            /* perform AuthN --> Only Admin  */
+            if (!authN(username, ERole.ROLE_ADMIN)) {
+                return ResponseEntity
+                        .badRequest()
+                        .body(new MessageResponse("Error: User not authorized for coach profile!"));
+            }
+
+            Optional<CoachProfile> coachProfile = coachProfileRepo.findById(username);
+            if (coachProfile.isPresent()) {
+                HttpHeaders headers = new HttpHeaders();
+                headers.setContentType(MediaType.APPLICATION_PDF);
+                byte[] resumeByteArray = coachProfile.get().getResume().getData();
+                return new ResponseEntity<>(resumeByteArray, headers, HttpStatus.OK);
+            }
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("Error: Failed to Get Resume for CoachId  " + username);
@@ -128,43 +190,28 @@ public class CoachController {
                     .badRequest()
                     .body(new MessageResponse("Error: Failed to Get Resume for Coach !"));
         }
-
-        if (resume != null) {
-            byte[] resumeByteArray = resume.getData();
-            return new ResponseEntity<>(resumeByteArray, headers, HttpStatus.OK);
-        }
-        else {
-            logger.error("Error: Failed to Get Resume for CoachId  " + username);
-            return ResponseEntity
-                    .badRequest()
-                    .body(new MessageResponse("Error: Failed to Get Resume for Coach !"));
-        }
-
-
-
-
     }
 
     @GetMapping("/get/lor1/{username}")
     public ResponseEntity<?> getLor1(@PathVariable String username) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_PDF);
-        Binary lor1;
         try {
-            lor1 = coachProfileService.getLor1(username);
+            /* perform AuthN --> Only Admin  */
+            if (!authN(username, ERole.ROLE_ADMIN)) {
+                return ResponseEntity
+                        .badRequest()
+                        .body(new MessageResponse("Error: User not authorized for coach profile!"));
+            }
+
+            Optional<CoachProfile> coachProfile = coachProfileRepo.findById(username);
+            if (coachProfile.isPresent()) {
+                HttpHeaders headers = new HttpHeaders();
+                headers.setContentType(MediaType.APPLICATION_PDF);
+                byte[] resumeByteArray = coachProfile.get().getLor1().getData();
+                return new ResponseEntity<>(resumeByteArray, headers, HttpStatus.OK);
+            }
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
         } catch (Exception e) {
             e.printStackTrace();
-            logger.error("Error: Failed to Get Lor1 for CoachId  " + username);
-            return ResponseEntity
-                    .badRequest()
-                    .body(new MessageResponse("Error: Failed to Get Lor1 for Coach !"));
-        }
-
-        if (lor1 != null) {
-            byte[] resumeByteArray = lor1.getData();
-            return new ResponseEntity<>(resumeByteArray, headers, HttpStatus.OK);
-        }
-        else {
             logger.error("Error: Failed to Get Lor1 for CoachId  " + username);
             return ResponseEntity
                     .badRequest()
@@ -174,28 +221,55 @@ public class CoachController {
 
     @GetMapping("/get/lor2/{username}")
     public ResponseEntity<?> getLor2(@PathVariable String username) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_PDF);
-        Binary lor2;
         try {
-            lor2 = coachProfileService.getLor2(username);
+            /* perform AuthN --> Only Admin  */
+            if (!authN(username, ERole.ROLE_ADMIN)) {
+                return ResponseEntity
+                        .badRequest()
+                        .body(new MessageResponse("Error: User not authorized for coach profile!"));
+            }
+
+            Optional<CoachProfile> coachProfile = coachProfileRepo.findById(username);
+            if (coachProfile.isPresent()) {
+                HttpHeaders headers = new HttpHeaders();
+                headers.setContentType(MediaType.APPLICATION_PDF);
+                byte[] resumeByteArray = coachProfile.get().getLor2().getData();
+                return new ResponseEntity<>(resumeByteArray, headers, HttpStatus.OK);
+            }
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
         } catch (Exception e) {
             e.printStackTrace();
-            logger.error("Error: Failed to Get Lor2 for CoachId  " + username);
+            logger.error("Error: Failed to Get Lor1 for CoachId  " + username);
             return ResponseEntity
                     .badRequest()
-                    .body(new MessageResponse("Error: Failed to Get Lor2 for Coach !"));
+                    .body(new MessageResponse("Error: Failed to Get Lor1 for Coach !"));
         }
+    }
 
-        if (lor2 != null) {
-            byte[] resumeByteArray = lor2.getData();
-            return new ResponseEntity<>(resumeByteArray, headers, HttpStatus.OK);
-        }
-        else {
-            logger.error("Error: Failed to Get Lor2 for CoachId  " + username);
-            return ResponseEntity
-                    .badRequest()
-                    .body(new MessageResponse("Error: Failed to Get Lor2 for Coach !"));
+    private boolean authN(String username, ERole eRole) {
+        try {
+            if(!userRepository.existsByUsername(username)) {
+                logger.error("Error: User Does Not Exist! - " + username);
+                return false;
+            }
+            User user = userRepository.findByUsername(username).orElse(null);
+            if (user == null) {
+                return false;
+            }
+            Set<Role> roles = user.getRoles();
+            boolean validRole = false;
+            for(Role role : roles) {
+                if(role.getName().equals(eRole)) {
+                    validRole = true;
+                    break;
+                }
+            }
+            if (!validRole) {
+                logger.error("Error: User not authorized for coach profile - " + username);
+            }
+            return validRole;
+        } catch (Exception e) {
+            return false;
         }
     }
 }
