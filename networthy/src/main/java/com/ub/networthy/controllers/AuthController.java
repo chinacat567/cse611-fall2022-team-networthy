@@ -46,7 +46,6 @@ import com.ub.networthy.security.jwt.*;
 
 
 
-@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {

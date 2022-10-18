@@ -25,6 +25,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 import com.ub.networthy.security.jwt.AuthEntryPointJwt;
 import com.ub.networthy.security.jwt.AuthTokenFilter;
@@ -96,22 +98,40 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
 						"/api/clientAndCoach/**")
 				.permitAll().antMatchers("/api/test/**").permitAll()
 				.anyRequest().authenticated();
-		http.cors().configurationSource(new CorsConfigurationSource() {
 
-		    @Override
-		    public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
-		        CorsConfiguration config = new CorsConfiguration();
-		        config.setAllowedHeaders(Collections.singletonList("*"));
-		        config.setAllowedMethods(Collections.singletonList("*"));
-		        config.addAllowedOrigin("*");
-		        config.setAllowCredentials(true);
-		        return config;
-		    }
-		});
+		
 		http.authenticationProvider(authenticationProvider());
 
 		http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 
 		return http.build();
 	}
+	
+	@Bean
+	public CorsFilter corsFilter() {
+
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+
+		CorsConfiguration corsConfiguration = new CorsConfiguration();
+		corsConfiguration.setAllowCredentials(true);
+		// Keeping For AWS deployment - will need to add proxy origins
+		//corsConfiguration.addAllowedOrigin("http://localhost:3000");
+		corsConfiguration.addAllowedOriginPattern("*");
+		corsConfiguration.addAllowedHeader("Authorization");
+		corsConfiguration.addAllowedHeader("Content-Type");
+		corsConfiguration.addAllowedHeader("Accept");
+		corsConfiguration.addAllowedMethod("POST");
+		corsConfiguration.addAllowedMethod("GET");	
+		corsConfiguration.addAllowedMethod("DELETE");
+		corsConfiguration.addAllowedMethod("PUT");
+		corsConfiguration.addAllowedMethod("OPTIONS");
+		corsConfiguration.setMaxAge(3600L);
+
+		source.registerCorsConfiguration("/**", corsConfiguration);
+
+		CorsFilter bean = new CorsFilter(source);
+
+		return bean;
+	  
+	  }
 }

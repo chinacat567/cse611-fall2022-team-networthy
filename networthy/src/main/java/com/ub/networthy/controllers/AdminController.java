@@ -4,8 +4,8 @@ package com.ub.networthy.controllers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -15,12 +15,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ub.networthy.models.ClientProfile;
 import com.ub.networthy.models.CoachProfile;
+import com.ub.networthy.models.ERole;
+import com.ub.networthy.models.Role;
+import com.ub.networthy.models.User;
 import com.ub.networthy.payload.request.ClientProfileRequest;
 import com.ub.networthy.payload.response.MessageResponse;
 import com.ub.networthy.repository.ClientProfileRepository;
 import com.ub.networthy.repository.CoachProfileRepository;
+import com.ub.networthy.repository.UserRepository;
 
 import java.util.Optional;
+import java.util.Set;
 
 @RestController
 @RequestMapping(value = "/api/admin")
@@ -31,53 +36,39 @@ public class AdminController
 	
 	@Autowired
 	CoachProfileRepository coachProfileRepository;
+	
+	@Autowired
+	ClientController clientController;
+	
+    @Autowired
+    private UserRepository userRepository;
 
 	Logger logger = LoggerFactory.getLogger(ClientController.class);
 
 
 	@PutMapping("/edit/clientProfile")
+//	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 	public ResponseEntity<?> editClientProfile(@RequestBody ClientProfileRequest clientProfileRequest) {
 		
-		ClientProfile existingClientProfile = clientProfileRepository.findByUsername(clientProfileRequest.getUsername());
-
-		if(existingClientProfile == null) {
-			logger.error("Error: Client Profile doesnot exist for - " +clientProfileRequest.getUsername());
-			return ResponseEntity
-					.badRequest()
-					.body(new MessageResponse("Error: User Does Not Exist"));
-		}
-		
-		//cannot change the username, email id and user type
-
-		if(!clientProfileRequest.getFirstName().equals(existingClientProfile.getFirstName())) existingClientProfile.setFirstName(clientProfileRequest.getFirstName());
-		if(!clientProfileRequest.getLastName().equals(existingClientProfile.getLastName())) existingClientProfile.setLastName(clientProfileRequest.getLastName());
-		if(!clientProfileRequest.getDateOfBirth().equals(existingClientProfile.getDateOfBirth())) existingClientProfile.setDateOfBirth(clientProfileRequest.getDateOfBirth());
-		if(!clientProfileRequest.getGender().equals(existingClientProfile.getGender())) existingClientProfile.setGender(clientProfileRequest.getGender());
-		if(!clientProfileRequest.getOccupation().equals(existingClientProfile.getOccupation())) existingClientProfile.setOccupation(clientProfileRequest.getOccupation());
-		if(!clientProfileRequest.getEducation().equals(existingClientProfile.getEducation())) existingClientProfile.setEducation(clientProfileRequest.getEducation());
-		if(!clientProfileRequest.getUniversity().equals(existingClientProfile.getUniversity())) existingClientProfile.setUniversity(clientProfileRequest.getUniversity());
-		if(!clientProfileRequest.getLocation().equals(existingClientProfile.getLocation())) existingClientProfile.setLocation(clientProfileRequest.getLocation());
-		if(clientProfileRequest.getFinancialLevel() != existingClientProfile.getFinancialLevel()) existingClientProfile.setFinancialLevel(clientProfileRequest.getFinancialLevel());
-		if(!clientProfileRequest.getLearningMethod().equals(existingClientProfile.getLearningMethod())) existingClientProfile.setLearningMethod(clientProfileRequest.getLearningMethod());
-		if(clientProfileRequest.getIncome() != existingClientProfile.getIncome()) existingClientProfile.setIncome(clientProfileRequest.getIncome());
-		if(clientProfileRequest.getDebt() != existingClientProfile.getDebt()) existingClientProfile.setDebt(clientProfileRequest.getDebt());
-		if(!clientProfileRequest.getGeneral().equals(existingClientProfile.getGeneral())) existingClientProfile.setGeneral(clientProfileRequest.getGeneral());
-		
-		clientProfileRepository.save(existingClientProfile);
-		
-		
-		return ResponseEntity.ok(new MessageResponse("Client Profile Updated Successfully"));
-		
+		return clientController.editClientProfile(clientProfileRequest);
+				
 	}
 	
 	
 	@PutMapping("/edit/coachProfile")
+//	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 	public ResponseEntity<?> editCoachProfile(CoachProfile coachProfileRequest) {
 		
-		System.out.println("Coach user name "+coachProfileRequest.getUsername());
+		if (!authN(coachProfileRequest.getUsername(), ERole.ROLE_COACH)) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: User not authorized to edit coach profile!"));
+        }
+		
 		try {
+			
 
-			Optional<CoachProfile> existingCoachProfile = coachProfileRepository.findById(coachProfileRequest.getUsername());
+			Optional<CoachProfile> existingCoachProfile = coachProfileRepository.findByUsername(coachProfileRequest.getUsername());
 
 			if(existingCoachProfile.isEmpty()) {
 				logger.error("Error: Coach Profile does not exist for - " +coachProfileRequest.getUsername());
@@ -85,16 +76,18 @@ public class AdminController
 						.badRequest()
 						.body(new MessageResponse("Error: User Does Not Exist"));
 			}
+			
+			
 
-			if(!coachProfileRequest.getFirstName().equals(existingCoachProfile.get().getFirstName())) existingCoachProfile.get().setFirstName(coachProfileRequest.getFirstName());
-			if(!coachProfileRequest.getLastName().equals(existingCoachProfile.get().getLastName())) existingCoachProfile.get().setLastName(coachProfileRequest.getLastName());
-			if(coachProfileRequest.getDateOfBirth()!= null) existingCoachProfile.get().setDateOfBirth(coachProfileRequest.getDateOfBirth());
-			if(!coachProfileRequest.getGender().equals(existingCoachProfile.get().getGender())) existingCoachProfile.get().setGender(coachProfileRequest.getGender());
-			if(!coachProfileRequest.getOccupation().equals(existingCoachProfile.get().getOccupation())) existingCoachProfile.get().setOccupation(coachProfileRequest.getOccupation());
-			if(!coachProfileRequest.getEducation().equals(existingCoachProfile.get().getEducation())) existingCoachProfile.get().setEducation(coachProfileRequest.getEducation());
-			if(!coachProfileRequest.getUniversity().equals(existingCoachProfile.get().getUniversity())) existingCoachProfile.get().setUniversity(coachProfileRequest.getUniversity());
-			if(!coachProfileRequest.getLocation().equals(existingCoachProfile.get().getLocation())) existingCoachProfile.get().setLocation(coachProfileRequest.getLocation());
-			if(!coachProfileRequest.getCredentials().equals(existingCoachProfile.get().getCredentials())) existingCoachProfile.get().setCredentials(coachProfileRequest.getCredentials());
+			if(coachProfileRequest.getFirstName() != null) existingCoachProfile.get().setFirstName(coachProfileRequest.getFirstName());
+			if(coachProfileRequest.getLastName() != null) existingCoachProfile.get().setLastName(coachProfileRequest.getLastName());
+			if(coachProfileRequest.getDateOfBirth() != null) existingCoachProfile.get().setDateOfBirth(coachProfileRequest.getDateOfBirth());
+			if(coachProfileRequest.getGender() != null) existingCoachProfile.get().setGender(coachProfileRequest.getGender());
+			if(coachProfileRequest.getOccupation() != null) existingCoachProfile.get().setOccupation(coachProfileRequest.getOccupation());
+			if(coachProfileRequest.getEducation() != null) existingCoachProfile.get().setEducation(coachProfileRequest.getEducation());
+			if(coachProfileRequest.getUniversity() != null) existingCoachProfile.get().setUniversity(coachProfileRequest.getUniversity());
+			if(coachProfileRequest.getLocation() != null) existingCoachProfile.get().setLocation(coachProfileRequest.getLocation());
+			if(coachProfileRequest.getCredentials() != null) existingCoachProfile.get().setCredentials(coachProfileRequest.getCredentials());
 
 			coachProfileRepository.save(existingCoachProfile.get());
 
@@ -112,10 +105,17 @@ public class AdminController
 	}
 	
 	@DeleteMapping("/remove/coachProfile/{userId}")
+//	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 	public ResponseEntity<?> deleteCoachProfile(@PathVariable String userId)
 	{
 
-		Optional<CoachProfile> existingCoachProfile = coachProfileRepository.findById(userId);
+		if (!authN(userId, ERole.ROLE_COACH)) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: User not authorized to delete coach profile!"));
+        }
+		
+		Optional<CoachProfile> existingCoachProfile = coachProfileRepository.findByUsername(userId);
 
 		if(existingCoachProfile.isEmpty()) {
 			logger.error("Error: Coach Profile doesnot exist for - " +userId);
@@ -130,8 +130,15 @@ public class AdminController
 	}
 	
 	@DeleteMapping("/remove/clientProfile/{userId}")
+//	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 	public ResponseEntity<?> deleteClientProfile(@PathVariable String userId)
 	{
+		
+		if (!authN(userId, ERole.ROLE_CLIENT)) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: User not authorized to delete client profile!"));
+        }
 		
 		ClientProfile existingClientProfile = clientProfileRepository.findByUsername(userId);
 		
@@ -149,9 +156,18 @@ public class AdminController
 	
 	
 	@PutMapping("/edit/coachProfile/{userId}")
+//	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 	public ResponseEntity<?> approveCoachProfile(@PathVariable String userId)
 	{
-		Optional<CoachProfile> existingCoachProfile = coachProfileRepository.findById(userId);
+		
+		if (!authN(userId, ERole.ROLE_COACH)) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: User not authorized to approve coach profile!"));
+        }
+
+		
+		Optional<CoachProfile> existingCoachProfile = coachProfileRepository.findByUsername(userId);
 		
 		if(existingCoachProfile.isEmpty()) {
 			logger.error("Error: Coach Profile doesnot exist for - " +userId);
@@ -166,6 +182,34 @@ public class AdminController
 		
 		return ResponseEntity.ok(new MessageResponse("Coach Profile Approved Successfully"));
 	}
+	
+    private boolean authN(String username, ERole eRole) {
+        try {
+            if(!userRepository.existsByUsername(username)) {
+                logger.error("Error: User Does Not Exist! - " + username);
+                return false;
+            }
+            User user = userRepository.findByUsername(username).orElse(null);
+            if (user == null) {
+                return false;
+            }
+            Set<Role> roles = user.getRoles();
+            boolean validRole = false;
+            for(Role role : roles) {
+                if(role.getName().equals(eRole)) {
+                    validRole = true;
+                    break;
+                }
+            }
+            if (!validRole) {
+                logger.error("Error: User not authorized for coach profile - " + username);
+            }
+            return validRole;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+	
 	
 	
 }
