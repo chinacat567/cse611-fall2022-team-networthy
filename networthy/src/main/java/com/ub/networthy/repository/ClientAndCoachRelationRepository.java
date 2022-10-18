@@ -7,18 +7,23 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 
 import javax.validation.constraints.NotBlank;
 import java.util.List;
+import java.util.Optional;
 
 
 @EnableMongoRepositories
 public interface ClientAndCoachRelationRepository extends MongoRepository<ClientAndCoachRelation, String> {
 
-    List<ClientAndCoachRelation> findAllByClientUserId(@NotBlank String clientUserId);
+    Optional<ClientAndCoachRelation> findFirstByClientUsername(@NotBlank String clientUsername);
 
-    List<ClientAndCoachRelation> findAllByCoachUserId(@NotBlank String coachUserId);
+    List<ClientAndCoachRelation> findAllByCoachUsername(@NotBlank String coachUsername);
 
-    boolean existsByClientUserId(@NotBlank String username);
+    boolean existsByClientUsername(@NotBlank String username);
+
+    boolean existsByClientUsernameAndCoachUsername(@NotBlank String clientUsername,
+                                                   @NotBlank String coachUsername);
 
     List<ClientAndCoachRelation> findAll();
 
-    void deleteClientAndCoachRelationByClientUserIdAndCoachUserId(@NotBlank String clientUserId, @NotBlank String coachUserId);
+    void deleteClientAndCoachRelationByClientUsernameAndCoachUsername(@NotBlank String clientUsername,
+                                                                      @NotBlank String coachUsername);
 }

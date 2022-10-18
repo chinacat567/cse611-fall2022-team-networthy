@@ -6,40 +6,44 @@ import org.springframework.data.mongodb.core.mapping.Field;
 
 import javax.validation.constraints.NotBlank;
 
-@Document(collection = "coachclientrelation")
+@Document(collection = "clientcoachrelation")
 public class ClientAndCoachRelation {
 
     @Id
-    @NotBlank
-    private
-    String clientUserId;
+    private String id;
 
+    @Field("CCR_CLIENT_ID")
     @NotBlank
     private
-    String coachUserId;
+    String clientUsername;
+
+    @Field("CCR_COACH_ID")
+    @NotBlank
+    private
+    String coachUsername;
 
     public ClientAndCoachRelation() {
     }
 
-    public ClientAndCoachRelation(String clientUserId, String coachUserId) {
-        this.clientUserId = clientUserId;
-        this.coachUserId = coachUserId;
+    public ClientAndCoachRelation(String clientUsername, String coachUsername) {
+        this.clientUsername = clientUsername;
+        this.coachUsername = coachUsername;
     }
 
-    public String getClientUserId() {
-        return this.clientUserId;
+    public String getClientUsername() {
+        return this.clientUsername;
     }
 
-    public void setClientUserId(String clientUserId) {
-        this.clientUserId = clientUserId;
+    public void setClientUsername(String clientUsername) {
+        this.clientUsername = clientUsername;
     }
 
     public String getCoachUserId() {
-        return this.coachUserId;
+        return this.coachUsername;
     }
 
-    public void setCoachUserId(String coachUserId) {
-        this.coachUserId = coachUserId;
+    public void setCoachUserId(String coachUsername) {
+        this.coachUsername = coachUsername;
     }
 }
 

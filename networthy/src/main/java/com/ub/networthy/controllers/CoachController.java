@@ -9,6 +9,7 @@ import com.ub.networthy.payload.request.CoachDataRequest;
 import com.ub.networthy.payload.response.MessageResponse;
 import com.ub.networthy.repository.CoachProfileRepository;
 import com.ub.networthy.repository.UserRepository;
+import com.ub.networthy.utils.Utils;
 import org.bson.BsonBinarySubType;
 import org.bson.types.Binary;
 import org.slf4j.Logger;
@@ -37,17 +38,17 @@ public class CoachController {
     @Autowired
     private UserRepository userRepository;
 
-    private Logger logger = LoggerFactory.getLogger(AuthController.class);
+    private Logger logger = LoggerFactory.getLogger(CoachController.class);
 
-    private Object IOException;
+    private Utils utils;
 
     /* ADD COACH DATA : Add the CoachProfile excluding resume, LORs
     Function handles POST request of type "application/json" */
     @PostMapping("/add/data")
     public ResponseEntity<?>  addCoachData(@RequestBody CoachDataRequest coachDataRequest) {
         try {
-            /* perform AuthN */
-            if (!authN(coachDataRequest.getUsername(), ERole.ROLE_COACH)) {
+            /* only Coach */
+            if (!utils.validateRole(coachDataRequest.getUsername(), ERole.ROLE_COACH)) {
                 return ResponseEntity
                         .badRequest()
                         .body(new MessageResponse("Error: User not authorized for coach profile!"));
@@ -92,8 +93,8 @@ public class CoachController {
             ObjectMapper objectMapper = new ObjectMapper();
             coachDataRequest = objectMapper.readValue(coachDataRequestString, CoachDataRequest.class);
 
-            /* perform AuthN */
-            if (!authN(coachDataRequest.getUsername(), ERole.ROLE_COACH)) {
+            /* only Coach  */
+            if (!utils.validateRole(coachDataRequest.getUsername(), ERole.ROLE_COACH)) {
                 return ResponseEntity
                         .badRequest()
                         .body(new MessageResponse("Error: User not authorized for client profile!"));
@@ -135,7 +136,7 @@ public class CoachController {
     @GetMapping("/get/profile/{username}")
     public ResponseEntity<?> getCoachData(@PathVariable String username) {
         try {
-            /* AuthN : Give access irrespective of Role */
+            /* Give access irrespective of Role */
             if(!userRepository.existsByUsername(username)) {
                 logger.error("Error: User Does Not Exist! - " + username);
                 return ResponseEntity
@@ -168,8 +169,8 @@ public class CoachController {
     @GetMapping("/get/resume/{username}")
     public ResponseEntity<?> getResume(@PathVariable String username) {
         try {
-            /* perform AuthN --> Only Admin  */
-            if (!authN(username, ERole.ROLE_ADMIN)) {
+            /*  Only Admin  */
+            if (!utils.validateRole(username, ERole.ROLE_ADMIN)) {
                 return ResponseEntity
                         .badRequest()
                         .body(new MessageResponse("Error: User not authorized for coach profile!"));
@@ -195,8 +196,8 @@ public class CoachController {
     @GetMapping("/get/lor1/{username}")
     public ResponseEntity<?> getLor1(@PathVariable String username) {
         try {
-            /* perform AuthN --> Only Admin  */
-            if (!authN(username, ERole.ROLE_ADMIN)) {
+            /* Only Admin  */
+            if (!utils.validateRole(username, ERole.ROLE_ADMIN)) {
                 return ResponseEntity
                         .badRequest()
                         .body(new MessageResponse("Error: User not authorized for coach profile!"));
@@ -222,8 +223,8 @@ public class CoachController {
     @GetMapping("/get/lor2/{username}")
     public ResponseEntity<?> getLor2(@PathVariable String username) {
         try {
-            /* perform AuthN --> Only Admin  */
-            if (!authN(username, ERole.ROLE_ADMIN)) {
+            /* perform utils.authZ --> Only Admin  */
+            if (!utils.validateRole(username, ERole.ROLE_ADMIN)) {
                 return ResponseEntity
                         .badRequest()
                         .body(new MessageResponse("Error: User not authorized for coach profile!"));
@@ -243,33 +244,6 @@ public class CoachController {
             return ResponseEntity
                     .badRequest()
                     .body(new MessageResponse("Error: Failed to Get Lor1 for Coach !"));
-        }
-    }
-
-    private boolean authN(String username, ERole eRole) {
-        try {
-            if(!userRepository.existsByUsername(username)) {
-                logger.error("Error: User Does Not Exist! - " + username);
-                return false;
-            }
-            User user = userRepository.findByUsername(username).orElse(null);
-            if (user == null) {
-                return false;
-            }
-            Set<Role> roles = user.getRoles();
-            boolean validRole = false;
-            for(Role role : roles) {
-                if(role.getName().equals(eRole)) {
-                    validRole = true;
-                    break;
-                }
-            }
-            if (!validRole) {
-                logger.error("Error: User not authorized for coach profile - " + username);
-            }
-            return validRole;
-        } catch (Exception e) {
-            return false;
         }
     }
 }
