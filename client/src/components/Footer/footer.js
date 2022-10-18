@@ -13,8 +13,8 @@ import "../../styles/footer.scss";
 
 export default function App() {
   return (
-    <footer class="footer">
-      <div class="footer__left">
+    <footer className="footer">
+      <div className="footer__left">
         <div className="companyInfo">
           <LocationOnIcon className="companyInfo__icon" />
           <span>Company Address</span>
@@ -31,7 +31,7 @@ export default function App() {
 
       <div className="footer__center">&copy; 2022 By NetWorthy</div>
 
-      <div class="footer__right">
+      <div className="footer__right">
         <FacebookRoundedIcon className="socialIcon" />
         <LinkedInIcon className="socialIcon" />
         <TwitterIcon className="socialIcon" />

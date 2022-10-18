@@ -1,4 +1,5 @@
 import React from "react";
+import { useDispatch } from "react-redux";
 import { Formik, Form } from "formik";
 import TextField from "@mui/material/TextField";
 import * as Yup from "yup";
@@ -7,9 +8,9 @@ import { Link } from "react-router-dom";
 import { ROUTES } from "../App/routeConfig";
 import { LOGIN_CONFIG, ROLE_CONFIG } from "./config";
 
+import { signup, signin } from "../../redux/slices/authSlice";
+
 import "../../styles/authWizard.scss";
-import { useDispatch } from "react-redux";
-import { signup } from "../../redux/slices/authSlice";
 
 const LoginSchema = Yup.object().shape({
   username: Yup.string().required("Please enter your username"),
@@ -39,12 +40,15 @@ const getValidationSchema = (state) => {
 
 const getInitialValues = (state) => {
   switch (state) {
-    case LOGIN_CONFIG.LOGIN || LOGIN_CONFIG.COACH_LOGIN || LOGIN_CONFIG.ADMIN:
+    case LOGIN_CONFIG.LOGIN:
+    case LOGIN_CONFIG.COACH_LOGIN:
+    case LOGIN_CONFIG.ADMIN:
       return {
         username: "",
         password: "",
       };
-    case LOGIN_CONFIG.SIGNUP || LOGIN_CONFIG.COACH_SIGNUP:
+    case LOGIN_CONFIG.SIGNUP:
+    case LOGIN_CONFIG.COACH_SIGNUP:
       return {
         username: "",
         email: "",
@@ -53,6 +57,19 @@ const getInitialValues = (state) => {
       };
     default:
       return {};
+  }
+};
+
+const getUserRole = (state) => {
+  switch (state) {
+    case LOGIN_CONFIG.LOGIN:
+    case LOGIN_CONFIG.SIGNUP:
+      return ROLE_CONFIG.CLIENT;
+    case LOGIN_CONFIG.COACH_LOGIN:
+    case LOGIN_CONFIG.COACH_SIGNUP:
+      return ROLE_CONFIG.COACH;
+    default:
+      return ROLE_CONFIG.CLIENT;
   }
 };
 
@@ -66,12 +83,21 @@ const AuthWizard = ({ state }) => {
     isAdminLogin = state == LOGIN_CONFIG.ADMIN;
 
   const submitForm = (data) => {
-    if (isSignup) {
-      // Client Signup
+    if (isSignup || isCoachSignup) {
+      // Signup
       dispatch(
         signup({
           ...data,
-          roles: [ROLE_CONFIG.CLIENT],
+          roles: [getUserRole(state)],
+        })
+      );
+    }
+    if (isLogin || isCoachLogin) {
+      // Login
+      dispatch(
+        signin({
+          ...data,
+          roles: [getUserRole(state)],
         })
       );
     }

@@ -17,7 +17,8 @@ httpService.interceptors.response.use(
     toast.error("Something went wrong!", {
       className: "warn-toast",
     });
-    throw new Error(error.response);
+    console.log(error);
+    throw error.response;
   }
 );
 
