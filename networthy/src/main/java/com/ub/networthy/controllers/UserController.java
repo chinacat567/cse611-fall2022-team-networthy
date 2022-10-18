@@ -24,7 +24,7 @@ import com.ub.networthy.payload.request.UserChangePasswordRequest;
 import com.ub.networthy.payload.response.MessageResponse;
 import com.ub.networthy.repository.UserRepository;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
+
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
