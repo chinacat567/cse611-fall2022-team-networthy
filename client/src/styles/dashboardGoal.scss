@@ -1,0 +1,23 @@
+@import "./common_styles/index.scss";
+
+.dashboardGoal {
+  display: flex;
+  padding: 20px;
+  border-radius: 6px;
+  height: 115px;
+  background-color: $--white;
+
+  &__summary {
+    margin-right: 40px;
+
+    .selectGoal {
+      min-width: 200px;
+      margin-bottom: 8px;
+
+      &__stage {
+        color: $--blue;
+        font-size: 14px;
+      }
+    }
+  }
+}
