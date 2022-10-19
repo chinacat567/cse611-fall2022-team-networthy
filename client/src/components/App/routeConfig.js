@@ -7,4 +7,5 @@ export const ROUTES = {
   COACH_SIGNUP: "/coach/signup",
   ADMIN: "/admin",
   CLIENT_DASHBOARD: "dashboard/client",
+  COACH_DASHBOARD: "dashboard/coach",
 };

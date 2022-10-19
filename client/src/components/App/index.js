@@ -15,6 +15,7 @@ import { LOGIN_CONFIG } from "../AuthWizard/config";
 import { ROUTES } from "./routeConfig";
 import Home from "../Home";
 import Dashboard from "../Dashboard";
+import PrivateRoute from "./privateRoute";
 
 const App = () => {
   return (
@@ -62,7 +63,11 @@ const App = () => {
             />
             <Route
               path={ROUTES.CLIENT_DASHBOARD}
-              element={<Dashboard role={null} />}
+              element={
+                <PrivateRoute>
+                  <Dashboard role={null} />
+                </PrivateRoute>
+              }
             />
           </Routes>
         </Router>
