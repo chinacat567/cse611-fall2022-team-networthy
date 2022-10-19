@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ub.networthy.models.ClientAndCoachRelation;
 import com.ub.networthy.models.ClientProfile;
 import com.ub.networthy.models.CoachProfile;
 import com.ub.networthy.models.ERole;
@@ -20,10 +21,12 @@ import com.ub.networthy.models.Role;
 import com.ub.networthy.models.User;
 import com.ub.networthy.payload.request.ClientProfileRequest;
 import com.ub.networthy.payload.response.MessageResponse;
+import com.ub.networthy.repository.ClientAndCoachRelationRepository;
 import com.ub.networthy.repository.ClientProfileRepository;
 import com.ub.networthy.repository.CoachProfileRepository;
 import com.ub.networthy.repository.UserRepository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -36,6 +39,10 @@ public class AdminController
 	
 	@Autowired
 	CoachProfileRepository coachProfileRepository;
+	
+
+    @Autowired
+    private ClientAndCoachRelationRepository clientCoachRelationRepo;
 	
 	@Autowired
 	ClientController clientController;
@@ -124,6 +131,20 @@ public class AdminController
 					.body(new MessageResponse("Error: User Does Not Exist"));
 		}
 
+		//Removing client coach relations before removing coach
+		
+		List<ClientAndCoachRelation> clientAndCoachRelations  = clientCoachRelationRepo.findAllByCoachUsername(userId);
+		
+		if(!clientAndCoachRelations.isEmpty())
+		{
+			for(ClientAndCoachRelation clientAndCoachRelation : clientAndCoachRelations)
+			{
+				String clientId = clientAndCoachRelation.getClientUsername();
+				
+				clientCoachRelationRepo.deleteClientAndCoachRelationByClientUsernameAndCoachUsername(clientId, userId);
+			}
+		}
+		
 		coachProfileRepository.deleteById(userId);
 
 		return ResponseEntity.ok(new MessageResponse("Coach Profile Deleted Successfully"));
@@ -148,6 +169,19 @@ public class AdminController
 					.badRequest()
 					.body(new MessageResponse("Error: User Does Not Exist"));
 		}
+		
+
+		//Removing client coach relation before removing client
+		
+        Optional<ClientAndCoachRelation> clientAndCoachRelation = clientCoachRelationRepo.findFirstByClientUsername(userId);
+        
+        if (clientAndCoachRelation.isPresent()) {
+        	
+        	String coachId = clientAndCoachRelation.get().getCoachUserId();
+        	
+        	clientCoachRelationRepo.deleteClientAndCoachRelationByClientUsernameAndCoachUsername(userId, coachId);	
+
+        }
 		
 		clientProfileRepository.deleteById(userId);
 		
