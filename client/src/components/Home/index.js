@@ -12,7 +12,7 @@ import "../../styles/home.scss";
 const Home = ({ authWizard }) => {
   return (
     <div className="home">
-      <Card sx={{ maxWidth: 600, minHeight: 400 }}>
+      <Card sx={{ maxWidth: 600, minHeight: 400 }} className="home__card">
         <CardMedia
           component="img"
           height="350"

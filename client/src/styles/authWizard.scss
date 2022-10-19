@@ -48,3 +48,10 @@
     color: $--nw-primary;
   }
 }
+
+@media only screen and (max-width: 420px) {
+  .authWizard {
+    min-width: 0px;
+    width: 90vw;
+  }
+}
