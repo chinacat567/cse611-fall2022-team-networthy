@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Formik, Form } from "formik";
 import TextField from "@mui/material/TextField";
@@ -41,14 +41,12 @@ const getValidationSchema = (state) => {
 const getInitialValues = (state) => {
   switch (state) {
     case LOGIN_CONFIG.LOGIN:
-    case LOGIN_CONFIG.COACH_LOGIN:
     case LOGIN_CONFIG.ADMIN:
       return {
         username: "",
         password: "",
       };
     case LOGIN_CONFIG.SIGNUP:
-    case LOGIN_CONFIG.COACH_SIGNUP:
       return {
         username: "",
         email: "",
@@ -60,13 +58,16 @@ const getInitialValues = (state) => {
   }
 };
 
-const getUserRole = (state) => {
-  switch (state) {
-    case LOGIN_CONFIG.LOGIN:
-    case LOGIN_CONFIG.SIGNUP:
+const TABS = {
+  CLIENT: "Client",
+  COACH: "Coach",
+};
+
+const getSignupUserRole = (tab) => {
+  switch (tab) {
+    case TABS.CLIENT:
       return ROLE_CONFIG.CLIENT;
-    case LOGIN_CONFIG.COACH_LOGIN:
-    case LOGIN_CONFIG.COACH_SIGNUP:
+    case TABS.COACH:
       return ROLE_CONFIG.COACH;
     default:
       return ROLE_CONFIG.CLIENT;
@@ -74,53 +75,61 @@ const getUserRole = (state) => {
 };
 
 const AuthWizard = ({ state }) => {
+  const [tab, setTab] = useState(TABS.CLIENT);
   const dispatch = useDispatch();
 
   const isLogin = state == LOGIN_CONFIG.LOGIN,
     isSignup = state == LOGIN_CONFIG.SIGNUP,
-    isCoachLogin = state == LOGIN_CONFIG.COACH_LOGIN,
-    isCoachSignup = state == LOGIN_CONFIG.COACH_SIGNUP,
     isAdminLogin = state == LOGIN_CONFIG.ADMIN;
 
   const submitForm = (data) => {
-    if (isSignup || isCoachSignup) {
+    if (isSignup) {
       // Signup
       dispatch(
         signup({
           ...data,
-          roles: [getUserRole(state)],
+          roles: [getSignupUserRole(tab)],
         })
       );
     }
-    if (isLogin || isCoachLogin) {
+    if (isLogin) {
       // Login
-      dispatch(
-        signin({
-          ...data,
-          roles: [getUserRole(state)],
-        })
-      );
+      dispatch(signin(data));
     }
   };
 
   return (
     <div className="authWizard">
+      {isSignup && (
+        <div className="formTabs">
+          {Object.values(TABS)?.map((thisTab) => (
+            <div
+              className={`formTabs__tab ${
+                tab == thisTab && "formTabs__tab--selected"
+              }`}
+              key={thisTab}
+              onClick={() => setTab(thisTab)}
+            >
+              {thisTab}
+            </div>
+          ))}
+        </div>
+      )}
+
       <Formik
         initialValues={getInitialValues(state)}
         validationSchema={getValidationSchema(state)}
         onSubmit={(values, { resetForm }) => {
           submitForm(values);
-          resetForm();
+          resetForm({
+            ...getInitialValues(state),
+          });
         }}
       >
         {({ values, errors, setFieldValue, handleChange, resetForm }) => (
           <Form className="authWizard__form">
-            {(isLogin || isCoachLogin || isAdminLogin) && (
+            {(isLogin || isAdminLogin) && (
               <>
-                {isLogin && <p className="authWizard__title">Client Login</p>}
-                {isCoachLogin && (
-                  <p className="authWizard__title">Coach Login</p>
-                )}
                 {isAdminLogin && (
                   <p className="authWizard__title">Admin Login</p>
                 )}
@@ -154,43 +163,33 @@ const AuthWizard = ({ state }) => {
                 </Button>
                 {isLogin && (
                   <div className="authWizard__redirection">
-                    <Link to={ROUTES.SIGNUP} onClick={resetForm}>
-                      Not a registered user?
-                    </Link>
-                    <Link to={ROUTES.COACH_LOGIN} onClick={resetForm}>
-                      Are you a coach?
-                    </Link>
-                  </div>
-                )}
-                {isCoachLogin && (
-                  <div className="authWizard__redirection">
-                    <Link to={ROUTES.COACH_SIGNUP} onClick={resetForm}>
-                      Not a registered coach?
-                    </Link>
-                    <Link to={ROUTES.LOGIN} onClick={resetForm}>
-                      Are you a client?
+                    <Link
+                      to={ROUTES.SIGNUP}
+                      onClick={() => {
+                        resetForm(...getInitialValues(state));
+                      }}
+                    >
+                      Not registered?
                     </Link>
                   </div>
                 )}
                 {isAdminLogin && (
                   <div className="authWizard__redirection">
-                    <Link to={ROUTES.LOGIN} onClick={resetForm}>
-                      Are you a client?
-                    </Link>
-                    <Link to={ROUTES.COACH_LOGIN} onClick={resetForm}>
-                      Are you a coach?
+                    <Link
+                      to={ROUTES.LOGIN}
+                      onClick={() => {
+                        resetForm(...getInitialValues(state));
+                      }}
+                    >
+                      Are you a client / coach?
                     </Link>
                   </div>
                 )}
               </>
             )}
 
-            {(isSignup || isCoachSignup) && (
+            {isSignup && (
               <>
-                {isSignup && <p className="authWizard__title">Client Signup</p>}
-                {isCoachSignup && (
-                  <p className="authWizard__title">Coach Signup</p>
-                )}
                 <TextField
                   name="username"
                   placeholder="Username"
@@ -236,7 +235,8 @@ const AuthWizard = ({ state }) => {
                   disabled={
                     Boolean(errors.password) ||
                     Boolean(errors.confirmPassword) ||
-                    values.password != values.confirmPassword ||
+                    (values.password &&
+                      values.password != values.confirmPassword) ||
                     Boolean(errors.email)
                   }
                 >
@@ -244,21 +244,17 @@ const AuthWizard = ({ state }) => {
                 </Button>
                 {isSignup && (
                   <div className="authWizard__redirection">
-                    <Link to={ROUTES.LOGIN} onClick={resetForm}>
+                    <Link
+                      to={ROUTES.LOGIN}
+                      onClick={() => {
+                        resetForm({
+                          ...getInitialValues(state),
+                        });
+                        document.body.scrollTop =
+                          document.documentElement.scrollTop = 0;
+                      }}
+                    >
                       Already registered?
-                    </Link>
-                    <Link to={ROUTES.COACH_SIGNUP} onClick={resetForm}>
-                      Are you a coach?
-                    </Link>
-                  </div>
-                )}
-                {isCoachSignup && (
-                  <div className="authWizard__redirection">
-                    <Link to={ROUTES.COACH_LOGIN} onClick={resetForm}>
-                      Already registered?
-                    </Link>
-                    <Link to={ROUTES.SIGNUP} onClick={resetForm}>
-                      Are you a client?
                     </Link>
                   </div>
                 )}

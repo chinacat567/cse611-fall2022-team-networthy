@@ -33,11 +33,12 @@ const signin = (payload) => {
       localStorage.setItem("USER", JSON.stringify(res?.data));
 
       // Navigation to respective dashboard
-      const role = payload?.roles[0];
+      const role = res?.data?.roles[0];
+
       if (role.includes(ROLE_CONFIG.CLIENT))
-        window.location.href = ROUTES.CLIENT_DASHBOARD;
+        window.location.href = "/" + ROUTES.CLIENT_DASHBOARD;
       else if (role.includes(ROLE_CONFIG.COACH))
-        window.location.href = ROUTES.COACH_DASHBOARD;
+        window.location.href = "/" + ROUTES.COACH_DASHBOARD;
       else
         toast.error("Role not found. Please try again later.", {
           className: "warn-toast",
