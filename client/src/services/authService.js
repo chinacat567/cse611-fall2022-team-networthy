@@ -59,9 +59,16 @@ const signin = (payload) => {
     });
 };
 
+const logoutService = () => {
+  localStorage.removeItem("USER");
+  localStorage.removeItem("USER_TOKEN");
+  window.location.reload();
+};
+
 const authService = {
   signup,
   signin,
+  logoutService,
 };
 
 export default authService;

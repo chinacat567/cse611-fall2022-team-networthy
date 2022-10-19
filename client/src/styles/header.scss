@@ -30,5 +30,26 @@
     font-weight: 500;
     font-size: 22px;
     font-family: "Catamaran", sans-serif;
+    cursor: pointer;
+
+    &:hover {
+      color: $--blue;
+    }
+  }
+
+  &__nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .navLink {
+      text-decoration: none;
+      color: $--black;
+      margin-right: 24px;
+    }
+
+    .navLink:hover {
+      color: $--blue;
+    }
   }
 }

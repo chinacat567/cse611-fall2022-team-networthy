@@ -22,9 +22,9 @@ const App = () => {
     <div className="app">
       {/* <Paper className="app__title">NetWorthy-App</Paper> */}
       {/* <Counter /> */}
-      <Header />
-      <div className="app__content">
-        <Router>
+      <Router>
+        <Header />
+        <div className="app__content">
           <Routes>
             <Route path={ROUTES.ABOUT} element={<About />} />
             <Route
@@ -70,9 +70,9 @@ const App = () => {
               }
             />
           </Routes>
-        </Router>
-      </div>
-      <Footer />
+        </div>
+        <Footer />
+      </Router>
     </div>
   );
 };
