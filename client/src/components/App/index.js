@@ -14,15 +14,17 @@ import AuthWizard from "../AuthWizard";
 import { LOGIN_CONFIG } from "../AuthWizard/config";
 import { ROUTES } from "./routeConfig";
 import Home from "../Home";
+import Dashboard from "../Dashboard";
+import PrivateRoute from "./privateRoute";
 
 const App = () => {
   return (
     <div className="app">
       {/* <Paper className="app__title">NetWorthy-App</Paper> */}
       {/* <Counter /> */}
-      <Header />
-      <div className="app__content">
-        <Router>
+      <Router>
+        <Header />
+        <div className="app__content">
           <Routes>
             <Route path={ROUTES.ABOUT} element={<About />} />
             <Route
@@ -59,10 +61,18 @@ const App = () => {
                 <Home authWizard={<AuthWizard state={LOGIN_CONFIG.ADMIN} />} />
               }
             />
+            <Route
+              path={ROUTES.CLIENT_DASHBOARD}
+              element={
+                <PrivateRoute>
+                  <Dashboard role={null} />
+                </PrivateRoute>
+              }
+            />
           </Routes>
-        </Router>
-      </div>
-      <Footer />
+        </div>
+        <Footer />
+      </Router>
     </div>
   );
 };

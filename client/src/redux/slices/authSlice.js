@@ -10,9 +10,11 @@ export const signin = createAsyncThunk("auth/signin", async (payload) => {
   return await authService.signin(payload);
 });
 
-// const USER_TOKEN = JSON.parse(localStorage.getItem("USER_TOKEN"));
+const user = JSON.parse(localStorage.getItem("USER"));
 
-const initialState = { isLoggedIn: false, user: null };
+const initialState = user
+  ? { isLoggedIn: true, user }
+  : { isLoggedIn: false, user: null };
 
 export const authSlice = createSlice({
   name: "auth",

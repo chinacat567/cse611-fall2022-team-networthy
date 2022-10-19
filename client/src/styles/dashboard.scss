@@ -1,0 +1,8 @@
+@import "./common_styles/index.scss";
+
+.dashboard {
+  padding: 150px 40px;
+  min-height: 100vh;
+  background-color: $--background-light-gray;
+  display: flex;
+}

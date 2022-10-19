@@ -2,6 +2,8 @@ import httpService from "./httpService";
 import { toast } from "react-toastify";
 
 import { API, getApi, navigateTo } from "./apiConfig";
+import { ROLE_CONFIG } from "../components/AuthWizard/config";
+import { ROUTES } from "../components/App/routeConfig";
 // import emailService from "./emailService";
 
 const signup = (payload) => {
@@ -29,7 +31,18 @@ const signin = (payload) => {
     .then((res) => {
       localStorage.setItem("USER_TOKEN", res?.data?.accessToken);
       localStorage.setItem("USER", JSON.stringify(res?.data));
-      toast("Signed In!");
+
+      // Navigation to respective dashboard
+      const role = res?.data?.roles[0];
+
+      if (role.includes(ROLE_CONFIG.CLIENT))
+        window.location.href = "/" + ROUTES.CLIENT_DASHBOARD;
+      else if (role.includes(ROLE_CONFIG.COACH))
+        window.location.href = "/" + ROUTES.COACH_DASHBOARD;
+      else
+        toast.error("Role not found. Please try again later.", {
+          className: "warn-toast",
+        });
     })
     .catch((err) => {
       if (err?.status == 401) {
@@ -47,9 +60,16 @@ const signin = (payload) => {
     });
 };
 
+const logoutService = () => {
+  localStorage.removeItem("USER");
+  localStorage.removeItem("USER_TOKEN");
+  window.location.reload();
+};
+
 const authService = {
   signup,
   signin,
+  logoutService,
 };
 
 export default authService;

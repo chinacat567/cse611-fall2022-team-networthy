@@ -1,38 +1,64 @@
+import { Menu, MenuItem } from "@mui/material";
 import * as React from "react";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 import logo from "../../assets/Images/NWlogo.webp";
+import authService from "../../services/authService";
 
 import "../../styles/header.scss";
+
 import { ROUTES } from "../App/routeConfig";
+import { ROLE_CONFIG } from "../AuthWizard/config";
 
 export default function IconLabelTabs() {
-  const [value, setValue] = React.useState(
-    parseInt(localStorage.getItem("TAB"))
-  );
-
-  const handleChange = (event, newValue) => {
-    localStorage.setItem("TAB", newValue);
-    if (newValue == 1) window.location.href = ROUTES.ABOUT;
-    if (newValue == 0) window.location.href = ROUTES.HOME;
-  };
+  const { user } = useSelector((state) => state.auth);
 
   return (
     <div className="header">
       <div className="header__left">
         <img src={logo} className="logo" />
-        <div className="header__title"> NetWorthy</div>
-      </div>
-      <div>
-        <Tabs
-          value={value}
-          onChange={handleChange}
-          aria-label="icon label tabs example"
+        <div
+          className="header__title"
+          onClick={() => (window.location.href = ROUTES.HOME)}
         >
-          <Tab label="Home" />
-          <Tab label="About" />
-        </Tabs>
+          NetWorthy
+        </div>
+      </div>
+      <div className="header__nav">
+        {user ? (
+          <>
+            {user?.roles[0]?.includes(ROLE_CONFIG.CLIENT) && (
+              <Link
+                className="navLink"
+                to={{ pathname: ROUTES.CLIENT_DASHBOARD }}
+              >
+                Dashboard
+              </Link>
+            )}
+            {user?.roles[0]?.includes(ROLE_CONFIG.COACH) && (
+              <Link
+                className="navLink"
+                to={{ pathname: ROUTES.COACH_DASHBOARD }}
+              >
+                Dashboard
+              </Link>
+            )}
+            <Link className="navLink" onClick={authService.logoutService}>
+              Logout
+            </Link>
+          </>
+        ) : (
+          <>
+            {" "}
+            <Link className="navLink" to={{ pathname: ROUTES.HOME }}>
+              Home
+            </Link>
+            <Link className="navLink" to={{ pathname: ROUTES.ABOUT }}>
+              About
+            </Link>
+          </>
+        )}
       </div>
     </div>
   );
