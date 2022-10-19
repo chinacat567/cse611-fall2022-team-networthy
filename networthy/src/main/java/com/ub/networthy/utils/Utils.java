@@ -35,7 +35,17 @@ public class Utils {
 
     public Utils() {
     }
-
+    
+    public boolean validateUser(String username) {
+    	
+    	try {
+    		return userRepository.existsByUsername(username);
+    	}catch (Exception e) {
+    		e.printStackTrace();
+    		return false;
+    	}
+    }
+    
     public boolean validateRole(String username, ERole eRole) {
         try {
             if(!userRepository.existsByUsername(username)) {

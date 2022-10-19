@@ -9,12 +9,12 @@ import java.util.List;
 public class ClientGoalRequest {
 
     @NotBlank
-    private String clientId;
+    private String clientUsername;
 
     @NotBlank
     private String goalId;
 
-    @NotBlank
+	@NotBlank
     private String goalStatus;
 
     @NotBlank
@@ -43,14 +43,15 @@ public class ClientGoalRequest {
 
     @NotBlank
     private List<String> goalTags;
+    
+    public String getClientUsername() {
+		return clientUsername;
+	}
 
-    public String getClientId() {
-        return clientId;
-    }
+	public void setClientUsername(String clientUsername) {
+		this.clientUsername = clientUsername;
+	}
 
-    public void setClientId(String clientId) {
-        this.clientId = clientId;
-    }
 
     public String getGoalId() {
         return goalId;

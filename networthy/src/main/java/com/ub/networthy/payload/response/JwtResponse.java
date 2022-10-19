@@ -3,6 +3,7 @@ package com.ub.networthy.payload.response;
 import java.util.List;
 
 import com.ub.networthy.models.ClientProfile;
+import com.ub.networthy.models.CoachProfile;
 
 public class JwtResponse {
 	private String token;
@@ -12,6 +13,27 @@ public class JwtResponse {
 	private String email;
 	private List<String> roles;
 	private ClientProfile clientProfile;
+	private CoachProfile coachProfile;
+
+
+
+	public JwtResponse(String accessToken, String id, String username, String email, List<String> roles, ClientProfile clientProfile, CoachProfile coachProfile) {
+		this.token = accessToken;
+		this.id = id;
+		this.username = username;
+		this.email = email;
+		this.roles = roles;
+		this.clientProfile = clientProfile;
+		this.coachProfile = coachProfile;
+	}
+	
+	public CoachProfile getCoachProfile() {
+		return coachProfile;
+	}
+
+	public void setCoachProfile(CoachProfile coachProfile) {
+		this.coachProfile = coachProfile;
+	}
 
 	public ClientProfile getClientProfile() {
 		return clientProfile;
@@ -20,16 +42,6 @@ public class JwtResponse {
 	public void setClientProfile(ClientProfile clientProfile) {
 		this.clientProfile = clientProfile;
 	}
-
-	public JwtResponse(String accessToken, String id, String username, String email, List<String> roles, ClientProfile clientProfile) {
-		this.token = accessToken;
-		this.id = id;
-		this.username = username;
-		this.email = email;
-		this.roles = roles;
-		this.clientProfile = clientProfile;
-	}
-
 	public String getAccessToken() {
 		return token;
 	}

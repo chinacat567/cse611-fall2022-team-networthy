@@ -17,19 +17,19 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 @Document(collection = "clientgoal")
 public class ClientGoal {
 
-    @Id
-    @NotBlank
-    private String clientId;
-
     @Field("GOL_ID")
     @NotBlank
     private String goalId;
+    
+    @Field("GOL_CLIENT")
+    @NotBlank
+    private String clientUsername;
 
     @Field("GOL_STATUS")
     @NotBlank
     private String goalStatus;
 
-    @Field("GOL_REVIEW_COA")
+	@Field("GOL_REVIEW_COA")
     @NotBlank
     private String goalReviewCoachId;
 
@@ -65,12 +65,12 @@ public class ClientGoal {
     @NotBlank
     private List<String> goalTags;
 
-    public ClientGoal(@NotBlank String clientId, @NotBlank String goalId, @NotBlank String goalStatus,
+    public ClientGoal(@NotBlank String clientUsername, @NotBlank String goalId, @NotBlank String goalStatus,
                       @NotBlank String goalReviewCoachId, @NotBlank String goalTittle, @NotBlank String goalDescription,
                       @NotBlank String goalSpecific, @NotBlank String goalMeasurable, @NotBlank String goalAttainable,
                       @NotBlank String goalRelevant, @NotBlank String goalTimeBased, @NotBlank List<String> goalTags) {
 
-        this.clientId = clientId;
+        this.clientUsername = clientUsername;
         this.goalId = goalId;
         this.goalStatus = goalStatus;
         this.goalReviewCoachId = goalReviewCoachId;
@@ -84,13 +84,13 @@ public class ClientGoal {
         this.goalTags = goalTags;
     }
 
-    public String getClientId() {
-        return clientId;
-    }
+    public String getClientUsername() {
+		return clientUsername;
+	}
 
-    public void setClientId(String clientId) {
-        this.clientId = clientId;
-    }
+	public void setClientUsername(String clientUsername) {
+		this.clientUsername = clientUsername;
+	}
 
     public String getGoalId() {
         return goalId;

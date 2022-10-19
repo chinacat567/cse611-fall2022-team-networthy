@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ub.networthy.models.ClientProfile;
+import com.ub.networthy.models.CoachProfile;
 import com.ub.networthy.models.ERole;
 import com.ub.networthy.models.Role;
 import com.ub.networthy.models.User;
@@ -40,6 +41,7 @@ import com.ub.networthy.payload.response.MessageResponse;
 import com.ub.networthy.repository.RoleRepository;
 import com.ub.networthy.repository.UserRepository;
 import com.ub.networthy.repository.ClientProfileRepository;
+import com.ub.networthy.repository.CoachProfileRepository;
 import com.ub.networthy.services.UserDetailsImpl;
 
 import com.ub.networthy.security.jwt.*;
@@ -60,6 +62,9 @@ public class AuthController {
 	
 	@Autowired
 	ClientProfileRepository clientProfileRepository;
+	
+	@Autowired
+    private CoachProfileRepository coachProfileRepository;
 
 	@Autowired
 	PasswordEncoder encoder;
@@ -91,13 +96,19 @@ public class AuthController {
 				.collect(Collectors.toList());
 		
 		ClientProfile clientProfile = clientProfileRepository.findByUsername(userDetails.getUsername());
+		CoachProfile coachProfile = null;
+		if(coachProfileRepository.existsByUsername(userDetails.getUsername())) {
+			coachProfile = coachProfileRepository.findByUsername(userDetails.getUsername()).get();
+		}
+		
 		logger.info("Success : Sign In SuccessFull - " + loginRequest.getUsername());
 		return ResponseEntity.ok(new JwtResponse(jwt, 
 												 userDetails.getId(), 
 												 userDetails.getUsername(), 
 												 userDetails.getEmail(), 
 												 roles,
-												 clientProfile));
+												 clientProfile,
+												 coachProfile));
 	}
 	
 	@GetMapping("/verify/{userId}")

@@ -27,7 +27,7 @@ public class ClientGoalService {
         /* set GoalId to a randomly generated 128 bit UUID */
         clientGoalRequest.setGoalId(UUID.randomUUID().toString());
 
-        ClientGoal clientGoal = new ClientGoal(clientGoalRequest.getClientId(), clientGoalRequest.getGoalId(),
+        ClientGoal clientGoal = new ClientGoal(clientGoalRequest.getClientUsername(), clientGoalRequest.getGoalId(),
                                                clientGoalRequest.getGoalStatus(), clientGoalRequest.getGoalReviewCoachId(),
                                                clientGoalRequest.getGoalTittle(), clientGoalRequest.getGoalDescription(),
                                                clientGoalRequest.getGoalSpecific(), clientGoalRequest.getGoalMeasurable(),
@@ -37,13 +37,19 @@ public class ClientGoalService {
         clientGoalRepo.save(clientGoal);
 
     }
+    
+    public List<ClientGoal> getAllGoalsForClient(String clientUsername) {
+    	
+    	 return clientGoalRepo.findAllByClientUsername(clientUsername);
+
+    }
 
     public void updateGoalStatus(@NotBlank String clientId, @NotBlank String updatedStatus) {
-        Optional<ClientGoal> clientGoal = clientGoalRepo.findAllByClientId(clientId).stream().findFirst();
+        Optional<ClientGoal> clientGoal = clientGoalRepo.findAllByClientUsername(clientId).stream().findFirst();
 
         if (clientGoal.isPresent()) {
             ClientGoal clientGoalOld = clientGoal.get();
-            ClientGoal updatedClientGoal = new ClientGoal(clientGoalOld.getClientId(), clientGoalOld.getGoalId(),
+            ClientGoal updatedClientGoal = new ClientGoal(clientGoalOld.getClientUsername(), clientGoalOld.getGoalId(),
                                                           updatedStatus, clientGoalOld.getGoalReviewCoachId(),
                                                           clientGoalOld.getGoalTittle(), clientGoalOld.getGoalDescription(),
                                                           clientGoalOld.getGoalSpecific(), clientGoalOld.getGoalMeasurable(),
@@ -58,14 +64,14 @@ public class ClientGoalService {
     }
 
     public void addTagsForGoal(@NotBlank String clientId, @NotNull List<String> newTags) {
-        Optional<ClientGoal> clientGoal = clientGoalRepo.findAllByClientId(clientId).stream().findFirst();
+        Optional<ClientGoal> clientGoal = clientGoalRepo.findAllByClientUsername(clientId).stream().findFirst();
         if (clientGoal.isPresent()) {
 
             ClientGoal clientGoalOld = clientGoal.get();
             List<String> updatedTags = new ArrayList<>(clientGoalOld.getGoalTags());
             updatedTags.addAll(newTags);
 
-            ClientGoal updatedClientGoal = new ClientGoal(clientGoalOld.getClientId(), clientGoalOld.getGoalId(),
+            ClientGoal updatedClientGoal = new ClientGoal(clientGoalOld.getClientUsername(), clientGoalOld.getGoalId(),
                     clientGoalOld.getGoalStatus(), clientGoalOld.getGoalReviewCoachId(),
                     clientGoalOld.getGoalTittle(), clientGoalOld.getGoalDescription(),
                     clientGoalOld.getGoalSpecific(), clientGoalOld.getGoalMeasurable(),

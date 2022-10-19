@@ -38,7 +38,8 @@ public class CoachController {
     private UserRepository userRepository;
 
     private Logger logger = LoggerFactory.getLogger(CoachController.class);
-
+    
+    @Autowired
     private Utils utils;
 
     /* ADD COACH DATA : Add the CoachProfile excluding resume, LORs
@@ -47,6 +48,12 @@ public class CoachController {
     public ResponseEntity<?>  addCoachData(@RequestBody CoachDataRequest coachDataRequest) {
         try {
             /* only Coach */
+        	if(!utils.validateUser(coachDataRequest.getUsername())) {
+        		return ResponseEntity
+                        .badRequest()
+                        .body(new MessageResponse("Error: User does not exist!"));
+        	}
+        	
             if (!utils.validateRole(coachDataRequest.getUsername(), ERole.ROLE_COACH)) {
                 return ResponseEntity
                         .badRequest()

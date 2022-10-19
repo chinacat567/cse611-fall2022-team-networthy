@@ -12,7 +12,7 @@ import java.util.List;
 @EnableMongoRepositories
 public interface ClientGoalRepository extends MongoRepository<ClientGoal, String> {
 
-    List<ClientGoal> findAllByClientId(@NotBlank String clientId);
+    List<ClientGoal> findAllByClientUsername(@NotBlank String clientUsername);
 
     List<ClientGoal> findAllByGoalReviewCoachId(@NotBlank String goalReviewCoachId);
 
