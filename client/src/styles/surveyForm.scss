@@ -1,0 +1,108 @@
+@import "./common_styles/index.scss";
+
+.surveyWizard {
+  min-width: 400px;
+  background-color: $--white;
+  padding: 40px 20px;
+
+  &__name {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    align-items: left;
+    margin-bottom: 40px;
+  }
+
+  &__location {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    align-items: left;
+    margin-bottom: 40px;
+  }
+
+  &__state {
+    width: 300px;
+    margin-left: 80px !important;
+  }
+
+  &__scroller {
+    width: 500px;
+  }
+
+  &__country {
+    width: 300px;
+    margin-left: 30px !important;
+  }
+
+  &__firstName {
+    margin-left: 30px !important;
+  }
+  &__lastName {
+    margin-left: 80px !important;
+  }
+
+  &__education {
+    width: 300px !important;
+    margin-left: 30px !important;
+  }
+
+  &__learningMethod {
+    width: 300px !important;
+    margin-left: 30px !important;
+  }
+
+  &__income {
+    width: 300px !important;
+    margin-left: 80px !important;
+  }
+
+  &__textbox {
+    margin-left: 30px !important;
+  }
+
+  &__university {
+    margin-top: 20px !important;
+    margin-left: 80px !important;
+  }
+  &__gender {
+    height: 60px;
+    margin-left: 30px !important;
+  }
+  &__title {
+    font-size: 18px;
+    text-align: center;
+    margin-bottom: 24px;
+  }
+
+  &__redirection {
+    width: 100%;
+    margin-top: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &_button {
+    width: 200px;
+    margin-left: 30px !important;
+  }
+
+  a {
+    text-decoration: none;
+    margin-bottom: 8px;
+    color: $--slightly-dark-gray;
+  }
+
+  a:hover {
+    color: $--nw-primary;
+  }
+}
+
+.surveyText {
+  margin-left: 30px !important;
+  margin-bottom: 30px;
+}
