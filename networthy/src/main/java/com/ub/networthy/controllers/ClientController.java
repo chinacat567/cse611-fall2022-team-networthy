@@ -142,8 +142,8 @@ public class ClientController {
 		if(clientProfileRequest.getLocation() != null) existingClientProfile.setLocation(clientProfileRequest.getLocation());
 		if(clientProfileRequest.getFinancialLevel() != 0) existingClientProfile.setFinancialLevel(clientProfileRequest.getFinancialLevel());
 		if(clientProfileRequest.getLearningMethod() != null) existingClientProfile.setLearningMethod(clientProfileRequest.getLearningMethod());
-		if(clientProfileRequest.getIncome() != 0) existingClientProfile.setIncome(clientProfileRequest.getIncome());
-		if(clientProfileRequest.getDebt() != 0) existingClientProfile.setDebt(clientProfileRequest.getDebt());
+		if(clientProfileRequest.getIncome() != null) existingClientProfile.setIncome(clientProfileRequest.getIncome());
+		if(clientProfileRequest.getDebt() != null) existingClientProfile.setDebt(clientProfileRequest.getDebt());
 		if(clientProfileRequest.getGeneral() != null) existingClientProfile.setGeneral(clientProfileRequest.getGeneral());
 		
 		clientProfileRepository.save(existingClientProfile);

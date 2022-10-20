@@ -70,11 +70,11 @@ public class ClientProfile {
 	
 	@Field("CLI_INCOME")
 	@NotBlank
-	private int income;
+	private String income;
 	
 	@Field("CLI_DEBT")
 	@NotBlank
-	private int debt;
+	private String debt;
 	
 	@Field("CLI_GENERAL")
 	@NotBlank
@@ -91,7 +91,7 @@ public class ClientProfile {
 	public ClientProfile(@NotBlank String userId, @NotBlank String emailId, @NotBlank String firstName,
 			@NotBlank String lastName, @NotBlank Date dateOfBirth, @NotBlank String gender, @NotBlank String occupation,
 			@NotBlank String education, @NotBlank String university, @NotBlank String location,
-			@NotBlank int financialLevel, @NotBlank String learningMethod, @NotBlank int income, @NotBlank int debt,
+			@NotBlank int financialLevel, @NotBlank String learningMethod, @NotBlank String income, @NotBlank String debt,
 			@NotBlank String general, @NotBlank boolean profileStatus) {
 		super();
 		this.username = userId;
@@ -208,19 +208,19 @@ public class ClientProfile {
 		this.learningMethod = learningMethod;
 	}
 
-	public int getIncome() {
+	public String getIncome() {
 		return income;
 	}
 
-	public void setIncome(int income) {
+	public void setIncome(String income) {
 		this.income = income;
 	}
 
-	public int getDebt() {
+	public String getDebt() {
 		return debt;
 	}
 
-	public void setDebt(int debt) {
+	public void setDebt(String debt) {
 		this.debt = debt;
 	}
 

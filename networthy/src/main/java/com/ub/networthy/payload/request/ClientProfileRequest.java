@@ -46,10 +46,10 @@ public class ClientProfileRequest {
 	private String learningMethod;
 
 	@NotBlank
-	private int income;
+	private String income;
 
 	@NotBlank
-	private int debt;
+	private String debt;
 
 	@NotBlank
 	private String general;
@@ -153,19 +153,19 @@ public class ClientProfileRequest {
 		this.learningMethod = learningMethod;
 	}
 
-	public int getIncome() {
+	public String getIncome() {
 		return income;
 	}
 
-	public void setIncome(int income) {
+	public void setIncome(String income) {
 		this.income = income;
 	}
 
-	public int getDebt() {
+	public String getDebt() {
 		return debt;
 	}
 
-	public void setDebt(int debt) {
+	public void setDebt(String debt) {
 		this.debt = debt;
 	}
 
