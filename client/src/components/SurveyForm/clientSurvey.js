@@ -14,6 +14,10 @@ import countryList from "react-select-country-list";
 import US_STATES from "./usStates.json";
 
 import "../../styles/surveyForm.scss";
+import clientService from "../../services/clientService";
+import { useDispatch, useSelector } from "react-redux";
+import { ROUTES } from "../App/routeConfig";
+import { addClientProfile } from "../../redux/slices/authSlice";
 
 const GENDER = {
   MALE: "Male",
@@ -59,46 +63,54 @@ const DEBTS = [
 ];
 
 const INIT_VALUES = {
-  firstname: "",
-  lastname: "",
-  dob: "",
+  firstName: "",
+  lastName: "",
+  dateOfBirth: "",
   gender: "",
   occupation: "",
-  highestEducation: "",
+  education: "",
   university: "",
   country: "",
   state: "",
-  financialLiteracy: 0,
-  preferredLearningMethod: "",
-  annualIncome: "",
+  financialLevel: 0,
+  learningMethod: "",
+  income: "",
   debt: "",
   general: "",
 };
 
 const ValidationSchema = Yup.object().shape({
-  firstname: Yup.string().required("First name cannot be empty."),
-  lastname: Yup.string().required("Last name cannot be empty."),
-  dob: Yup.string().required("Date of birth cannot be empty."),
+  firstName: Yup.string().required("First name cannot be empty."),
+  lastName: Yup.string().required("Last name cannot be empty."),
+  dateOfBirth: Yup.string().required("Date of birth cannot be empty."),
   gender: Yup.string().required("Gender cannot be empty."),
   occupation: Yup.string().required("Occupation cannot be empty."),
-  highestEducation: Yup.string().required("Highest education cannot be empty."),
+  education: Yup.string().required("Highest education cannot be empty."),
   university: Yup.string().required("University name cannot be empty."),
   country: Yup.string().required("Country selection cannot be empty."),
   state: Yup.string().required("State selection cannot be empty."),
-  financialLiteracy: Yup.number().optional(),
-  preferredLearningMethod: Yup.string().required(
-    "Preferred learning cannot be empty."
-  ),
-  annualIncome: Yup.string().required("Annual income cannot be empty."),
+  financialLevel: Yup.number().optional(),
+  learningMethod: Yup.string().required("Preferred learning cannot be empty."),
+  income: Yup.string().required("Annual income cannot be empty."),
   debt: Yup.string().required("Debt cannot be empty."),
   general: Yup.string().optional(),
 });
 
 const ClientSurvey = () => {
+  const { user } = useSelector((state) => state?.auth);
+  const dispatch = useDispatch();
   const countries = countryList().getData();
 
-  const submitForm = (values) => {
-    console.log(values);
+  const submitForm = async (values, callback) => {
+    console.log(values.dateOfBirth);
+    values = {
+      ...values,
+      username: user?.username,
+      emailId: user?.email,
+      profileStatus: true,
+      location: values.state + ", " + values.country,
+    };
+    dispatch(addClientProfile(values));
   };
 
   return (
@@ -108,8 +120,9 @@ const ClientSurvey = () => {
         initialValues={INIT_VALUES}
         validationSchema={ValidationSchema}
         onSubmit={(values, { resetForm }) => {
-          submitForm(values);
-          // resetForm({ ...INIT_VALUES });
+          submitForm(values, () => {
+            resetForm({ ...INIT_VALUES });
+          });
         }}
       >
         {({
@@ -124,7 +137,7 @@ const ClientSurvey = () => {
             <Form>
               <div className="surveyWizard__sub">
                 <TextField
-                  name="firstname"
+                  name="firstName"
                   label="First Name"
                   className="surveyWizard__textField"
                   value={values.firstname}
@@ -133,7 +146,7 @@ const ClientSurvey = () => {
                   helperText={errors.firstname}
                 />
                 <TextField
-                  name="lastname"
+                  name="lastName"
                   label="Last Name"
                   className="surveyWizard__textField"
                   value={values.lastname}
@@ -142,18 +155,18 @@ const ClientSurvey = () => {
                   helperText={errors.lastname}
                 />
                 <TextField
-                  name="dob"
+                  name="dateOfBirth"
                   label="Date Of Birth"
                   type="date"
                   className="surveyWizard__textField"
-                  value={values.dob}
+                  value={values.dateOfBirth}
                   onChange={handleChange}
                   sx={{ width: 220 }}
                   InputLabelProps={{
                     shrink: true,
                   }}
-                  error={Boolean(errors.dob)}
-                  helperText={errors.dob}
+                  error={Boolean(errors.dateOfBirth)}
+                  helperText={errors.dateOfBirth}
                 />
               </div>
 
@@ -197,17 +210,17 @@ const ClientSurvey = () => {
 
               <div className="surveyWizard__sub">
                 <div>
-                  <InputLabel id="highestEducation">
+                  <InputLabel id="education">
                     Higest Education Completed
                   </InputLabel>
                   <Select
-                    labelId="highestEducation"
-                    name="highestEducation"
-                    value={values.highestEducation}
+                    labelId="education"
+                    name="education"
+                    value={values.education}
                     className="surveyWizard__select"
                     onChange={handleChange}
                     sx={{ width: 220 }}
-                    error={Boolean(errors.highestEducation)}
+                    error={Boolean(errors.education)}
                   >
                     {HIGHEST_EDUCATION.map((x) => (
                       <MenuItem value={x} key={x}>
@@ -216,7 +229,7 @@ const ClientSurvey = () => {
                     ))}
                   </Select>
                   <p className="errorText">
-                    <ErrorMessage name="highestEducation" />
+                    <ErrorMessage name="education" />
                   </p>
                 </div>
 
@@ -286,14 +299,11 @@ const ClientSurvey = () => {
                   </InputLabel>
                   <br />
                   <Slider
-                    name="financialLiteracy"
+                    name="financialLevel"
                     onChange={({ target }) => {
-                      setFieldValue(
-                        "financialLiteracy",
-                        parseInt(target.value)
-                      );
+                      setFieldValue("financialLevel", parseInt(target.value));
                     }}
-                    value={parseInt(values.financialLiteracy)}
+                    value={parseInt(values.financialLevel)}
                     className="surveyWizard__scroller"
                     valueLabelDisplay="auto"
                     step={1}
@@ -311,13 +321,13 @@ const ClientSurvey = () => {
                   </InputLabel>
                   <Select
                     labelId="learningMethod"
-                    name="preferredLearningMethod"
-                    value={values.preferredLearningMethod}
+                    name="learningMethod"
+                    value={values.learningMethod}
                     className="surveyWizard__select"
                     sx={{ width: 220 }}
-                    error={Boolean(errors.preferredLearningMethod)}
+                    error={Boolean(errors.learningMethod)}
                     onChange={({ target }) => {
-                      setFieldValue("preferredLearningMethod", target.value);
+                      setFieldValue("learningMethod", target.value);
                     }}
                   >
                     {LEARNING_METHODS.map((x) => (
@@ -327,21 +337,21 @@ const ClientSurvey = () => {
                     ))}
                   </Select>
                   <p className="errorText">
-                    <ErrorMessage name="preferredLearningMethod" />
+                    <ErrorMessage name="learningMethod" />
                   </p>
                 </div>
 
                 <div>
-                  <InputLabel id="annualIncome">Annual Income</InputLabel>
+                  <InputLabel id="income">Annual Income</InputLabel>
                   <Select
-                    labelId="annualIncome"
-                    name="annualIncome"
-                    value={values.annualIncome}
+                    labelId="income"
+                    name="income"
+                    value={values.income}
                     className="surveyWizard__select"
-                    error={Boolean(errors.annualIncome)}
+                    error={Boolean(errors.income)}
                     sx={{ width: 220 }}
                     onChange={({ target }) => {
-                      setFieldValue("annualIncome", target.value);
+                      setFieldValue("income", target.value);
                     }}
                   >
                     {ANNUAL_INCOMES.map((x) => (
@@ -351,7 +361,7 @@ const ClientSurvey = () => {
                     ))}
                   </Select>
                   <p className="errorText">
-                    <ErrorMessage name="annualIncome" />
+                    <ErrorMessage name="income" />
                   </p>
                 </div>
 

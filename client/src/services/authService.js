@@ -1,19 +1,16 @@
 import httpService from "./httpService";
 import { toast } from "react-toastify";
 
-import { API, getApi, navigateTo } from "./apiConfig";
+import { API, getApi } from "./apiConfig";
 import { ROLE_CONFIG } from "../components/AuthWizard/config";
 import { ROUTES } from "../components/App/routeConfig";
-// import emailService from "./emailService";
 
-const signup = (payload) => {
+const _signup = (payload) => {
   return httpService
     .post(getApi(API.SIGNUP), payload)
     .then((res) => {
       toast("You are registered, Welcome to NetWorthy");
-      // TODO: Replace with emailService
       toast("Check email for verification");
-      // emailService.sendVerificationEmail(payload?.username, payload?.email);
     })
     .catch((err) => {
       toast.error(
@@ -25,7 +22,7 @@ const signup = (payload) => {
     });
 };
 
-const signin = (payload) => {
+const _signin = (payload) => {
   return httpService
     .post(getApi(API.LOGIN), payload)
     .then((res) => {
@@ -33,11 +30,16 @@ const signin = (payload) => {
       localStorage.setItem("USER", JSON.stringify(res?.data));
 
       // Navigation to respective dashboard
-      const role = res?.data?.roles[0];
+      const role = res?.data?.roles[0],
+        clientProfile = res?.data?.clientProfile;
 
-      if (role.includes(ROLE_CONFIG.CLIENT))
-        window.location.href = "/" + ROUTES.CLIENT_DASHBOARD;
-      else if (role.includes(ROLE_CONFIG.COACH))
+      if (role.includes(ROLE_CONFIG.CLIENT)) {
+        window.location.href =
+          "/" +
+          (clientProfile
+            ? ROUTES.CLIENT_DASHBOARD
+            : ROUTES.CLIENT_PROFILE_SURVEY);
+      } else if (role.includes(ROLE_CONFIG.COACH))
         window.location.href = "/" + ROUTES.COACH_DASHBOARD;
       else
         toast.error("Role not found. Please try again later.", {
@@ -67,8 +69,8 @@ const logoutService = () => {
 };
 
 const authService = {
-  signup,
-  signin,
+  _signup,
+  _signin,
   logoutService,
 };
 
