@@ -43,6 +43,8 @@ import com.ub.networthy.repository.UserRepository;
 import com.ub.networthy.repository.ClientProfileRepository;
 import com.ub.networthy.repository.CoachProfileRepository;
 import com.ub.networthy.services.UserDetailsImpl;
+import com.ub.networthy.services.EmailSenderService;
+
 
 import com.ub.networthy.security.jwt.*;
 
@@ -56,6 +58,9 @@ public class AuthController {
 
 	@Autowired
 	UserRepository userRepository;
+	
+	@Autowired
+	EmailSenderService emailSenderService;
 
 	@Autowired
 	RoleRepository roleRepository;
@@ -102,6 +107,7 @@ public class AuthController {
 		}
 		
 		logger.info("Success : Sign In SuccessFull - " + loginRequest.getUsername());
+		
 		return ResponseEntity.ok(new JwtResponse(jwt, 
 												 userDetails.getId(), 
 												 userDetails.getUsername(), 
@@ -125,6 +131,23 @@ public class AuthController {
 		user.setVerified(true);
 		userRepository.save(user);
 		logger.info("Success: User Verified - " +userId);
+		return ResponseEntity.ok(new MessageResponse("User verification successfully!"));
+		
+	}
+	
+	@GetMapping("/resendVerification/{userId}")
+	public ResponseEntity<?> resendVerificationLink(@PathVariable String userId) {
+		if(!userRepository.existsByUsername(userId)) {
+			logger.error("Error: Username doesnot exist ! - " +userId);
+			return ResponseEntity
+					.badRequest()
+					.body(new MessageResponse("Error: Username does not exist"));
+		} 
+		
+		User user = userRepository.findByUsername(userId).get();
+		
+		emailSenderService.sendEmail(user.getEmail(), "Welcome To NetWorthy !", "Hello "+user.getUsername()+",\n\nPlease click on the link to verify your email - http://localhost:8080/api/auth/verify/"+user.getUsername()+ " \n\n Thank You,\n Team NetWorthy");
+		logger.info("Success: Resend User Verification URL for -  " +user.getUsername());
 		return ResponseEntity.ok(new MessageResponse("User verification successfully!"));
 		
 	}
@@ -184,6 +207,8 @@ public class AuthController {
 		user.setRoles(roles);
 		userRepository.save(user);
 		logger.info("Success: User registered successfully! " +signUpRequest.getUsername());
+		emailSenderService.sendEmail(signUpRequest.getEmail(), "Welcome To NetWorthy", "Hello "+signUpRequest.getUsername()+"\nPlease click on the link to verify your email - http://localhost:8080/api/auth/verify/"+signUpRequest.getUsername()+ " \n\n Thank You,\n Team NetWorthy");
+		
 		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
 	}
 	
