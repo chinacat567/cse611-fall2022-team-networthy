@@ -1,124 +1,193 @@
-import React, { useState, useMemo, useCallback } from "react";
-import { useDispatch } from "react-redux";
-import { Formik, Form } from "formik";
+import React from "react";
+import * as Yup from "yup";
+import { Formik, Form, ErrorMessage } from "formik";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import TextareaAutosize from "@mui/material/TextareaAutosize";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
+import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import InputLabel from "@mui/material/InputLabel";
 import Slider from "@mui/material/Slider";
-import Typography from "@mui/material/Typography";
 import countryList from "react-select-country-list";
-import SelectUSState from "react-select-us-states";
+import US_STATES from "./usStates.json";
 
 import "../../styles/surveyForm.scss";
-import { height } from "@mui/system";
 
-const clientSurvey = ({ state }) => {
-  // const dispatch = useDispatch();
-  const options = countryList().getData();
+const GENDER = {
+  MALE: "Male",
+  FEMALE: "Female",
+  TRANSGENDER: "Transgender",
+  NONBINARY: "Non-Binary",
+};
 
-  console.log(options);
+const HIGHEST_EDUCATION = [
+  "Doctorate degree (for example, PhD, EdD)",
+  "Professional degree beyond bachelor's degree (for example:MD, DDS, DVM, LLB, JD)",
+  "Master's degree (for example: MA, MS, MEng, MEd, MSW, MBA)",
+  "Bachelor's degree (for example: BA. BS)",
+  "Associates degree (for example: AA, AS)",
+  "GED or alternative credential",
+  "Regular high school diploma",
+  "12th grade—no diploma",
+  "No schooling completed",
+];
 
-  const getInitialValues = (state) => {
-    return {
-      firstname: "",
-      lastname: "",
-      gender: "male",
-    };
-  };
+const LEARNING_METHODS = ["Books", "Articles", "Videos", "Podcasts"];
 
-  const submitForm = (data) => {
-    // if (isSignup || isCoachSignup) {
-    //   // Signup
-    //   dispatch(
-    //     signup({
-    //       ...data,
-    //       roles: [getUserRole(state)],
-    //     })
-    //   );
-    // }
-    // if (isLogin || isCoachLogin) {
-    //   // Login
-    //   dispatch(
-    //     signin({
-    //       ...data,
-    //       roles: [getUserRole(state)],
-    //     })
-    //   );
-    // }
+const ANNUAL_INCOMES = [
+  "0-$20k",
+  "$21-$40k",
+  "$41-$60k",
+  "$61-$80k",
+  "$81-$100k",
+  "$101-$125k",
+  "$126-$150k",
+  "$150k+",
+];
+
+const DEBTS = [
+  "0-$20k",
+  "$21-$40k",
+  "$41-$60k",
+  "$61-$80k",
+  "$81-$100k",
+  "$101-$125k",
+  "$126-$150k",
+  "$150k+",
+];
+
+const INIT_VALUES = {
+  firstname: "",
+  lastname: "",
+  dob: "",
+  gender: "",
+  occupation: "",
+  highestEducation: "",
+  university: "",
+  country: "",
+  state: "",
+  financialLiteracy: 0,
+  preferredLearningMethod: "",
+  annualIncome: "",
+  debt: "",
+  general: "",
+};
+
+const ValidationSchema = Yup.object().shape({
+  firstname: Yup.string().required("First name cannot be empty."),
+  lastname: Yup.string().required("Last name cannot be empty."),
+  dob: Yup.string().required("Date of birth cannot be empty."),
+  gender: Yup.string().required("Gender cannot be empty."),
+  occupation: Yup.string().required("Occupation cannot be empty."),
+  highestEducation: Yup.string().required("Highest education cannot be empty."),
+  university: Yup.string().required("University name cannot be empty."),
+  country: Yup.string().required("Country selection cannot be empty."),
+  state: Yup.string().required("State selection cannot be empty."),
+  financialLiteracy: Yup.number().optional(),
+  preferredLearningMethod: Yup.string().required(
+    "Preferred learning cannot be empty."
+  ),
+  annualIncome: Yup.string().required("Annual income cannot be empty."),
+  debt: Yup.string().required("Debt cannot be empty."),
+  general: Yup.string().optional(),
+});
+
+const ClientSurvey = () => {
+  const countries = countryList().getData();
+
+  const submitForm = (values) => {
+    console.log(values);
   };
 
   return (
     <div className="surveyWizard">
-      <p className="surveyText">SURVEY FORM</p>
+      <p className="surveyText">CLIENT PROFILE</p>
       <Formik
-        initialValues={getInitialValues(state)}
+        initialValues={INIT_VALUES}
+        validationSchema={ValidationSchema}
         onSubmit={(values, { resetForm }) => {
           submitForm(values);
-          resetForm();
+          // resetForm({ ...INIT_VALUES });
         }}
       >
-        {({ values, errors, setFieldValue, handleChange, resetForm }) => (
+        {({
+          values,
+          errors,
+          setFieldValue,
+          handleChange,
+          touched,
+          resetForm,
+        }) => (
           <>
             <Form>
-              <div className="surveyWizard__name">
+              <div className="surveyWizard__sub">
                 <TextField
                   name="firstname"
-                  placeholder="First Name"
-                  className="surveyWizard__firstName"
+                  label="First Name"
+                  className="surveyWizard__textField"
                   value={values.firstname}
                   onChange={handleChange}
                   error={Boolean(errors.firstname)}
-                  helperText={errors.username}
+                  helperText={errors.firstname}
                 />
-
                 <TextField
                   name="lastname"
-                  placeholder="Last Name"
-                  className="surveyWizard__lastName"
+                  label="Last Name"
+                  className="surveyWizard__textField"
                   value={values.lastname}
                   onChange={handleChange}
                   error={Boolean(errors.lastname)}
                   helperText={errors.lastname}
                 />
-
                 <TextField
-                  id="dob"
+                  name="dob"
                   label="Date Of Birth"
                   type="date"
-                  className="surveyWizard__lastName"
-                  defaultValue="2000-01-01"
+                  className="surveyWizard__textField"
+                  value={values.dob}
+                  onChange={handleChange}
                   sx={{ width: 220 }}
                   InputLabelProps={{
                     shrink: true,
                   }}
+                  error={Boolean(errors.dob)}
+                  helperText={errors.dob}
                 />
               </div>
 
-              <div className="surveyWizard__name">
-                <ToggleButtonGroup
-                  color="primary"
-                  value={values.gender}
-                  onChange={({ target: { value } }) => {
-                    setFieldValue("gender", value);
-                  }}
-                  className="surveyWizard__gender"
-                  aria-label="Platform"
-                >
-                  <ToggleButton value="male">Male</ToggleButton>
-                  <ToggleButton value="female">Female</ToggleButton>
-                  <ToggleButton value="transgender">Transgender</ToggleButton>
-                  <ToggleButton value="nonbinary">Non-Binary</ToggleButton>
-                </ToggleButtonGroup>
+              <div className="surveyWizard__sub">
+                <div>
+                  <ToggleButtonGroup
+                    color="primary"
+                    name="gender"
+                    value={values.gender}
+                    onChange={({ target: { value } }) => {
+                      setFieldValue("gender", value);
+                    }}
+                    className="surveyWizard__gender"
+                    aria-label="Platform"
+                  >
+                    {Object.values(GENDER).map((x) => (
+                      <ToggleButton
+                        value={x}
+                        key={x}
+                        className="surveyWizard__gender--btn"
+                      >
+                        {x}
+                      </ToggleButton>
+                    ))}
+                  </ToggleButtonGroup>
+                  <p className="errorText">
+                    <ErrorMessage name="gender" />
+                  </p>
+                </div>
 
                 <TextField
                   name="occupation"
-                  placeholder="Occupation"
-                  className="surveyWizard__lastName"
+                  label="Occupation"
+                  className="surveyWizard__textField"
                   value={values.occupation}
                   onChange={handleChange}
                   error={Boolean(errors.occupation)}
@@ -126,86 +195,105 @@ const clientSurvey = ({ state }) => {
                 />
               </div>
 
-              <div className="surveyWizard__name">
+              <div className="surveyWizard__sub">
                 <div>
-                  <InputLabel
-                    className="surveyWizard__education"
-                    id="highestEducation"
-                  >
+                  <InputLabel id="highestEducation">
                     Higest Education Completed
                   </InputLabel>
                   <Select
                     labelId="highestEducation"
-                    id="highestEducation"
+                    name="highestEducation"
                     value={values.highestEducation}
-                    className="surveyWizard__education"
-                    label="Higest Education Completed"
+                    className="surveyWizard__select"
                     onChange={handleChange}
+                    sx={{ width: 220 }}
+                    error={Boolean(errors.highestEducation)}
                   >
-                    <MenuItem value={10}>
-                      Doctorate degree (for example, PhD, EdD)
-                    </MenuItem>
-                    <MenuItem value={20}>
-                      Professional degree beyond bachelor’s degree (for example:
-                      MD, DDS, DVM, LLB, JD)
-                    </MenuItem>
-                    <MenuItem value={30}>
-                      Master’s degree (for example: MA, MS, MEng, MEd, MSW, MBA)
-                    </MenuItem>
-                    <MenuItem value={40}>
-                      Bachelor’s degree (for example: BA. BS)
-                    </MenuItem>
-                    <MenuItem value={50}>
-                      Associates degree (for example: AA, AS)
-                    </MenuItem>
-                    <MenuItem value={60}>
-                      GED or alternative credential
-                    </MenuItem>
-                    <MenuItem value={70}>Regular high school diploma</MenuItem>
-                    <MenuItem value={80}>12th grade—no diploma</MenuItem>
-                    <MenuItem value={90}>No schooling completed</MenuItem>
+                    {HIGHEST_EDUCATION.map((x) => (
+                      <MenuItem value={x} key={x}>
+                        {x}
+                      </MenuItem>
+                    ))}
                   </Select>
+                  <p className="errorText">
+                    <ErrorMessage name="highestEducation" />
+                  </p>
                 </div>
 
                 <TextField
                   name="university"
-                  placeholder="University"
-                  className="surveyWizard__university"
+                  label="University"
+                  className="surveyWizard__textField"
                   value={values.university}
                   onChange={handleChange}
                   error={Boolean(errors.university)}
                   helperText={errors.university}
                 />
               </div>
-              <div className="surveyWizard__location">
+
+              <div className="surveyWizard__sub">
                 <div>
-                  <InputLabel className="surveyWizard__country" id="country">
-                    Country
-                  </InputLabel>
+                  <InputLabel id="country">Country</InputLabel>
                   <Select
-                    className="surveyWizard__country"
+                    labelId="country"
+                    name="country"
+                    className="surveyWizard__select"
                     value={values.country}
-                    onChange={() => {}}
+                    sx={{ width: 220 }}
+                    error={Boolean(errors.country)}
+                    onChange={({ target }) => {
+                      setFieldValue("country", target.value);
+                    }}
                   >
-                    {options.map(({ label, value }) => (
+                    {countries.map(({ label, value }) => (
                       <MenuItem value={label} key={value}>
                         {label}
                       </MenuItem>
                     ))}
                   </Select>
+                  <p className="errorText">
+                    <ErrorMessage name="country" />
+                  </p>
                 </div>
-                <div className="surveyWizard__state">
-                  <InputLabel id="state">State</InputLabel>
-                  <SelectUSState id="state" onChange={() => {}} />
-                </div>
+
                 <div>
-                  <Typography gutterBottom>
-                    Level of financial Literacy
-                  </Typography>
+                  <InputLabel id="state">State</InputLabel>
+                  <Select
+                    labelId="state"
+                    name="state"
+                    className="surveyWizard__select"
+                    value={values.state}
+                    sx={{ width: 220 }}
+                    error={Boolean(errors.state)}
+                    onChange={({ target }) => {
+                      setFieldValue("state", target.value);
+                    }}
+                  >
+                    {Object.values(US_STATES).map((x) => (
+                      <MenuItem value={x} key={x}>
+                        {x}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                  <p className="errorText">
+                    <ErrorMessage name="state" />
+                  </p>
+                </div>
+
+                <div>
+                  <InputLabel id="literacy">
+                    Financial Literacy Level (Optional)
+                  </InputLabel>
+                  <br />
                   <Slider
-                    aria-label="Temperature"
-                    defaultValue={0}
-                    getAriaValueText={values.financialLiteracy}
+                    name="financialLiteracy"
+                    onChange={({ target }) => {
+                      setFieldValue(
+                        "financialLiteracy",
+                        parseInt(target.value)
+                      );
+                    }}
+                    value={parseInt(values.financialLiteracy)}
                     className="surveyWizard__scroller"
                     valueLabelDisplay="auto"
                     step={1}
@@ -216,88 +304,102 @@ const clientSurvey = ({ state }) => {
                 </div>
               </div>
 
-              <div className="surveyWizard__name">
+              <div className="surveyWizard__sub">
                 <div>
-                  <InputLabel
-                    className="surveyWizard__learningMethod"
-                    id="learningMethod"
-                  >
+                  <InputLabel id="learningMethod">
                     Preferred learning method
                   </InputLabel>
                   <Select
                     labelId="learningMethod"
-                    id="learningMethod"
+                    name="preferredLearningMethod"
                     value={values.preferredLearningMethod}
-                    className="surveyWizard__learningMethod"
-                    label="Preferred learning method"
-                    onChange={handleChange}
+                    className="surveyWizard__select"
+                    sx={{ width: 220 }}
+                    error={Boolean(errors.preferredLearningMethod)}
+                    onChange={({ target }) => {
+                      setFieldValue("preferredLearningMethod", target.value);
+                    }}
                   >
-                    <MenuItem value={"Books"}>Books</MenuItem>
-                    <MenuItem value={"Articles"}>Articles</MenuItem>
-                    <MenuItem value={"Videos"}>Videos</MenuItem>
-                    <MenuItem value={"Podcast"}>Podcast</MenuItem>
+                    {LEARNING_METHODS.map((x) => (
+                      <MenuItem value={x} key={x}>
+                        {x}
+                      </MenuItem>
+                    ))}
                   </Select>
+                  <p className="errorText">
+                    <ErrorMessage name="preferredLearningMethod" />
+                  </p>
                 </div>
 
                 <div>
-                  <InputLabel className="surveyWizard__income" id="income">
-                    Annual Income
-                  </InputLabel>
+                  <InputLabel id="annualIncome">Annual Income</InputLabel>
                   <Select
-                    labelId="income"
-                    id="income"
-                    value={values.annualincome}
-                    className="surveyWizard__income"
-                    label="Annual Income"
-                    onChange={handleChange}
+                    labelId="annualIncome"
+                    name="annualIncome"
+                    value={values.annualIncome}
+                    className="surveyWizard__select"
+                    error={Boolean(errors.annualIncome)}
+                    sx={{ width: 220 }}
+                    onChange={({ target }) => {
+                      setFieldValue("annualIncome", target.value);
+                    }}
                   >
-                    <MenuItem value={"0-$20k"}>0-$20k</MenuItem>
-                    <MenuItem value={"$21-$40k"}>$21-$40k</MenuItem>
-                    <MenuItem value={"$41-$60k"}>$41-$60k</MenuItem>
-                    <MenuItem value={"$61-$80k"}>$61-$80k</MenuItem>
-                    <MenuItem value={"$81-$100k"}>$81-$100k</MenuItem>
-                    <MenuItem value={"$101-$125k"}>$101-$125k</MenuItem>
-                    <MenuItem value={"$126-$150k"}>$126-$150k</MenuItem>
-                    <MenuItem value={"$150k+"}>$150k+</MenuItem>
+                    {ANNUAL_INCOMES.map((x) => (
+                      <MenuItem value={x} key={x}>
+                        {x}
+                      </MenuItem>
+                    ))}
                   </Select>
+                  <p className="errorText">
+                    <ErrorMessage name="annualIncome" />
+                  </p>
                 </div>
+
                 <div>
-                  <InputLabel className="surveyWizard__income" id="debt">
-                    Approximate Debt
-                  </InputLabel>
+                  <InputLabel id="debt">Approximate Debt</InputLabel>
                   <Select
                     labelId="debt"
-                    id="debt"
+                    name="debt"
                     value={values.debt}
-                    className="surveyWizard__income"
-                    label="Approximate Debt"
-                    onChange={handleChange}
+                    className="surveyWizard__select"
+                    sx={{ width: 220 }}
+                    error={Boolean(errors.debt)}
+                    onChange={({ target }) => {
+                      setFieldValue("debt", target.value);
+                    }}
                   >
-                    <MenuItem value={"0-$20k"}>0-$20k</MenuItem>
-                    <MenuItem value={"$21-$40k"}>$21-$40k</MenuItem>
-                    <MenuItem value={"$41-$60k"}>$41-$60k</MenuItem>
-                    <MenuItem value={"$61-$80k"}>$61-$80k</MenuItem>
-                    <MenuItem value={"$81-$100k"}>$81-$100k</MenuItem>
-                    <MenuItem value={"$101-$125k"}>$101-$125k</MenuItem>
-                    <MenuItem value={"$126-$150k"}>$126-$150k</MenuItem>
-                    <MenuItem value={"$150k+"}>$150k+</MenuItem>
+                    {DEBTS.map((x) => (
+                      <MenuItem value={x} key={x}>
+                        {x}
+                      </MenuItem>
+                    ))}
                   </Select>
+                  <p className="errorText">
+                    <ErrorMessage name="debt" />
+                  </p>
                 </div>
               </div>
-              <div className="surveyWizard__name">
+
+              <div className="surveyWizard__sub">
                 <TextareaAutosize
                   aria-label="empty textarea"
-                  placeholder="What is your why ?"
+                  name="general"
+                  placeholder="What is your why ? (Optional)"
                   className="surveyWizard__textbox"
-                  style={{ width: 1000, height: 100 }}
+                  value={values.general}
+                  style={{ width: "60vw", height: 100 }}
+                  onChange={({ target }) => {
+                    setFieldValue("general", target.value);
+                  }}
                 />
               </div>
-              <div className="surveyWizard__name">
+              <div className="surveyWizard__sub">
                 <Button
                   type="submit"
-                  className="surveyWizard_button"
+                  className="surveyWizard__button"
                   variant="contained"
-                  disabled={Boolean(errors.password) || Boolean(errors.email)}
+                  disabled={false}
+                  sx={{ width: 200 }}
                 >
                   Submit
                 </Button>
@@ -310,4 +412,4 @@ const clientSurvey = ({ state }) => {
   );
 };
 
-export default clientSurvey;
+export default ClientSurvey;

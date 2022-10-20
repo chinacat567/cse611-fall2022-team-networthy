@@ -1,108 +1,103 @@
 @import "./common_styles/index.scss";
 
 .surveyWizard {
-  min-width: 400px;
-  background-color: $--white;
-  padding: 40px 20px;
+  background-color: $--nw-primary-lightest;
+  padding: 100px 5%;
 
-  &__name {
-    width: 100%;
+  &__sub {
+    margin-bottom: 32px;
     display: flex;
-    flex-direction: row;
-    justify-content: left;
-    align-items: left;
-    margin-bottom: 40px;
+    justify-content: flex-start;
+    align-items: flex-end;
+    flex-wrap: wrap;
   }
 
-  &__location {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: left;
-    align-items: left;
-    margin-bottom: 40px;
+  &__textField {
+    margin-right: 32px !important;
+    margin-top: 10px !important;
   }
 
-  &__state {
-    width: 300px;
-    margin-left: 80px !important;
-  }
-
-  &__scroller {
-    width: 500px;
-  }
-
-  &__country {
-    width: 300px;
-    margin-left: 30px !important;
-  }
-
-  &__firstName {
-    margin-left: 30px !important;
-  }
-  &__lastName {
-    margin-left: 80px !important;
-  }
-
-  &__education {
-    width: 300px !important;
-    margin-left: 30px !important;
-  }
-
-  &__learningMethod {
-    width: 300px !important;
-    margin-left: 30px !important;
-  }
-
-  &__income {
-    width: 300px !important;
-    margin-left: 80px !important;
-  }
-
-  &__textbox {
-    margin-left: 30px !important;
-  }
-
-  &__university {
-    margin-top: 20px !important;
-    margin-left: 80px !important;
-  }
   &__gender {
-    height: 60px;
-    margin-left: 30px !important;
+    margin-right: 32px !important;
+    margin-top: 10px !important;
+
+    &--btn {
+      height: 56px;
+    }
   }
+
+  &__select {
+    margin-right: 32px !important;
+    margin-top: 10px !important;
+  }
+
   &__title {
     font-size: 18px;
     text-align: center;
-    margin-bottom: 24px;
   }
 
-  &__redirection {
-    width: 100%;
-    margin-top: 24px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-
-  &_button {
-    width: 200px;
-    margin-left: 30px !important;
-  }
-
-  a {
-    text-decoration: none;
-    margin-bottom: 8px;
-    color: $--slightly-dark-gray;
-  }
-
-  a:hover {
-    color: $--nw-primary;
+  &__button {
+    background-color: $--nw-primary !important;
   }
 }
 
 .surveyText {
-  margin-left: 30px !important;
+  font-family: "Roboto", sans-serif;
+  font-weight: bolder;
   margin-bottom: 30px;
+  color: $--nw-primary;
+}
+
+.errorText {
+  font-size: 14px;
+  color: $--error-red;
+}
+
+.MuiSlider-root {
+  margin-left: 10px !important;
+}
+
+@media only screen and (max-width: 500px) {
+  .surveyWizard {
+    &__sub {
+      margin-bottom: 0px;
+    }
+
+    &__textField {
+      width: 320px !important;
+      margin-bottom: 20px !important;
+    }
+
+    &__gender {
+      margin-bottom: 20px !important;
+
+      &--btn {
+        font-size: 12px !important;
+        height: 56px;
+      }
+    }
+
+    &__scroller {
+      margin-bottom: 20px !important;
+    }
+
+    &__select {
+      width: 308px !important;
+      margin-right: 32px !important;
+      margin-bottom: 20px !important;
+    }
+
+    &__title {
+      font-size: 18px;
+      text-align: center;
+    }
+
+    &__textbox {
+      width: 308px !important;
+      margin-bottom: 32px !important;
+    }
+  }
+  .errorText {
+    margin-bottom: 10px !important;
+  }
 }

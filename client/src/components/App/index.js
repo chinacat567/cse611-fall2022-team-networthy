@@ -1,27 +1,25 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Paper from "@mui/material/Paper";
 
 // Styles
 import "../../styles/app.scss";
 
 // Components
 import About from "../About";
-// import { Counter } from "../Test/counter";
 import Header from "../Header/header";
 import Footer from "../Footer/footer";
-import AuthWizard from "../AuthWizard";
-import { LOGIN_CONFIG } from "../AuthWizard/config";
-import { ROUTES } from "./routeConfig";
 import Home from "../Home";
 import Dashboard from "../Dashboard";
 import PrivateRoute from "./privateRoute";
+import ClientSurvey from "../SurveyForm/clientSurvey";
+import AuthWizard from "../AuthWizard";
+
+import { LOGIN_CONFIG } from "../AuthWizard/config";
+import { ROUTES } from "./routeConfig";
 
 const App = () => {
   return (
     <div className="app">
-      {/* <Paper className="app__title">NetWorthy-App</Paper> */}
-      {/* <Counter /> */}
       <Router>
         <Header />
         <div className="app__content">
@@ -68,6 +66,10 @@ const App = () => {
                   <Dashboard role={null} />
                 </PrivateRoute>
               }
+            />
+            <Route
+              path={ROUTES.CLIENT_PROFILE_SURVEY}
+              element={<ClientSurvey />}
             />
           </Routes>
         </div>
