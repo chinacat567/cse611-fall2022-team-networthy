@@ -1,0 +1,149 @@
+@import "./common_styles/index.scss";
+
+.profileCard {
+  padding: 20px;
+  border-radius: 6px;
+  //   background-color: aliceblue;
+  display: flex;
+  align-items: center;
+
+  &__icon {
+    width: 92px;
+    height: 92px;
+
+    &--large {
+      width: 122px;
+      height: 122px;
+    }
+  }
+
+  &__details {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+    margin-left: 20px;
+
+    &--large {
+      font-size: 32px;
+    }
+    &--medium {
+      color: $--slightly-dark-gray;
+      font-size: 16px;
+    }
+    &--small {
+      color: $--slightly-dark-gray;
+      font-size: 14px;
+      margin-top: -5px;
+    }
+    &--link {
+      color: $--blue;
+      margin-top: 2px;
+      cursor: pointer;
+
+      &:hover {
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+.drawer {
+  padding: 100px 20px;
+  width: 420px;
+  background-color: $--nw-primary-lightest;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+
+  &__icon {
+    margin-bottom: 20px;
+
+    &--large {
+      width: 122px;
+      height: 122px;
+    }
+  }
+
+  &__details {
+    &--large {
+      font-size: 32px;
+    }
+    &--medium {
+      font-size: 16px;
+    }
+    &--small {
+      font-size: 14px;
+    }
+  }
+
+  &__specificDetails {
+    width: 100%;
+    margin-bottom: 16px;
+
+    &--label {
+      font-family: "Roboto", sans-serif;
+      font-size: 12px;
+      font-weight: bold;
+      color: $--slightly-dark-gray;
+    }
+    &--value {
+      font-size: 18px;
+      line-height: 26px;
+    }
+  }
+}
+
+@media only screen and (max-width: 750px) {
+  .profileCard {
+    margin-bottom: 20px;
+
+    &__icon {
+    }
+
+    &__details {
+      &--large {
+      }
+      &--medium {
+      }
+      &--small {
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 420px) {
+  .profileCard {
+    margin-bottom: 20px;
+    padding-left: 12px;
+
+    &__icon {
+      width: 60px;
+      height: 60px;
+    }
+
+    &__details {
+      &--large {
+        font-size: 24px;
+      }
+      &--medium {
+        font-size: 14px;
+      }
+      &--small {
+        font-size: 12px;
+      }
+    }
+  }
+  .drawer {
+    width: 320px;
+
+    &__icon {
+      &--large {
+        width: 100px;
+        height: 100px;
+      }
+    }
+  }
+}

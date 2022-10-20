@@ -15,7 +15,7 @@ export default function IconLabelTabs() {
   const { user } = useSelector((state) => state.auth);
 
   return (
-    <div className="header">
+    <div className={`header ${user ? "header--solid" : "header--gradient"}`}>
       <div className="header__left">
         <img src={logo} className="logo" />
         <div

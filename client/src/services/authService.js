@@ -63,7 +63,7 @@ const signin = (payload) => {
 const logoutService = () => {
   localStorage.removeItem("USER");
   localStorage.removeItem("USER_TOKEN");
-  window.location.reload();
+  window.location.href = "/" + ROUTES.HOME;
 };
 
 const authService = {
