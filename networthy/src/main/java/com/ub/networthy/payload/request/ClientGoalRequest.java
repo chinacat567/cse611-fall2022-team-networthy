@@ -3,6 +3,8 @@ package com.ub.networthy.payload.request;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import com.ub.networthy.models.GoalStatus;
+
 import javax.validation.constraints.NotBlank;
 import java.util.List;
 
@@ -15,7 +17,7 @@ public class ClientGoalRequest {
     private String goalId;
 
 	@NotBlank
-    private String goalStatus;
+    private GoalStatus goalStatus;
 
     @NotBlank
     private String goalReviewCoachId;
@@ -61,11 +63,11 @@ public class ClientGoalRequest {
         this.goalId = goalId;
     }
 
-    public String getGoalStatus() {
+    public GoalStatus getGoalStatus() {
         return goalStatus;
     }
 
-    public void setGoalStatus(String goalStatus) {
+    public void setGoalStatus(GoalStatus goalStatus) {
         this.goalStatus = goalStatus;
     }
 

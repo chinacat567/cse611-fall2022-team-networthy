@@ -2,12 +2,16 @@ package com.ub.networthy.controllers;
 
 
 import com.ub.networthy.models.ClientGoal;
+import com.ub.networthy.models.GoalStatus;
 import com.ub.networthy.payload.request.ClientGoalRequest;
+import com.ub.networthy.payload.request.GoalStatusChangeRequest;
 import com.ub.networthy.payload.response.ClientGoalsResponse;
 import com.ub.networthy.payload.response.JwtResponse;
 import com.ub.networthy.payload.response.MessageResponse;
 import com.ub.networthy.repository.UserRepository;
 import com.ub.networthy.services.ClientGoalService;
+import com.ub.networthy.utils.Utils;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +20,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -33,6 +38,8 @@ public class ClientGoalController {
     
     @Autowired
     UserRepository userRepository;
+    
+   
 
     private Logger logger = LoggerFactory.getLogger(AuthController.class);
 
@@ -78,18 +85,29 @@ public class ClientGoalController {
     	return ResponseEntity.ok(new ClientGoalsResponse(clientId, result));
     }
 
-    @PostMapping("/updateGoal/{clientId}")
-    public ResponseEntity<?> updateGoalStatus(@RequestParam String updateStatus, @PathVariable String clientId) {
+    @PostMapping("/updateGoal")
+    public ResponseEntity<?> updateGoalStatus(@RequestBody GoalStatusChangeRequest goalStatusChangeRequest) {
         try {
-            clientGoalService.updateGoalStatus(clientId, updateStatus);
+        	
+        	return clientGoalService.updateGoalStatus(goalStatusChangeRequest);
+        	
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("Failed to update Goal");
             return ResponseEntity
                     .badRequest()
-                    .body(new MessageResponse("Error: Goal does not exists for " + clientId));
+                    .body(new MessageResponse("Failed to Update Goal"));
         }
-        return ResponseEntity.ok(new MessageResponse("Updated Goal for Client successfully !"));
+       
+    }
+    
+    @PutMapping("/editGoal")
+    public ResponseEntity<?> editGoal(@RequestBody ClientGoalRequest clientGoal) {
+    	
+    	ClientGoal editedGoal = clientGoalService.editClientGoal(clientGoal);
+    	
+    	 return ResponseEntity.ok(new MessageResponse("Goal Edited Successfully"));
+    	
     }
 
     @PostMapping("/addTagsForGoal/{clientId}")

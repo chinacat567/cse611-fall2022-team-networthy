@@ -17,7 +17,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 @Document(collection = "clientgoal")
 public class ClientGoal {
 
-    @Field("GOL_ID")
+	@Id
     @NotBlank
     private String goalId;
     
@@ -27,7 +27,7 @@ public class ClientGoal {
 
     @Field("GOL_STATUS")
     @NotBlank
-    private String goalStatus;
+    private GoalStatus goalStatus;
 
 	@Field("GOL_REVIEW_COA")
     @NotBlank
@@ -65,7 +65,7 @@ public class ClientGoal {
     @NotBlank
     private List<String> goalTags;
 
-    public ClientGoal(@NotBlank String clientUsername, @NotBlank String goalId, @NotBlank String goalStatus,
+    public ClientGoal(@NotBlank String clientUsername, @NotBlank String goalId, @NotBlank GoalStatus goalStatus,
                       @NotBlank String goalReviewCoachId, @NotBlank String goalTittle, @NotBlank String goalDescription,
                       @NotBlank String goalSpecific, @NotBlank String goalMeasurable, @NotBlank String goalAttainable,
                       @NotBlank String goalRelevant, @NotBlank String goalTimeBased, @NotBlank List<String> goalTags) {
@@ -100,11 +100,11 @@ public class ClientGoal {
         this.goalId = goalId;
     }
 
-    public String getGoalStatus() {
+    public GoalStatus getGoalStatus() {
         return goalStatus;
     }
 
-    public void setGoalStatus(String goalStatus) {
+    public void setGoalStatus(GoalStatus goalStatus) {
         this.goalStatus = goalStatus;
     }
 

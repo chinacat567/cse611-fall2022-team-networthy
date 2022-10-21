@@ -19,4 +19,6 @@ public interface ClientGoalRepository extends MongoRepository<ClientGoal, String
     List<ClientGoal> findAll();
 
     void deleteClientGoalByGoalId(@NotBlank String goalId);
+    
+    ClientGoal findByGoalId(String goalId);
 }
