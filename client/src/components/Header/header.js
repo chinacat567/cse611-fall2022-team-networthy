@@ -29,12 +29,23 @@ export default function IconLabelTabs() {
         {user ? (
           <>
             {user?.roles[0]?.includes(ROLE_CONFIG.CLIENT) && (
-              <Link
-                className="navLink"
-                to={{ pathname: ROUTES.CLIENT_DASHBOARD }}
-              >
-                Dashboard
-              </Link>
+              <>
+                {!!user?.clientProfile ? (
+                  <Link
+                    className="navLink"
+                    to={{ pathname: ROUTES.CLIENT_DASHBOARD }}
+                  >
+                    Dashboard
+                  </Link>
+                ) : (
+                  <Link
+                    className="navLink"
+                    to={{ pathname: ROUTES.CLIENT_PROFILE_SURVEY }}
+                  >
+                    Profile Survey
+                  </Link>
+                )}
+              </>
             )}
             {user?.roles[0]?.includes(ROLE_CONFIG.COACH) && (
               <Link

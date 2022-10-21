@@ -65,7 +65,7 @@ const _signin = (payload) => {
 const logoutService = () => {
   localStorage.removeItem("USER");
   localStorage.removeItem("USER_TOKEN");
-  window.location.href = "/" + ROUTES.HOME;
+  window.location.href = ROUTES.LOGIN;
 };
 
 const authService = {

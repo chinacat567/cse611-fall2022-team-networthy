@@ -10,6 +10,7 @@ const PrivateRoute = ({ children }) => {
 
   useEffect(() => {
     if (!isLoggedIn) {
+      console.log("Here");
       window.location.href = ROUTES.LOGIN;
     }
   }, []);

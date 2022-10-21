@@ -16,12 +16,19 @@ import AuthWizard from "../AuthWizard";
 
 import { LOGIN_CONFIG } from "../AuthWizard/config";
 import { ROUTES } from "./routeConfig";
+import { useSelector } from "react-redux";
+
+import Loader from "../Loading";
 
 const App = () => {
+  const { user } = useSelector((state) => state?.auth);
+  const { loaderVisible } = useSelector((state) => state?.loader);
+
   return (
     <div className="app">
       <Router>
         <Header />
+        {loaderVisible && <Loader />}
         <div className="app__content">
           <Routes>
             <Route path={ROUTES.ABOUT} element={<About />} />
@@ -63,13 +70,17 @@ const App = () => {
               path={ROUTES.CLIENT_DASHBOARD}
               element={
                 <PrivateRoute>
-                  <Dashboard role={null} />
+                  <Dashboard role={null} user={user} />
                 </PrivateRoute>
               }
             />
             <Route
               path={ROUTES.CLIENT_PROFILE_SURVEY}
-              element={<ClientSurvey />}
+              element={
+                <PrivateRoute>
+                  <ClientSurvey user={user} />
+                </PrivateRoute>
+              }
             />
           </Routes>
         </div>

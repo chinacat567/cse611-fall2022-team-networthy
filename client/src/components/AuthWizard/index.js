@@ -11,6 +11,7 @@ import { LOGIN_CONFIG, ROLE_CONFIG } from "./config";
 import { signup, signin } from "../../redux/slices/authSlice";
 
 import "../../styles/authWizard.scss";
+import { showLoader } from "../../redux/slices/loaderSlice";
 
 const LoginSchema = Yup.object().shape({
   username: Yup.string().required("Please enter your username"),
@@ -82,10 +83,11 @@ const AuthWizard = ({ state }) => {
     isSignup = state == LOGIN_CONFIG.SIGNUP,
     isAdminLogin = state == LOGIN_CONFIG.ADMIN;
 
-  const submitForm = (data) => {
+  const submitForm = async (data) => {
+    dispatch(showLoader(true));
     if (isSignup) {
       // Signup
-      dispatch(
+      await dispatch(
         signup({
           ...data,
           roles: [getSignupUserRole(tab)],
@@ -94,8 +96,9 @@ const AuthWizard = ({ state }) => {
     }
     if (isLogin) {
       // Login
-      dispatch(signin(data));
+      await dispatch(signin(data));
     }
+    dispatch(showLoader(false));
   };
 
   return (

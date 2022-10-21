@@ -13,11 +13,10 @@ import Slider from "@mui/material/Slider";
 import countryList from "react-select-country-list";
 import US_STATES from "./usStates.json";
 
-import "../../styles/surveyForm.scss";
-import clientService from "../../services/clientService";
-import { useDispatch, useSelector } from "react-redux";
-import { ROUTES } from "../App/routeConfig";
+import { useDispatch } from "react-redux";
 import { addClientProfile } from "../../redux/slices/authSlice";
+
+import "../../styles/surveyForm.scss";
 
 const GENDER = {
   MALE: "Male",
@@ -96,18 +95,35 @@ const ValidationSchema = Yup.object().shape({
   general: Yup.string().optional(),
 });
 
-const ClientSurvey = () => {
-  const { user } = useSelector((state) => state?.auth);
+const ClientSurvey = ({ user }) => {
   const dispatch = useDispatch();
   const countries = countryList().getData();
+  const isEdit = !!user.clientProfile;
 
-  const submitForm = async (values, callback) => {
-    console.log(values.dateOfBirth);
+  const getInitValues = () => {
+    if (isEdit) {
+      let initProfile = {
+        ...user.clientProfile,
+      };
+      initProfile.dateOfBirth = getDate(initProfile.dateOfBirth);
+      return initProfile;
+    }
+    return INIT_VALUES;
+  };
+
+  const getDate = (date) => {
+    let dateSplit = date.split("-");
+    return dateSplit[2] + "-" + dateSplit[1] + "-" + dateSplit[0];
+  };
+
+  const submitForm = async (values) => {
+    let dob = values.dateOfBirth.split("-");
     values = {
       ...values,
       username: user?.username,
       emailId: user?.email,
       profileStatus: true,
+      dateOfBirth: dob[2] + "-" + dob[1] + "-" + dob[0],
       location: values.state + ", " + values.country,
     };
     dispatch(addClientProfile(values));
@@ -117,7 +133,7 @@ const ClientSurvey = () => {
     <div className="surveyWizard">
       <p className="surveyText">CLIENT PROFILE</p>
       <Formik
-        initialValues={INIT_VALUES}
+        initialValues={getInitValues()}
         validationSchema={ValidationSchema}
         onSubmit={(values, { resetForm }) => {
           submitForm(values, () => {
@@ -140,27 +156,30 @@ const ClientSurvey = () => {
                   name="firstName"
                   label="First Name"
                   className="surveyWizard__textField"
-                  value={values.firstname}
+                  value={values.firstName}
                   onChange={handleChange}
-                  error={Boolean(errors.firstname)}
-                  helperText={errors.firstname}
+                  error={Boolean(errors.firstName)}
+                  helperText={errors.firstName}
                 />
                 <TextField
                   name="lastName"
                   label="Last Name"
                   className="surveyWizard__textField"
-                  value={values.lastname}
+                  value={values.lastName}
                   onChange={handleChange}
-                  error={Boolean(errors.lastname)}
-                  helperText={errors.lastname}
+                  error={Boolean(errors.lastName)}
+                  helperText={errors.lastName}
                 />
                 <TextField
                   name="dateOfBirth"
                   label="Date Of Birth"
                   type="date"
                   className="surveyWizard__textField"
-                  value={values.dateOfBirth}
-                  onChange={handleChange}
+                  defaultValue={values.dateOfBirth}
+                  onChange={(e) => {
+                    console.log(e.target.value);
+                    setFieldValue("dateOfBirth", e.target.value);
+                  }}
                   sx={{ width: 220 }}
                   InputLabelProps={{
                     shrink: true,
