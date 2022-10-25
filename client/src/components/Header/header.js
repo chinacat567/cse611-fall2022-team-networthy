@@ -13,13 +13,25 @@ import { ROUTES } from "../App/routeConfig";
 import { ROLE_CONFIG } from "../AuthWizard/config";
 
 export default function IconLabelTabs() {
-  const { user } = useSelector((state) => state.auth);
+  const { user, isLoggedIn } = useSelector((state) => state?.auth);
+  const userRole = localStorage.getItem("USER_ROLE");
 
   return (
     <div className={`header ${user ? "header--solid" : "header--gradient"}`}>
       <div className="header__left">
         <img src={logo} className="logo" />
-        <div className="header__title">NetWorthy</div>
+        <div className="header__title">
+          NetWorthy
+          {isLoggedIn && (
+            <div className="roleTitle">
+              {userRole === ROLE_CONFIG.CLIENT
+                ? " Client"
+                : userRole === ROLE_CONFIG.COACH
+                ? " Coach"
+                : ""}
+            </div>
+          )}
+        </div>
       </div>
       <div className="header__nav">
         {user ? (

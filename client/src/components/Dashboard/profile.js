@@ -62,9 +62,7 @@ const Profile = ({
     <div className="profileCard">
       <img src={Icon} className="profileCard__icon" />
       <div className="profileCard__details">
-        <p className="profileCard__details--large">
-          {firstName + " " + lastName}
-        </p>
+        <p className="profileCard__details--large">Hi {firstName}!</p>
         <p className="profileCard__details--medium">{emailId}</p>
         <p className="profileCard__details--small">{occupation}</p>
         <p
