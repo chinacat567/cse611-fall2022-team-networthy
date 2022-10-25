@@ -38,6 +38,10 @@
 
   &__button {
     background-color: $--nw-primary !important;
+
+    &--cancel {
+      margin-left: 20px !important;
+    }
   }
 }
 
@@ -90,6 +94,14 @@
     &__title {
       font-size: 18px;
       text-align: center;
+    }
+
+    &__button {
+      width: 100px !important;
+
+      &--cancel {
+        width: 100px !important;
+      }
     }
 
     &__textbox {

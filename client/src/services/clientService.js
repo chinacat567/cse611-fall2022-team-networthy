@@ -19,11 +19,34 @@ const _addClientProfile = (payload) => {
           className: "warn-toast",
         }
       );
+      return payload;
+    });
+};
+
+const _updateClientProfile = (payload) => {
+  return httpService
+    .put(getApi(API.UPDATE_CLIENT_PROFILE), payload)
+    .then(({ data }) => {
+      if (data?.message) {
+        toast.success("Client profile updated successfully.");
+      }
+      // returning the profile data to update in the "user" slice
+      return payload;
+    })
+    .catch((err) => {
+      toast.error(
+        err?.data?.message || "Something went wrong, please try again.",
+        {
+          className: "warn-toast",
+        }
+      );
+      return payload;
     });
 };
 
 const clientService = {
   _addClientProfile,
+  _updateClientProfile,
 };
 
 export default clientService;

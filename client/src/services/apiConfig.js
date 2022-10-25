@@ -8,6 +8,7 @@ export const API = {
   LOGIN: "/api/auth/signin",
   EMAIL_VERIFICATION: "/api/auth/verify",
   ADD_CLIENT_PROFILE: "/api/client/add/clientProfile",
+  UPDATE_CLIENT_PROFILE: "/api/client/edit/clientProfile",
 };
 
 // Helper Functions

@@ -4,16 +4,17 @@ import { ROUTES } from "./routeConfig";
 import { toast } from "react-toastify";
 
 const PrivateRoute = ({ children }) => {
-  const isLoggedIn = useSelector((state) => state?.auth?.isLoggedIn);
-
-  console.log(isLoggedIn);
+  const { isLoggedIn, user } = useSelector((state) => state?.auth);
 
   useEffect(() => {
-    if (!isLoggedIn) {
-      console.log("Here");
+    if (!isLoggedIn || !user) {
       window.location.href = ROUTES.LOGIN;
     }
   }, []);
+
+  if (!isLoggedIn || !user) {
+    return <></>;
+  }
 
   return children;
 };

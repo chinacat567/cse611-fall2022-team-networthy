@@ -14,9 +14,13 @@ import countryList from "react-select-country-list";
 import US_STATES from "./usStates.json";
 
 import { useDispatch } from "react-redux";
-import { addClientProfile } from "../../redux/slices/authSlice";
+import {
+  addClientProfile,
+  updateClientProfile,
+} from "../../redux/slices/authSlice";
 
 import "../../styles/surveyForm.scss";
+import { ROUTES } from "../App/routeConfig";
 
 const GENDER = {
   MALE: "Male",
@@ -95,39 +99,49 @@ const ValidationSchema = Yup.object().shape({
   general: Yup.string().optional(),
 });
 
+const getDate = (date) => {
+  let dob = new Date(date?.split("-") || "");
+  let month = dob.getUTCMonth() + 1; //months from 1-12
+  let day = dob.getUTCDate();
+  let year = dob.getUTCFullYear();
+  return year + "-" + month + "-" + day;
+};
+
 const ClientSurvey = ({ user }) => {
   const dispatch = useDispatch();
   const countries = countryList().getData();
-  const isEdit = !!user.clientProfile;
+  const isEdit = !!user?.clientProfile;
 
   const getInitValues = () => {
     if (isEdit) {
+      let locationArr = user?.clientProfile?.location?.split(", ") || "";
       let initProfile = {
         ...user.clientProfile,
+        dateOfBirth: getDate(user?.clientProfile?.dateOfBirth),
+        country: locationArr[1],
+        state: locationArr[0],
       };
-      initProfile.dateOfBirth = getDate(initProfile.dateOfBirth);
       return initProfile;
     }
     return INIT_VALUES;
   };
 
-  const getDate = (date) => {
-    let dateSplit = date.split("-");
-    return dateSplit[2] + "-" + dateSplit[1] + "-" + dateSplit[0];
-  };
-
   const submitForm = async (values) => {
-    let dob = values.dateOfBirth.split("-");
     values = {
       ...values,
       username: user?.username,
       emailId: user?.email,
       profileStatus: true,
-      dateOfBirth: dob[2] + "-" + dob[1] + "-" + dob[0],
+      dateOfBirth: getDate(values?.dateOfBirth),
       location: values.state + ", " + values.country,
     };
-    dispatch(addClientProfile(values));
+
+    isEdit
+      ? dispatch(updateClientProfile(values))
+      : dispatch(addClientProfile(values));
   };
+
+  const onCancel = () => (window.location.href = "/" + ROUTES.CLIENT_DASHBOARD);
 
   return (
     <div className="surveyWizard">
@@ -177,7 +191,6 @@ const ClientSurvey = ({ user }) => {
                   className="surveyWizard__textField"
                   defaultValue={values.dateOfBirth}
                   onChange={(e) => {
-                    console.log(e.target.value);
                     setFieldValue("dateOfBirth", e.target.value);
                   }}
                   sx={{ width: 220 }}
@@ -430,8 +443,21 @@ const ClientSurvey = ({ user }) => {
                   disabled={false}
                   sx={{ width: 200 }}
                 >
-                  Submit
+                  {isEdit ? "Update" : "Submit"}
                 </Button>
+                {isEdit && (
+                  <Button
+                    type="button"
+                    className="surveyWizard__button--cancel"
+                    variant="outlined"
+                    disabled={false}
+                    color="inherit"
+                    sx={{ width: 200 }}
+                    onClick={onCancel}
+                  >
+                    Cancel
+                  </Button>
+                )}
               </div>
             </Form>
           </>

@@ -1,10 +1,13 @@
 import { Drawer } from "@mui/material";
 import React, { useState } from "react";
+import EditIcon from "@mui/icons-material/Edit";
+
 import BoyIcon from "../../assets/Icons/boy.png";
 import GirlIcon from "../../assets/Icons/girl.png";
 import UserIcon from "../../assets/Icons/user.png";
 
 import "../../styles/profileCard.scss";
+import { ROUTES } from "../App/routeConfig";
 
 const getIcon = (gender) => {
   switch (gender) {
@@ -51,6 +54,10 @@ const Profile = ({
     setDrawerOpen(open);
   };
 
+  const onEditClick = () => {
+    window.location.href = "/" + ROUTES.CLIENT_PROFILE_SURVEY;
+  };
+
   return (
     <div className="profileCard">
       <img src={Icon} className="profileCard__icon" />
@@ -69,6 +76,7 @@ const Profile = ({
       </div>
       <Drawer anchor={"left"} open={drawerOpen} onClose={toggleDrawer(false)}>
         <div className="profileCard__drawer drawer">
+          <EditIcon className="drawer__editIcon" onClick={onEditClick} />
           <img src={Icon} className="drawer__icon drawer__icon--large" />
           <p className="drawer__details--large">{firstName + " " + lastName}</p>
           <p className="drawer__details--medium">{emailId}</p>

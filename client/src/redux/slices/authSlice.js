@@ -18,6 +18,13 @@ export const addClientProfile = createAsyncThunk(
   }
 );
 
+export const updateClientProfile = createAsyncThunk(
+  "auth/updateClientProfile",
+  async (payload) => {
+    return await clientService._updateClientProfile(payload);
+  }
+);
+
 const user = JSON.parse(localStorage.getItem("USER"));
 
 const initialState = user
@@ -36,6 +43,11 @@ export const authSlice = createSlice({
       state.isLoggedIn = true;
     },
     [addClientProfile.fulfilled]: (state, action) => {
+      state.user.clientProfile = action?.payload;
+      localStorage.setItem("USER", JSON.stringify(state.user));
+      window.location.href = "/" + ROUTES.CLIENT_DASHBOARD;
+    },
+    [updateClientProfile.fulfilled]: (state, action) => {
       state.user.clientProfile = action?.payload;
       localStorage.setItem("USER", JSON.stringify(state.user));
       window.location.href = "/" + ROUTES.CLIENT_DASHBOARD;
