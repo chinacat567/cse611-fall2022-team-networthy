@@ -29,7 +29,7 @@ const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   },
   [`& .${linearProgressClasses.bar}`]: {
     borderRadius: 5,
-    backgroundColor: theme.palette.mode === "light" ? "#1a90ff" : "#d2d2d2",
+    backgroundColor: theme.palette.mode === "light" ? "#415d32" : "#d2d2d2",
   },
 }));
 
@@ -87,6 +87,7 @@ const DashboardGoal = () => {
           value={(value / total) * 100}
           total={total}
           size={70}
+          sx={{ color: "#415d32" }}
         />
         <Box
           sx={{

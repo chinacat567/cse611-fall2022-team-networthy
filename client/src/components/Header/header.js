@@ -2,6 +2,7 @@ import { Menu, MenuItem } from "@mui/material";
 import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import Logout from "@mui/icons-material/Logout";
 
 import logo from "../../assets/Images/NWlogo.webp";
 import authService from "../../services/authService";
@@ -18,17 +19,12 @@ export default function IconLabelTabs() {
     <div className={`header ${user ? "header--solid" : "header--gradient"}`}>
       <div className="header__left">
         <img src={logo} className="logo" />
-        <div
-          className="header__title"
-          onClick={() => (window.location.href = ROUTES.HOME)}
-        >
-          NetWorthy
-        </div>
+        <div className="header__title">NetWorthy</div>
       </div>
       <div className="header__nav">
         {user ? (
           <>
-            {user?.roles[0]?.includes(ROLE_CONFIG.CLIENT) && (
+            {/* {user?.roles[0]?.includes(ROLE_CONFIG.CLIENT) && (
               <>
                 {!!user?.clientProfile ? (
                   <Link
@@ -54,9 +50,9 @@ export default function IconLabelTabs() {
               >
                 Dashboard
               </Link>
-            )}
+            )} */}
             <Link className="navLink" onClick={authService.logoutService}>
-              Logout
+              <Logout fontSize="small" sx={{ marginRight: "10px" }} /> Logout
             </Link>
           </>
         ) : (

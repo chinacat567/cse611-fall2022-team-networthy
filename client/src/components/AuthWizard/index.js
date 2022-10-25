@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Formik, Form } from "formik";
 import TextField from "@mui/material/TextField";
 import * as Yup from "yup";
@@ -76,12 +76,23 @@ const getSignupUserRole = (tab) => {
 };
 
 const AuthWizard = ({ state }) => {
+  const { user, isLoggedIn } = useSelector((state) => state?.auth);
   const [tab, setTab] = useState(TABS.CLIENT);
   const dispatch = useDispatch();
 
   const isLogin = state == LOGIN_CONFIG.LOGIN,
     isSignup = state == LOGIN_CONFIG.SIGNUP,
     isAdminLogin = state == LOGIN_CONFIG.ADMIN;
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      const userRole = localStorage.getItem("USER_ROLE");
+      if (userRole === ROLE_CONFIG.CLIENT)
+        window.location.href = "/" + ROUTES.CLIENT_DASHBOARD;
+      else if (userRole === ROLE_CONFIG.COACH)
+        window.location.href = "/" + ROUTES.COACH_DASHBOARD;
+    }
+  }, []);
 
   const submitForm = async (data) => {
     dispatch(showLoader(true));

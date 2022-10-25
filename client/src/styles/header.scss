@@ -34,13 +34,8 @@
 
   &__title {
     font-weight: bold;
-    font-size: 22px;
+    font-size: 20px;
     font-family: "Catamaran", sans-serif;
-    cursor: pointer;
-
-    &:hover {
-      color: $--blue;
-    }
   }
 
   &__nav {
@@ -52,6 +47,9 @@
       text-decoration: none;
       color: $--black;
       margin-right: 24px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     .navLink:hover {

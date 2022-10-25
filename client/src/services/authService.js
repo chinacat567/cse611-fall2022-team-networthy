@@ -33,6 +33,8 @@ const _signin = (payload) => {
       const role = res?.data?.roles[0],
         clientProfile = res?.data?.clientProfile;
 
+      localStorage.setItem("USER_ROLE", role);
+
       if (role.includes(ROLE_CONFIG.CLIENT)) {
         window.location.href =
           "/" +

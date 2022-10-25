@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 // Styles
@@ -14,14 +14,14 @@ import PrivateRoute from "./privateRoute";
 import ClientSurvey from "../SurveyForm/clientSurvey";
 import AuthWizard from "../AuthWizard";
 
-import { LOGIN_CONFIG } from "../AuthWizard/config";
+import { LOGIN_CONFIG, ROLE_CONFIG } from "../AuthWizard/config";
 import { ROUTES } from "./routeConfig";
 import { useSelector } from "react-redux";
 
 import Loader from "../Loading";
 
 const App = () => {
-  const { user } = useSelector((state) => state?.auth);
+  const { user, isLoggedIn } = useSelector((state) => state?.auth);
   const { loaderVisible } = useSelector((state) => state?.loader);
 
   return (
