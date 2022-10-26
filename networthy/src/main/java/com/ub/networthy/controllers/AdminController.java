@@ -26,10 +26,13 @@ import com.ub.networthy.repository.ClientProfileRepository;
 import com.ub.networthy.repository.CoachProfileRepository;
 import com.ub.networthy.repository.UserRepository;
 
+import io.swagger.annotations.Api;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+@Api(tags = "Admin APIs")
 @RestController
 @RequestMapping(value = "/api/admin")
 public class AdminController
@@ -189,7 +192,7 @@ public class AdminController
 	}
 	
 	
-	@PutMapping("/edit/coachProfile/{userId}")
+	@PutMapping("/coachProfile/approve/{userId}/{status}")
 //	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 	public ResponseEntity<?> approveCoachProfile(@PathVariable String userId)
 	{

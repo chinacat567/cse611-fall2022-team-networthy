@@ -3,9 +3,12 @@ package com.ub.networthy.utils;
 import com.ub.networthy.controllers.AuthController;
 import com.ub.networthy.controllers.ClientCoachRelationController;
 import com.ub.networthy.controllers.ClientController;
+import com.ub.networthy.models.ClientGoal;
+import com.ub.networthy.models.CoachComment;
 import com.ub.networthy.models.ERole;
 import com.ub.networthy.models.Role;
 import com.ub.networthy.models.User;
+import com.ub.networthy.repository.ClientGoalRepository;
 import com.ub.networthy.repository.ClientProfileRepository;
 import com.ub.networthy.repository.CoachProfileRepository;
 import com.ub.networthy.repository.UserRepository;
@@ -29,6 +32,9 @@ public class Utils {
 
     @Autowired
     private CoachProfileRepository coachProfileRepository;
+    
+    @Autowired
+    private ClientGoalRepository clientGoalRepository; 
 
     /*TO DO : Unable to see Util logs from Controller */
     private Logger logger = LoggerFactory.getLogger(ClientCoachRelationController.class);
@@ -95,5 +101,15 @@ public class Utils {
             logger.error("Error: Failed to Get Client Data for clientId " + clientId);
             return false;
         }
+    }
+    
+    public boolean isValidGoal(@NotBlank String goalId) {
+    	try {
+    		ClientGoal clientGoal = clientGoalRepository.findById(goalId).get();
+    		return clientGoal != null;
+    	}catch(Exception e) {
+    		logger.error("Error : Faild to get Goal for goalId - "+ goalId);
+    		return false;
+    	}
     }
 }

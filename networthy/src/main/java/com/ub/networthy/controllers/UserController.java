@@ -24,7 +24,9 @@ import com.ub.networthy.payload.request.UserChangePasswordRequest;
 import com.ub.networthy.payload.response.MessageResponse;
 import com.ub.networthy.repository.UserRepository;
 
+import io.swagger.annotations.Api;
 
+@Api(tags = "User APIs")
 @RestController
 @RequestMapping("/api/user")
 public class UserController {

@@ -10,6 +10,9 @@ import com.ub.networthy.payload.response.MessageResponse;
 import com.ub.networthy.repository.CoachProfileRepository;
 import com.ub.networthy.repository.UserRepository;
 import com.ub.networthy.utils.Utils;
+
+import io.swagger.annotations.Api;
+
 import org.bson.BsonBinarySubType;
 import org.bson.types.Binary;
 import org.slf4j.Logger;
@@ -27,6 +30,7 @@ import java.io.IOException;
 import java.util.Optional;
 import java.util.Set;
 
+@Api(tags = "Coach APIs")
 @RestController
 @RequestMapping("/api/coach")
 public class CoachController {

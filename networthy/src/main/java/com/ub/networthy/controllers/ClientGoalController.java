@@ -12,6 +12,8 @@ import com.ub.networthy.repository.UserRepository;
 import com.ub.networthy.services.ClientGoalService;
 import com.ub.networthy.utils.Utils;
 
+import io.swagger.annotations.Api;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-
+@Api(tags = "Client Goal APIs")
 @RestController
 @RequestMapping("/api/clientGoal")
 public class ClientGoalController {
@@ -84,7 +86,7 @@ public class ClientGoalController {
     	
     	return ResponseEntity.ok(new ClientGoalsResponse(clientId, result));
     }
-
+    //Change to Goal Status
     @PostMapping("/updateGoal")
     public ResponseEntity<?> updateGoalStatus(@RequestBody GoalStatusChangeRequest goalStatusChangeRequest) {
         try {

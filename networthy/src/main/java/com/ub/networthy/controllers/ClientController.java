@@ -23,9 +23,13 @@ import com.ub.networthy.payload.response.MessageResponse;
 import com.ub.networthy.repository.ClientProfileRepository;
 import com.ub.networthy.repository.UserRepository;
 
+import io.swagger.annotations.Api;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
+@Api(tags = "Client APIs")
 @RestController
 @RequestMapping("/api/client")
 public class ClientController {

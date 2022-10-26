@@ -47,9 +47,10 @@ import com.ub.networthy.services.EmailSenderService;
 
 
 import com.ub.networthy.security.jwt.*;
+import io.swagger.annotations.Api;
 
 
-
+@Api(tags = "Authentication APIs")
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
