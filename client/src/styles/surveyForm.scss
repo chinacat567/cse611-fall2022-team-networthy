@@ -13,7 +13,7 @@
   }
 
   &__textField {
-    margin-right: 32px !important;
+    margin-right: 50px !important;
     margin-top: 10px !important;
   }
 
@@ -27,7 +27,7 @@
   }
 
   &__select {
-    margin-right: 32px !important;
+    margin-right: 50px !important;
     margin-top: 10px !important;
   }
 
@@ -35,7 +35,10 @@
     font-size: 18px;
     text-align: center;
   }
-
+  &__buttonUpload {
+    background-color: $--blue !important;
+    color: $--white !important;
+  }
   &__button {
     background-color: $--nw-primary !important;
 

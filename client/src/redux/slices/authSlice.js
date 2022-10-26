@@ -25,6 +25,22 @@ export const updateClientProfile = createAsyncThunk(
   }
 );
 
+export const addCoachProfile = createAsyncThunk(
+  "auth/coachProfile",
+  async (payload) => {
+    //to be updated to coachprofile service
+    return await clientService._addClientProfile(payload);
+  }
+);
+
+export const updateCoachProfile = createAsyncThunk(
+  "auth/updateCoachProfile",
+  async (payload) => {
+    //to be updated to coachprofile service
+    return await clientService._updateClientProfile(payload);
+  }
+);
+
 const user = JSON.parse(localStorage.getItem("USER"));
 
 const initialState = user
