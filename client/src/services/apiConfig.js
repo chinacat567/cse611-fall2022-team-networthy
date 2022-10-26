@@ -10,6 +10,7 @@ export const API = {
   ADD_CLIENT_PROFILE: "/api/client/add/clientProfile",
   UPDATE_CLIENT_PROFILE: "/api/client/edit/clientProfile",
   GET_ALL_CLIENT_GOALS: "/api/clientGoal/getAllGoals",
+  UPDATE_GOAL_STATUS: "/api/clientGoal/updateGoal",
 };
 
 // Helper Functions

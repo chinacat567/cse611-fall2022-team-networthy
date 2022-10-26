@@ -8,6 +8,13 @@ export const getAllClientGoals = createAsyncThunk(
   }
 );
 
+export const updateGoalStatus = createAsyncThunk(
+  "goal/updateGoalStatus",
+  async (payload) => {
+    return await goalService._updateGoalStatus(payload);
+  }
+);
+
 export const goalSlice = createSlice({
   name: "goal",
   initialState: {
@@ -17,6 +24,13 @@ export const goalSlice = createSlice({
   extraReducers: {
     [getAllClientGoals.fulfilled]: (state, action) => {
       state.goalList = action?.payload || [];
+    },
+    [updateGoalStatus.fulfilled]: (state, action) => {
+      state.goalList.forEach((goal, index, list) => {
+        if (goal.goalId == action.payload.goalId) {
+          list[index].goalStatus = action.payload.updatedStatus;
+        }
+      });
     },
   },
 });

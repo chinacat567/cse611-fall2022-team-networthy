@@ -1,4 +1,76 @@
 @import "./common_styles/index.scss";
 
 .goalDashboard {
+  display: flex;
+  &__goalList {
+    width: 28%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-right: 1px solid $--gray-2;
+
+    .goalTab {
+      padding: 20px 40px;
+      width: 100%;
+      word-wrap: break-word;
+      border-bottom: 1px solid $--gray;
+      display: flex;
+      align-items: center;
+
+      .icon {
+        margin-right: 10px;
+      }
+
+      &:hover {
+        background-color: $--nw-primary-light-2;
+        cursor: pointer;
+      }
+      &--selected {
+        background-color: $--nw-primary-light-2;
+      }
+    }
+  }
+  &__goalContent {
+    width: 72%;
+  }
+  .goalContent {
+    width: 100%;
+    padding: 40px 150px;
+
+    &__header {
+      h2 {
+        margin-bottom: 16px;
+      }
+      p {
+        color: $--slightly-dark-gray;
+        word-wrap: break-word;
+      }
+    }
+
+    &__details {
+      margin-top: 32px;
+    }
+
+    &__smart {
+      word-wrap: break-word;
+      margin-bottom: 28px;
+      .smartTag {
+        margin-bottom: 10px;
+        div {
+          background-color: $--nw-primary-light-2;
+          display: inline-flex;
+          padding: 2px 5px;
+          border-radius: 4px;
+        }
+      }
+    }
+  }
+
+  .addGoalBtn {
+    margin-top: 24px;
+    border-radius: 0px;
+    width: 120px !important;
+    background-color: $--nw-primary !important;
+  }
 }

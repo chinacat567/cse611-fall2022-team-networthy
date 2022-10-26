@@ -4,9 +4,10 @@ import LinearProgress, {
 } from "@mui/material/LinearProgress";
 import CircularProgress from "@mui/material/CircularProgress";
 import { styled } from "@mui/material/styles";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import "../../styles/goalSummary.scss";
+import { useSelector } from "react-redux";
 
 const CssTextField = styled(TextField)({
   "& .MuiInput-input": {
@@ -19,6 +20,13 @@ const CssTextField = styled(TextField)({
     display: "none",
   },
 });
+
+const truncateString = (str) => {
+  if (str.length > 20) {
+    return str.substring(0, 20) + "...";
+  }
+  return str;
+};
 
 const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   height: 10,
@@ -33,29 +41,37 @@ const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   },
 }));
 
-const goals = [
-  {
-    value: "Goal A",
-    label: "Goal A",
+const GOAL_STATUSES = {
+  NOT_STARTED: {
+    title: "Not Started",
+    value: 0,
   },
-  {
-    value: "Goal B",
-    label: "Goal B",
+  IN_PROGRESS: {
+    title: "In Progress",
+    value: 50,
   },
-  {
-    value: "Goal C",
-    label: "Goal C",
+  IN_REVIEW: {
+    title: "In Review",
+    value: 80,
   },
-  {
-    value: "Goal D",
-    label: "Goal D",
+  FINISHED: {
+    title: "Finished",
+    value: 100,
   },
-];
+};
 
 const GoalSummary = () => {
-  const [goal, setGoal] = useState(goals[0].value);
-  const value = 7,
-    total = 10;
+  const clientGoals = useSelector((state) => state?.goal?.goalList);
+  const [goal, setGoal] = useState({});
+
+  useEffect(() => {
+    if (clientGoals.length) {
+      setGoal(clientGoals[0]);
+    }
+  }, [clientGoals]);
+
+  const value = clientGoals.filter((x) => x.goalStatus === "FINISHED").length,
+    total = clientGoals.length;
 
   const handleChange = (e) => {
     setGoal(e?.target?.value);
@@ -71,14 +87,23 @@ const GoalSummary = () => {
           onChange={handleChange}
           variant="standard"
         >
-          {goals.map((option) => (
-            <MenuItem key={option.value} value={option.value}>
-              {option.label}
+          {clientGoals.map((goalEle) => (
+            <MenuItem key={goalEle.goalId} value={goalEle}>
+              {truncateString(goalEle.goalTittle)}
             </MenuItem>
           ))}
         </CssTextField>
-        <p className="selectGoal__stage">In Progress</p>
-        <BorderLinearProgress variant="determinate" value={50} />
+        {goal && goal.goalStatus && (
+          <>
+            <p className="selectGoal__stage">
+              {GOAL_STATUSES[goal.goalStatus].title}
+            </p>
+            <BorderLinearProgress
+              variant="determinate"
+              value={GOAL_STATUSES[goal.goalStatus].value}
+            />
+          </>
+        )}
       </div>
 
       <Box sx={{ position: "relative", display: "inline-flex" }}>

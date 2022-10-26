@@ -6,6 +6,8 @@ import Profile from "./profile";
 import "../../styles/dashboard.scss";
 import { useSearchParams } from "react-router-dom";
 import GoalDashboard from "./goalDashboard";
+import { getAllClientGoals } from "../../redux/slices/goalSlice";
+import { useDispatch } from "react-redux";
 
 const TABS = {
   goals: "Goal Updates",
@@ -22,6 +24,7 @@ const getTabFromURL = () => {
 };
 
 const Dashboard = ({ user }) => {
+  const dispatch = useDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
   const [tab, setTab] = useState(getTabFromURL());
 
@@ -30,9 +33,10 @@ const Dashboard = ({ user }) => {
       setSearchParams({ tab: "goals" });
       setTab("goals");
     }
+    if (user.username) {
+      dispatch(getAllClientGoals({ username: user.username }));
+    }
   }, []);
-
-  console.log(user);
 
   return (
     <div className="dashboard">

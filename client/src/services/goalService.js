@@ -19,8 +19,27 @@ const _getAllClientGoals = ({ username }) => {
     });
 };
 
+const _updateGoalStatus = (payload) => {
+  return httpService
+    .post(getApi(API.UPDATE_GOAL_STATUS), payload)
+    .then((res) => {
+      toast.success("Goal status updated");
+      return payload;
+    })
+    .catch((err) => {
+      toast.error(
+        err?.data?.message || "Something went wrong, please try again.",
+        {
+          className: "warn-toast",
+        }
+      );
+      return payload;
+    });
+};
+
 const goalService = {
   _getAllClientGoals,
+  _updateGoalStatus,
 };
 
 export default goalService;
