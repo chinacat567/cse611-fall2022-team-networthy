@@ -6,7 +6,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { styled } from "@mui/material/styles";
 import React, { useState } from "react";
 
-import "../../styles/dashboardGoal.scss";
+import "../../styles/goalSummary.scss";
 
 const CssTextField = styled(TextField)({
   "& .MuiInput-input": {
@@ -52,7 +52,7 @@ const goals = [
   },
 ];
 
-const DashboardGoal = () => {
+const GoalSummary = () => {
   const [goal, setGoal] = useState(goals[0].value);
   const value = 7,
     total = 10;
@@ -62,8 +62,8 @@ const DashboardGoal = () => {
   };
 
   return (
-    <div className="dashboardGoal">
-      <div className="dashboardGoal__summary">
+    <div className="goalSummary">
+      <div className="goalSummary__summary">
         <CssTextField
           select
           className="selectGoal"
@@ -110,4 +110,4 @@ const DashboardGoal = () => {
   );
 };
 
-export default DashboardGoal;
+export default GoalSummary;

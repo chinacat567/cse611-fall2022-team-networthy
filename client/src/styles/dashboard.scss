@@ -45,6 +45,10 @@
       }
     }
   }
+
+  &__content {
+    background-color: aliceblue;
+  }
 }
 
 @media only screen and (max-width: 750px) {
