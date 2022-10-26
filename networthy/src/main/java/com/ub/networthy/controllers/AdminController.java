@@ -27,10 +27,13 @@ import com.ub.networthy.repository.CoachProfileRepository;
 import com.ub.networthy.repository.UserRepository;
 import com.ub.networthy.services.EmailSenderService;
 
+import io.swagger.annotations.Api;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+@Api(tags = "Admin APIs")
 @RestController
 @RequestMapping(value = "/api/admin")
 public class AdminController
