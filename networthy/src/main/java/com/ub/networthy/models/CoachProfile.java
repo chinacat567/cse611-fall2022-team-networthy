@@ -65,6 +65,10 @@ public class CoachProfile {
     @Field("COA_PROFILE_STATUS")
     @NotBlank
     private boolean profileStatus;
+    
+    @Field("COA_GENERAL")
+    @NotBlank
+    private String general;
 
     /* resume, lor1, lor2 can be NULL */
     @Field("COA_RESUME")
@@ -84,7 +88,7 @@ public class CoachProfile {
     public CoachProfile(@NotBlank String username, @NotBlank String emailId, @NotBlank String firstName,
                         @NotBlank String lastName, @NotBlank Date dateOfBirth, @NotBlank String gender, @NotBlank String occupation,
                         @NotBlank String education, @NotBlank String university, @NotBlank String location, String credentials,
-                        @NotBlank boolean profileStatus) {
+                        @NotBlank boolean profileStatus, @NotBlank String general) {
         super();
         this.username = username;
         this.emailId = emailId;
@@ -104,10 +108,10 @@ public class CoachProfile {
     public CoachProfile(@NotBlank String userId, @NotBlank String emailId, @NotBlank String firstName,
                         @NotBlank String lastName, @NotBlank Date dateOfBirth, @NotBlank String gender, @NotBlank String occupation,
                         @NotBlank String education, @NotBlank String university, @NotBlank String location, String credentials,
-                        @NotBlank boolean profileStatus, @NotNull Binary resume, @NotNull Binary lor1, @NotNull Binary lor2) {
+                        @NotBlank boolean profileStatus, @NotNull String general, @NotNull Binary resume, @NotNull Binary lor1, @NotNull Binary lor2) {
 
         this(userId, emailId, firstName, lastName, dateOfBirth, gender, occupation,
-                education, university, location, credentials, profileStatus);
+                education, university, location, credentials, profileStatus, general);
 
         this.resume = resume;
         this.lor1 = lor1;
@@ -210,6 +214,15 @@ public class CoachProfile {
     public void setProfileStatus(boolean profileStatus) {
         this.profileStatus = profileStatus;
     }
+    
+	public String getGeneral() {
+		return general;
+	}
+
+	public void setGeneral(String general) {
+		this.general = general;
+	}
+
 
     public void setResume(Binary resume) {
         this.resume = resume;

@@ -44,11 +44,14 @@ public class CoachDataRequest {
 
 	@NotBlank
 	private boolean profileStatus;
+	
+	@NotBlank
+	private String general;
 
 	public CoachDataRequest(@NotBlank String username, @NotBlank String emailId, @NotBlank String firstName,
 							@NotBlank String lastName, @NotBlank Date dateOfBirth, @NotBlank String gender,
 							@NotBlank String occupation, @NotBlank String education, @NotBlank String university,
-							@NotBlank String location, String credentials, @NotBlank boolean profileStatus) {
+							@NotBlank String location, String credentials, @NotBlank boolean profileStatus, @NotBlank String general) {
 		this.username = username;
 		this.emailId = emailId;
 		this.firstName = firstName;
@@ -61,6 +64,7 @@ public class CoachDataRequest {
 		this.location = location;
 		this.credentials = credentials;
 		this.profileStatus = profileStatus;
+		this.general = general;
 	}
 
 	public CoachDataRequest() {
@@ -162,4 +166,13 @@ public class CoachDataRequest {
 	public void setProfileStatus(boolean profileStatus) {
 		this.profileStatus = profileStatus;
 	}
+	
+	public String getGeneral() {
+		return general;
+	}
+
+	public void setGeneral(String general) {
+		this.general = general;
+	}
+
 }

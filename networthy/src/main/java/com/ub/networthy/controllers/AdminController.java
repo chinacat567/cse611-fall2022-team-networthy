@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.ub.networthy.models.ClientAndCoachRelation;
 import com.ub.networthy.models.ClientProfile;
@@ -32,6 +34,8 @@ import io.swagger.annotations.Api;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+
+import javax.validation.constraints.NotNull;
 
 @Api(tags = "Admin APIs")
 @RestController
@@ -102,7 +106,11 @@ public class AdminController
 			if(coachProfileRequest.getUniversity() != null) existingCoachProfile.get().setUniversity(coachProfileRequest.getUniversity());
 			if(coachProfileRequest.getLocation() != null) existingCoachProfile.get().setLocation(coachProfileRequest.getLocation());
 			if(coachProfileRequest.getCredentials() != null) existingCoachProfile.get().setCredentials(coachProfileRequest.getCredentials());
-
+			if(coachProfileRequest.getGeneral() != null)existingCoachProfile.get().setGeneral(coachProfileRequest.getGeneral());
+			if(coachProfileRequest.getResume() != null)existingCoachProfile.get().setResume(coachProfileRequest.getResume());
+			if(coachProfileRequest.getLor1() != null)existingCoachProfile.get().setLor1(coachProfileRequest.getLor1());
+			if(coachProfileRequest.getLor2() != null)existingCoachProfile.get().setLor2(coachProfileRequest.getLor2());
+			
 			coachProfileRepository.save(existingCoachProfile.get());
 
 			return ResponseEntity.ok(new MessageResponse("Coach Profile Updated Successfully"));
