@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,6 +23,7 @@ import com.ub.networthy.payload.request.ClientProfileRequest;
 import com.ub.networthy.payload.response.MessageResponse;
 import com.ub.networthy.repository.ClientProfileRepository;
 import com.ub.networthy.repository.UserRepository;
+import com.ub.networthy.utils.Utils;
 
 import io.swagger.annotations.Api;
 
@@ -39,6 +41,9 @@ public class ClientController {
 	
 	@Autowired
 	UserRepository userRepository;
+	
+	@Autowired
+	Utils utils;
 	
 	Logger logger = LoggerFactory.getLogger(ClientController.class);
 
@@ -159,5 +164,16 @@ public class ClientController {
 	public List<ClientProfile> getAllClientProfile(){
 		
 		return clientProfileRepository.findAll();
+	}
+	
+	@GetMapping("/getProfile/{clientId}")
+	//@PreAuthorize("hasAuthority('ROLE_ADMIN')")
+	public ClientProfile getClientProfile(@PathVariable String clientId){
+		
+		if(!utils.clientExists(clientId)) {
+			logger.error("Error: Client Profile doesnot exist for - " +clientId);
+			return null;
+		}
+		return clientProfileRepository.findByUsername(clientId);
 	}
 }
