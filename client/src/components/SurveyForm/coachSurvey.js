@@ -9,7 +9,6 @@ import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import InputLabel from "@mui/material/InputLabel";
-import Slider from "@mui/material/Slider";
 import countryList from "react-select-country-list";
 import US_STATES from "./usStates.json";
 import useFileUpload from "react-use-file-upload";
