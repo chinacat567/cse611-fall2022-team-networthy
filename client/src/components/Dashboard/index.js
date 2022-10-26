@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 
-import DashboardGoal from "./dashboardGoal";
+import GoalSummary from "./goalSummary";
 import Profile from "./profile";
 
 import "../../styles/dashboard.scss";
 import { useSearchParams } from "react-router-dom";
+import GoalDashboard from "./goalDashboard";
 
 const TABS = {
   goals: "Goal Updates",
@@ -31,11 +32,13 @@ const Dashboard = ({ user }) => {
     }
   }, []);
 
+  console.log(user);
+
   return (
     <div className="dashboard">
       <div className="dashboard__userCenter">
         <Profile user={user} />
-        <DashboardGoal />
+        <GoalSummary />
       </div>
       <div className="dashboard__tabs">
         {Object.entries(TABS).map(([k, v]) => (
@@ -50,6 +53,9 @@ const Dashboard = ({ user }) => {
             {v}
           </div>
         ))}
+      </div>
+      <div className="dashboard__content">
+        {tab === "goals" && <GoalDashboard username={user?.username || ""} />}
       </div>
     </div>
   );
