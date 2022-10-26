@@ -25,14 +25,12 @@ import com.ub.networthy.repository.ClientAndCoachRelationRepository;
 import com.ub.networthy.repository.ClientProfileRepository;
 import com.ub.networthy.repository.CoachProfileRepository;
 import com.ub.networthy.repository.UserRepository;
-
-import io.swagger.annotations.Api;
+import com.ub.networthy.services.EmailSenderService;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-@Api(tags = "Admin APIs")
 @RestController
 @RequestMapping(value = "/api/admin")
 public class AdminController
@@ -52,6 +50,9 @@ public class AdminController
 	
     @Autowired
     private UserRepository userRepository;
+    
+    @Autowired
+    private EmailSenderService emailSenderService;
 
 	Logger logger = LoggerFactory.getLogger(ClientController.class);
 
@@ -192,9 +193,9 @@ public class AdminController
 	}
 	
 	
-	@PutMapping("/coachProfile/approve/{userId}/{status}")
+	@PutMapping("/coachProfile/approve/{userId}/{approved}")
 //	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
-	public ResponseEntity<?> approveCoachProfile(@PathVariable String userId)
+	public ResponseEntity<?> approveCoachProfile(@PathVariable String userId, @PathVariable boolean approved)
 	{
 		
 		if (!authN(userId, ERole.ROLE_COACH)) {
@@ -213,11 +214,26 @@ public class AdminController
 					.body(new MessageResponse("Error: User Does Not Exist"));
 		}
 		
-		existingCoachProfile.get().setProfileStatus(true);
+		if(approved)
+		{
+			existingCoachProfile.get().setProfileStatus(true);
+			
+			coachProfileRepository.save(existingCoachProfile.get());
+			
+			emailSenderService.sendEmail(existingCoachProfile.get().getEmailId(), 
+					"Networthy : Coach request approved.", 
+					"Hello "+ existingCoachProfile.get().getFirstName() + ", \n\nCongratulations, your Coach profile has been approved." + " \n\n Thank You,\n Team NetWorthy" );
+			
+			return ResponseEntity.ok(new MessageResponse("Coach Profile Approved Successfully"));
+		}
 		
-		coachProfileRepository.save(existingCoachProfile.get());
+		emailSenderService.sendEmail(existingCoachProfile.get().getEmailId(), 
+				"Networthy : Coach request declined.", 
+				"Hello "+ existingCoachProfile.get().getFirstName() + ", \n\nYour Coach profile has been declined, please contact NetWorthy for further details." + " \n\n Thank You,\n Team NetWorthy" );
 		
-		return ResponseEntity.ok(new MessageResponse("Coach Profile Approved Successfully"));
+		
+		return ResponseEntity.ok(new MessageResponse("Coach Profile Declined"));
+		
 	}
 	
     private boolean authN(String username, ERole eRole) {
@@ -250,4 +266,3 @@ public class AdminController
 	
 	
 }
-	
