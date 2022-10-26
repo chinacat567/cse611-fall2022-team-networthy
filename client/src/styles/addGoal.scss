@@ -1,0 +1,37 @@
+@import "./common_styles/index.scss";
+
+.addGoal {
+  background-color: $--nw-primary-lightest;
+  padding: 100px 5%;
+
+  &__text {
+    margin-bottom: 32px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-end;
+    flex-wrap: wrap;
+  }
+
+  &__smart {
+    margin-right: 50px !important;
+    margin-top: 10px !important;
+  }
+
+  &__generic {
+    margin-right: 50px !important;
+    margin-top: 10px !important;
+    margin-bottom: 0px !important;
+  }
+
+  &__button {
+    margin-top: 50px !important;
+    background-color: $--nw-primary !important;
+  }
+}
+
+.addGoalText {
+  font-family: "Roboto", sans-serif;
+  font-weight: bolder;
+  margin-bottom: 30px;
+  color: $--nw-primary;
+}

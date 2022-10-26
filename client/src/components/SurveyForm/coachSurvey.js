@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import * as Yup from "yup";
 import { Formik, Form, ErrorMessage } from "formik";
 import TextField from "@mui/material/TextField";
@@ -9,14 +9,14 @@ import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import InputLabel from "@mui/material/InputLabel";
-import Slider from "@mui/material/Slider";
 import countryList from "react-select-country-list";
 import US_STATES from "./usStates.json";
+import useFileUpload from "react-use-file-upload";
 
 import { useDispatch } from "react-redux";
 import {
-  addClientProfile,
-  updateClientProfile,
+  addCoachProfile,
+  updateCoachProfile,
 } from "../../redux/slices/authSlice";
 
 import "../../styles/surveyForm.scss";
@@ -82,52 +82,6 @@ const INIT_VALUES = {
   general: "",
 };
 
-const marks = [
-  {
-    value: 0,
-    label: "Child",
-  },
-  // {
-  //   value: 1,
-  //   label: "1",
-  // },
-  // {
-  //   value: 2,
-  //   label: "2",
-  // },
-  // {
-  //   value: 3,
-  //   label: "3",
-  // },
-  // {
-  //   value: 4,
-  //   label: "4",
-  // },
-  // {
-  //   value: 5,
-  //   label: "5",
-  // },
-  // {
-  //   value: 6,
-  //   label: "6",
-  // },
-  // {
-  //   value: 7,
-  //   label: "7",
-  // },
-  // {
-  //   value: 8,
-  //   label: "8",
-  // },
-  // {
-  //   value: 9,
-  //   label: "9",
-  // },
-  {
-    value: 10,
-    label: "W. Buffet",
-  },
-];
 const ValidationSchema = Yup.object().shape({
   firstName: Yup.string().required("First name cannot be empty."),
   lastName: Yup.string().required("Last name cannot be empty."),
@@ -138,10 +92,6 @@ const ValidationSchema = Yup.object().shape({
   university: Yup.string().required("University name cannot be empty."),
   country: Yup.string().required("Country selection cannot be empty."),
   state: Yup.string().required("State selection cannot be empty."),
-  financialLevel: Yup.number().optional(),
-  learningMethod: Yup.string().required("Preferred learning cannot be empty."),
-  income: Yup.string().required("Annual income cannot be empty."),
-  debt: Yup.string().required("Debt cannot be empty."),
   general: Yup.string().optional(),
 });
 
@@ -153,7 +103,7 @@ const getDate = (date) => {
   return year + "-" + month + "-" + day;
 };
 
-const ClientSurvey = ({ user }) => {
+const CoachSurvey = ({ user }) => {
   const dispatch = useDispatch();
   const countries = countryList().getData();
   const isEdit = !!user?.clientProfile;
@@ -183,15 +133,30 @@ const ClientSurvey = ({ user }) => {
     };
 
     isEdit
-      ? dispatch(updateClientProfile(values))
-      : dispatch(addClientProfile(values));
+      ? dispatch(updateCoachProfile(values))
+      : dispatch(addCoachProfile(values));
   };
+
+  const {
+    files,
+    fileNames,
+    fileTypes,
+    totalSize,
+    totalSizeInBytes,
+    handleDragDropEvent,
+    clearAllFiles,
+    createFormData,
+    setFiles,
+    removeFile,
+  } = useFileUpload();
+
+  const inputRef = useRef();
 
   const onCancel = () => (window.location.href = "/" + ROUTES.CLIENT_DASHBOARD);
 
   return (
     <div className="surveyWizard">
-      <p className="surveyText">CLIENT PROFILE</p>
+      <p className="surveyText">COACH PROFILE</p>
       <Formik
         initialValues={getInitValues()}
         validationSchema={ValidationSchema}
@@ -214,7 +179,6 @@ const ClientSurvey = ({ user }) => {
               <div className="surveyWizard__sub">
                 <div>
                   <InputLabel id="education">First Name</InputLabel>
-
                   <TextField
                     name="firstName"
                     className="surveyWizard__textField"
@@ -237,7 +201,6 @@ const ClientSurvey = ({ user }) => {
                 </div>
                 <div>
                   <InputLabel id="education">Date of Birth</InputLabel>
-
                   <TextField
                     name="dateOfBirth"
                     type="date"
@@ -254,9 +217,9 @@ const ClientSurvey = ({ user }) => {
                     helperText={errors.dateOfBirth}
                   />
                 </div>
+
                 <div>
                   <InputLabel id="education">Gender</InputLabel>
-
                   <ToggleButtonGroup
                     color="primary"
                     name="gender"
@@ -286,7 +249,6 @@ const ClientSurvey = ({ user }) => {
               <div className="surveyWizard__sub">
                 <div>
                   <InputLabel id="education">Occupation</InputLabel>
-
                   <TextField
                     name="occupation"
                     className="surveyWizard__textField"
@@ -321,9 +283,9 @@ const ClientSurvey = ({ user }) => {
                 </div>
                 <div>
                   <InputLabel id="education">University</InputLabel>
-
                   <TextField
                     name="university"
+                    label="University"
                     className="surveyWizard__textField"
                     value={values.university}
                     onChange={handleChange}
@@ -381,112 +343,83 @@ const ClientSurvey = ({ user }) => {
                     <ErrorMessage name="state" />
                   </p>
                 </div>
+              </div>
 
+              <div className="surveyWizard__sub">
                 <div>
-                  <InputLabel id="literacy">
-                    Financial Literacy Level
+                  <InputLabel id="state">
+                    Resume and 2 Letter of Recommendations
                   </InputLabel>
-                  <br />
-                  <Slider
-                    name="financialLevel"
-                    onChange={({ target }) => {
-                      setFieldValue("financialLevel", parseInt(target.value));
+                  <div>
+                    <ul>
+                      {fileNames.map((name) => (
+                        <li key={name}>
+                          <span>{name}</span>
+
+                          <span onClick={() => removeFile(name)}>
+                            <i className="fa fa-times" />
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+
+                    {files.length > 0 && (
+                      <ul>
+                        {/* <li>File types found: {fileTypes.join(", ")}</li> */}
+                        {/* <li>Total Size: {totalSize}</li>
+                        <li>Total Bytes: {totalSizeInBytes}</li> */}
+
+                        <p className="clear-all">
+                          <button onClick={() => clearAllFiles()}>
+                            Clear All
+                          </button>
+                        </p>
+                      </ul>
+                    )}
+                  </div>
+                  <Button
+                    className="surveyWizard__buttonUpload"
+                    onClick={() => inputRef.current.click()}
+                  >
+                    Upload
+                  </Button>
+                  <input
+                    ref={inputRef}
+                    type="file"
+                    multiple
+                    style={{ display: "none" }}
+                    onChange={(e) => {
+                      setFiles(e, "a");
+                      inputRef.current.value = null;
                     }}
-                    value={parseInt(values.financialLevel)}
-                    className="surveyWizard__scroller"
-                    valueLabelDisplay="auto"
-                    step={1}
-                    marks={marks}
-                    min={0}
-                    max={10}
                   />
                 </div>
               </div>
 
               <div className="surveyWizard__sub">
                 <div>
-                  <InputLabel id="learningMethod">
-                    Preferred learning method
-                  </InputLabel>
-                  <Select
-                    labelId="learningMethod"
-                    name="learningMethod"
-                    value={values.learningMethod}
-                    className="surveyWizard__select"
-                    sx={{ width: 220 }}
-                    error={Boolean(errors.learningMethod)}
+                  <InputLabel id="state">What is your Why?</InputLabel>
+                  <TextareaAutosize
+                    aria-label="empty textarea"
+                    name="general"
+                    placeholder="Why do you want to help people improve their finance?"
+                    className="surveyWizard__textbox"
+                    value={values.general}
+                    style={{ width: "60vw", height: 100 }}
                     onChange={({ target }) => {
-                      setFieldValue("learningMethod", target.value);
+                      setFieldValue("general", target.value);
                     }}
-                  >
-                    {LEARNING_METHODS.map((x) => (
-                      <MenuItem value={x} key={x}>
-                        {x}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                  <p className="errorText">
-                    <ErrorMessage name="learningMethod" />
-                  </p>
-                </div>
-
-                <div>
-                  <InputLabel id="income">Annual Income</InputLabel>
-                  <Select
-                    labelId="income"
-                    name="income"
-                    value={values.income}
-                    className="surveyWizard__select"
-                    error={Boolean(errors.income)}
-                    sx={{ width: 220 }}
-                    onChange={({ target }) => {
-                      setFieldValue("income", target.value);
-                    }}
-                  >
-                    {ANNUAL_INCOMES.map((x) => (
-                      <MenuItem value={x} key={x}>
-                        {x}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                  <p className="errorText">
-                    <ErrorMessage name="income" />
-                  </p>
-                </div>
-
-                <div>
-                  <InputLabel id="debt">Approximate Debt</InputLabel>
-                  <Select
-                    labelId="debt"
-                    name="debt"
-                    value={values.debt}
-                    className="surveyWizard__select"
-                    sx={{ width: 220 }}
-                    error={Boolean(errors.debt)}
-                    onChange={({ target }) => {
-                      setFieldValue("debt", target.value);
-                    }}
-                  >
-                    {DEBTS.map((x) => (
-                      <MenuItem value={x} key={x}>
-                        {x}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                  <p className="errorText">
-                    <ErrorMessage name="debt" />
-                  </p>
+                  />
                 </div>
               </div>
 
               <div className="surveyWizard__sub">
                 <div>
-                  <InputLabel id="education">What is your Why?</InputLabel>
-
+                  <InputLabel id="state">Credentials</InputLabel>
                   <TextareaAutosize
                     aria-label="empty textarea"
                     name="general"
-                    placeholder="Why do you want to improve your finance?"
+                    placeholder="This is your time to sell yourself to the users, think of it as an elevator pitch."
                     className="surveyWizard__textbox"
                     value={values.general}
                     style={{ width: "60vw", height: 100 }}
@@ -528,4 +461,4 @@ const ClientSurvey = ({ user }) => {
   );
 };
 
-export default ClientSurvey;
+export default CoachSurvey;
