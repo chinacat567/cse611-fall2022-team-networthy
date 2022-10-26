@@ -93,10 +93,6 @@ const ValidationSchema = Yup.object().shape({
   university: Yup.string().required("University name cannot be empty."),
   country: Yup.string().required("Country selection cannot be empty."),
   state: Yup.string().required("State selection cannot be empty."),
-  financialLevel: Yup.number().optional(),
-  learningMethod: Yup.string().required("Preferred learning cannot be empty."),
-  income: Yup.string().required("Annual income cannot be empty."),
-  debt: Yup.string().required("Debt cannot be empty."),
   general: Yup.string().optional(),
 });
 

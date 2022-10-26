@@ -82,6 +82,52 @@ const INIT_VALUES = {
   general: "",
 };
 
+const marks = [
+  {
+    value: 0,
+    label: "Child",
+  },
+  // {
+  //   value: 1,
+  //   label: "1",
+  // },
+  // {
+  //   value: 2,
+  //   label: "2",
+  // },
+  // {
+  //   value: 3,
+  //   label: "3",
+  // },
+  // {
+  //   value: 4,
+  //   label: "4",
+  // },
+  // {
+  //   value: 5,
+  //   label: "5",
+  // },
+  // {
+  //   value: 6,
+  //   label: "6",
+  // },
+  // {
+  //   value: 7,
+  //   label: "7",
+  // },
+  // {
+  //   value: 8,
+  //   label: "8",
+  // },
+  // {
+  //   value: 9,
+  //   label: "9",
+  // },
+  {
+    value: 10,
+    label: "W. Buffet",
+  },
+];
 const ValidationSchema = Yup.object().shape({
   firstName: Yup.string().required("First name cannot be empty."),
   lastName: Yup.string().required("Last name cannot be empty."),
@@ -166,44 +212,51 @@ const ClientSurvey = ({ user }) => {
           <>
             <Form>
               <div className="surveyWizard__sub">
-                <TextField
-                  name="firstName"
-                  label="First Name"
-                  className="surveyWizard__textField"
-                  value={values.firstName}
-                  onChange={handleChange}
-                  error={Boolean(errors.firstName)}
-                  helperText={errors.firstName}
-                />
-                <TextField
-                  name="lastName"
-                  label="Last Name"
-                  className="surveyWizard__textField"
-                  value={values.lastName}
-                  onChange={handleChange}
-                  error={Boolean(errors.lastName)}
-                  helperText={errors.lastName}
-                />
-                <TextField
-                  name="dateOfBirth"
-                  label="Date Of Birth"
-                  type="date"
-                  className="surveyWizard__textField"
-                  defaultValue={values.dateOfBirth}
-                  onChange={(e) => {
-                    setFieldValue("dateOfBirth", e.target.value);
-                  }}
-                  sx={{ width: 220 }}
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  error={Boolean(errors.dateOfBirth)}
-                  helperText={errors.dateOfBirth}
-                />
-              </div>
-
-              <div className="surveyWizard__sub">
                 <div>
+                  <InputLabel id="education">First Name</InputLabel>
+
+                  <TextField
+                    name="firstName"
+                    className="surveyWizard__textField"
+                    value={values.firstName}
+                    onChange={handleChange}
+                    error={Boolean(errors.firstName)}
+                    helperText={errors.firstName}
+                  />
+                </div>
+                <div>
+                  <InputLabel id="education">Last Name</InputLabel>
+                  <TextField
+                    name="lastName"
+                    className="surveyWizard__textField"
+                    value={values.lastName}
+                    onChange={handleChange}
+                    error={Boolean(errors.lastName)}
+                    helperText={errors.lastName}
+                  />
+                </div>
+                <div>
+                  <InputLabel id="education">Date of Birth</InputLabel>
+
+                  <TextField
+                    name="dateOfBirth"
+                    type="date"
+                    className="surveyWizard__textField"
+                    defaultValue={values.dateOfBirth}
+                    onChange={(e) => {
+                      setFieldValue("dateOfBirth", e.target.value);
+                    }}
+                    sx={{ width: 220 }}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    error={Boolean(errors.dateOfBirth)}
+                    helperText={errors.dateOfBirth}
+                  />
+                </div>
+                <div>
+                  <InputLabel id="education">Gender</InputLabel>
+
                   <ToggleButtonGroup
                     color="primary"
                     name="gender"
@@ -228,19 +281,21 @@ const ClientSurvey = ({ user }) => {
                     <ErrorMessage name="gender" />
                   </p>
                 </div>
-
-                <TextField
-                  name="occupation"
-                  label="Occupation"
-                  className="surveyWizard__textField"
-                  value={values.occupation}
-                  onChange={handleChange}
-                  error={Boolean(errors.occupation)}
-                  helperText={errors.occupation}
-                />
               </div>
 
               <div className="surveyWizard__sub">
+                <div>
+                  <InputLabel id="education">Occupation</InputLabel>
+
+                  <TextField
+                    name="occupation"
+                    className="surveyWizard__textField"
+                    value={values.occupation}
+                    onChange={handleChange}
+                    error={Boolean(errors.occupation)}
+                    helperText={errors.occupation}
+                  />
+                </div>
                 <div>
                   <InputLabel id="education">
                     Higest Education Completed
@@ -264,16 +319,18 @@ const ClientSurvey = ({ user }) => {
                     <ErrorMessage name="education" />
                   </p>
                 </div>
+                <div>
+                  <InputLabel id="education">University</InputLabel>
 
-                <TextField
-                  name="university"
-                  label="University"
-                  className="surveyWizard__textField"
-                  value={values.university}
-                  onChange={handleChange}
-                  error={Boolean(errors.university)}
-                  helperText={errors.university}
-                />
+                  <TextField
+                    name="university"
+                    className="surveyWizard__textField"
+                    value={values.university}
+                    onChange={handleChange}
+                    error={Boolean(errors.university)}
+                    helperText={errors.university}
+                  />
+                </div>
               </div>
 
               <div className="surveyWizard__sub">
@@ -327,7 +384,7 @@ const ClientSurvey = ({ user }) => {
 
                 <div>
                   <InputLabel id="literacy">
-                    Financial Literacy Level (Optional)
+                    Financial Literacy Level
                   </InputLabel>
                   <br />
                   <Slider
@@ -339,7 +396,7 @@ const ClientSurvey = ({ user }) => {
                     className="surveyWizard__scroller"
                     valueLabelDisplay="auto"
                     step={1}
-                    marks
+                    marks={marks}
                     min={0}
                     max={10}
                   />
@@ -423,17 +480,21 @@ const ClientSurvey = ({ user }) => {
               </div>
 
               <div className="surveyWizard__sub">
-                <TextareaAutosize
-                  aria-label="empty textarea"
-                  name="general"
-                  placeholder="What is your why ? (Optional)"
-                  className="surveyWizard__textbox"
-                  value={values.general}
-                  style={{ width: "60vw", height: 100 }}
-                  onChange={({ target }) => {
-                    setFieldValue("general", target.value);
-                  }}
-                />
+                <div>
+                  <InputLabel id="education">What is your Why?</InputLabel>
+
+                  <TextareaAutosize
+                    aria-label="empty textarea"
+                    name="general"
+                    placeholder="Why do you want to improve your finance?"
+                    className="surveyWizard__textbox"
+                    value={values.general}
+                    style={{ width: "60vw", height: 100 }}
+                    onChange={({ target }) => {
+                      setFieldValue("general", target.value);
+                    }}
+                  />
+                </div>
               </div>
               <div className="surveyWizard__sub">
                 <Button
