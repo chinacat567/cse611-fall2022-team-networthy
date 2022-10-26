@@ -27,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -256,4 +257,10 @@ public class CoachController {
                     .body(new MessageResponse("Error: Failed to Get Lor1 for Coach !"));
         }
     }
+    
+    @GetMapping("/getAll")
+	public List<CoachProfile> getAllCoachProfiles(){
+		
+		return coachProfileRepo.findAll();
+	}
 }
