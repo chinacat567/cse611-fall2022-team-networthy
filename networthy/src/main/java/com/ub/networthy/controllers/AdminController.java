@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
+//import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
+//import org.springframework.web.multipart.MultipartFile;
 
 import com.ub.networthy.models.ClientAndCoachRelation;
 import com.ub.networthy.models.ClientProfile;
@@ -137,7 +137,7 @@ public class AdminController
 	public ResponseEntity<?> deleteCoachProfile(@PathVariable String userId)
 	{
 
-		if (!authN(userId, ERole.ROLE_COACH)) {
+		if (!utils.validateRole(userId, ERole.ROLE_COACH)) {
             return ResponseEntity
                     .badRequest()
                     .body(new MessageResponse("Error: User not authorized to delete coach profile!"));
@@ -166,7 +166,7 @@ public class AdminController
 			}
 		}
 		
-		coachProfileRepository.deleteById(userId);
+		coachProfileRepository.delete(existingCoachProfile.orElse(null));
 
 		return ResponseEntity.ok(new MessageResponse("Coach Profile Deleted Successfully"));
 	}
@@ -176,7 +176,7 @@ public class AdminController
 	public ResponseEntity<?> deleteClientProfile(@PathVariable String userId)
 	{
 		
-		if (!authN(userId, ERole.ROLE_CLIENT)) {
+		if (!utils.validateRole(userId, ERole.ROLE_CLIENT)) {
             return ResponseEntity
                     .badRequest()
                     .body(new MessageResponse("Error: User not authorized to delete client profile!"));
@@ -196,6 +196,7 @@ public class AdminController
 		
         Optional<ClientAndCoachRelation> clientAndCoachRelation = clientCoachRelationRepo.findFirstByClientUsername(userId);
         
+        
         if (clientAndCoachRelation.isPresent()) {
         	
         	String coachId = clientAndCoachRelation.get().getCoachUserId();
@@ -203,8 +204,8 @@ public class AdminController
         	clientCoachRelationRepo.deleteClientAndCoachRelationByClientUsernameAndCoachUsername(userId, coachId);	
 
         }
-		
-		clientProfileRepository.deleteById(userId);
+        
+        clientProfileRepository.delete(existingClientProfile);
 		
 		return ResponseEntity.ok(new MessageResponse("Client Profile Deleted Successfully"));
 	}
@@ -215,7 +216,7 @@ public class AdminController
 	public ResponseEntity<?> approveCoachProfile(@PathVariable String userId, @PathVariable boolean approved)
 	{
 		
-		if (!authN(userId, ERole.ROLE_COACH)) {
+		if (!utils.validateRole(userId, ERole.ROLE_COACH)) {
             return ResponseEntity
                     .badRequest()
                     .body(new MessageResponse("Error: User not authorized to approve coach profile!"));
@@ -251,35 +252,6 @@ public class AdminController
 		
 		return ResponseEntity.ok(new MessageResponse("Coach Profile Declined"));
 		
-	}
-	
-    private boolean authN(String username, ERole eRole) {
-        try {
-            if(!userRepository.existsByUsername(username)) {
-                logger.error("Error: User Does Not Exist! - " + username);
-                return false;
-            }
-            User user = userRepository.findByUsername(username).orElse(null);
-            if (user == null) {
-                return false;
-            }
-            Set<Role> roles = user.getRoles();
-            boolean validRole = false;
-            for(Role role : roles) {
-                if(role.getName().equals(eRole)) {
-                    validRole = true;
-                    break;
-                }
-            }
-            if (!validRole) {
-                logger.error("Error: User not authorized for coach profile - " + username);
-            }
-            return validRole;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-	
-	
+	}	
 	
 }
