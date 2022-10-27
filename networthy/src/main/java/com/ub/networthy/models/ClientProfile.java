@@ -37,7 +37,7 @@ public class ClientProfile {
 	
 	@Field("CLI_DOB")
 	@NotBlank
-	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd-MM-yyyy")
+	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
 	private Date dateOfBirth;
 	
 	@Field("CLI_GENDER")

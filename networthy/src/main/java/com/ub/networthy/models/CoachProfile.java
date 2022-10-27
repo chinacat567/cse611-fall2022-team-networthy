@@ -35,7 +35,7 @@ public class CoachProfile {
 
     @Field("COA_DOB")
     @NotBlank
-    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd-MM-yyyy")
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
     private Date dateOfBirth;
 
     @Field("COA_GENDER")
