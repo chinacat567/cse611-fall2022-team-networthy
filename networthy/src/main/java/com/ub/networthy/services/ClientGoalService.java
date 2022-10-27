@@ -99,6 +99,7 @@ public class ClientGoalService {
     	if(editClientGoal.getGoalReviewCoachId() != null) clientGoal.setGoalReviewCoachId(editClientGoal.getGoalReviewCoachId());
     	if(editClientGoal.getGoalTags() != null) clientGoal.setGoalTags(editClientGoal.getGoalTags());
     	if(editClientGoal.getGoalStatus() != null) clientGoal.setGoalStatus(editClientGoal.getGoalStatus());
+    	if(editClientGoal.getGoalTittle() != null) clientGoal.setGoalTittle(editClientGoal.getGoalTittle());
     	
     	clientGoalRepo.save(clientGoal);
     	
