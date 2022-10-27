@@ -22,12 +22,14 @@ import com.ub.networthy.models.ERole;
 import com.ub.networthy.models.Role;
 import com.ub.networthy.models.User;
 import com.ub.networthy.payload.request.ClientProfileRequest;
+import com.ub.networthy.payload.request.CoachDataRequest;
 import com.ub.networthy.payload.response.MessageResponse;
 import com.ub.networthy.repository.ClientAndCoachRelationRepository;
 import com.ub.networthy.repository.ClientProfileRepository;
 import com.ub.networthy.repository.CoachProfileRepository;
 import com.ub.networthy.repository.UserRepository;
 import com.ub.networthy.services.EmailSenderService;
+import com.ub.networthy.utils.Utils;
 
 import io.swagger.annotations.Api;
 
@@ -60,6 +62,9 @@ public class AdminController
     
     @Autowired
     private EmailSenderService emailSenderService;
+    
+    @Autowired
+    private Utils utils;
 
 	Logger logger = LoggerFactory.getLogger(ClientController.class);
 
@@ -75,19 +80,20 @@ public class AdminController
 	
 	@PutMapping("/edit/coachProfile")
 //	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
-	public ResponseEntity<?> editCoachProfile(CoachProfile coachProfileRequest) {
+	public ResponseEntity<?> editCoachProfile(@RequestBody CoachDataRequest coachProfileRequest) {
 		
-		if (!authN(coachProfileRequest.getUsername(), ERole.ROLE_COACH)) {
+		
+		if (!utils.validateRole(coachProfileRequest.getUsername(), ERole.ROLE_COACH)) {
             return ResponseEntity
                     .badRequest()
                     .body(new MessageResponse("Error: User not authorized to edit coach profile!"));
         }
 		
+		
 		try {
 			
 
 			Optional<CoachProfile> existingCoachProfile = coachProfileRepository.findByUsername(coachProfileRequest.getUsername());
-
 			if(existingCoachProfile.isEmpty()) {
 				logger.error("Error: Coach Profile does not exist for - " +coachProfileRequest.getUsername());
 				return ResponseEntity
@@ -107,10 +113,10 @@ public class AdminController
 			if(coachProfileRequest.getLocation() != null) existingCoachProfile.get().setLocation(coachProfileRequest.getLocation());
 			if(coachProfileRequest.getCredentials() != null) existingCoachProfile.get().setCredentials(coachProfileRequest.getCredentials());
 			if(coachProfileRequest.getGeneral() != null)existingCoachProfile.get().setGeneral(coachProfileRequest.getGeneral());
-			if(coachProfileRequest.getResume() != null)existingCoachProfile.get().setResume(coachProfileRequest.getResume());
-			if(coachProfileRequest.getLor1() != null)existingCoachProfile.get().setLor1(coachProfileRequest.getLor1());
-			if(coachProfileRequest.getLor2() != null)existingCoachProfile.get().setLor2(coachProfileRequest.getLor2());
-			
+//			if(coachProfileRequest.getResume() != null)existingCoachProfile.get().setResume(coachProfileRequest.getResume());
+//			if(coachProfileRequest.getLor1() != null)existingCoachProfile.get().setLor1(coachProfileRequest.getLor1());
+//			if(coachProfileRequest.getLor2() != null)existingCoachProfile.get().setLor2(coachProfileRequest.getLor2());
+//			
 			coachProfileRepository.save(existingCoachProfile.get());
 
 			return ResponseEntity.ok(new MessageResponse("Coach Profile Updated Successfully"));
