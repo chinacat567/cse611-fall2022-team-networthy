@@ -1,18 +1,12 @@
 import React, { useEffect, useState } from "react";
-
-import GoalSummary from "./goalSummary";
-import Profile from "./profile";
+import { useDispatch } from "react-redux";
+import { useSearchParams } from "react-router-dom";
 
 import "../../styles/dashboard.scss";
-import { useSearchParams } from "react-router-dom";
-import GoalDashboard from "./goalDashboard";
-import { getAllClientGoals } from "../../redux/slices/goalSlice";
-import { useDispatch } from "react-redux";
+import Profile from "./profile";
 
 const TABS = {
-  goals: "Goal Updates",
-  content: "Personalised Content",
-  coaches: "View Coaches",
+  clients: "Your Clients",
 };
 
 const getTabFromURL = () => {
@@ -23,26 +17,25 @@ const getTabFromURL = () => {
   return "";
 };
 
-const Dashboard = ({ user }) => {
+const CoachDashboard = ({ user }) => {
   const dispatch = useDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
   const [tab, setTab] = useState(getTabFromURL());
 
   useEffect(() => {
     if (!tab) {
-      setSearchParams({ tab: "content" });
-      setTab("content");
+      setSearchParams({ tab: "clients" });
+      setTab("clients");
     }
     if (user.username) {
-      dispatch(getAllClientGoals({ username: user.username }));
+      //   dispatch(getAllClientGoals({ username: user.username }));
     }
   }, []);
 
   return (
     <div className="dashboard">
       <div className="dashboard__userCenter">
-        <Profile user={user} isClient={true} />
-        <GoalSummary />
+        <Profile user={user} isClient={false} />
       </div>
       <div className="dashboard__tabs">
         {Object.entries(TABS).map(([k, v]) => (
@@ -58,11 +51,9 @@ const Dashboard = ({ user }) => {
           </div>
         ))}
       </div>
-      <div className="dashboard__content">
-        {tab === "goals" && <GoalDashboard username={user?.username || ""} />}
-      </div>
+      <div className="dashboard__content"></div>
     </div>
   );
 };
 
-export default Dashboard;
+export default CoachDashboard;

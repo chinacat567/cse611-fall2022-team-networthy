@@ -31,7 +31,8 @@ const _signin = (payload) => {
 
       // Navigation to respective dashboard
       const role = res?.data?.roles[0],
-        clientProfile = res?.data?.clientProfile;
+        clientProfile = res?.data?.clientProfile,
+        coachProfile = res?.data?.coachProfile;
 
       localStorage.setItem("USER_ROLE", role);
 
@@ -42,7 +43,9 @@ const _signin = (payload) => {
             ? ROUTES.CLIENT_DASHBOARD
             : ROUTES.CLIENT_PROFILE_SURVEY);
       } else if (role.includes(ROLE_CONFIG.COACH))
-        window.location.href = "/" + ROUTES.COACH_DASHBOARD;
+        window.location.href =
+          "/" +
+          (coachProfile ? ROUTES.COACH_DASHBOARD : ROUTES.COACH_PROFILE_SURVEY);
       else
         toast.error("Role not found. Please try again later.", {
           className: "warn-toast",

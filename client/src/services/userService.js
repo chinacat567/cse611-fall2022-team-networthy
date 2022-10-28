@@ -44,9 +44,53 @@ const _updateClientProfile = (payload) => {
     });
 };
 
-const clientService = {
-  _addClientProfile,
-  _updateClientProfile,
+const _addCoachProfile = (payload) => {
+  return httpService
+    .post(getApi(API.ADD_COACH_PROFILE), payload)
+    .then(({ data }) => {
+      if (data?.message) {
+        toast.success("Coach profile saved successfully.");
+      }
+      // returning the profile data to update in the "user" slice
+      return payload;
+    })
+    .catch((err) => {
+      toast.error(
+        err?.data?.message || "Something went wrong, please try again.",
+        {
+          className: "warn-toast",
+        }
+      );
+      return payload;
+    });
 };
 
-export default clientService;
+const _updateCoachProfile = (payload) => {
+  return httpService
+    .put(getApi(API.UPDATE_COACH_PROFILE), payload)
+    .then(({ data }) => {
+      if (data?.message) {
+        toast.success("Coach profile updated successfully.");
+      }
+      // returning the profile data to update in the "user" slice
+      return payload;
+    })
+    .catch((err) => {
+      toast.error(
+        err?.data?.message || "Something went wrong, please try again.",
+        {
+          className: "warn-toast",
+        }
+      );
+      return payload;
+    });
+};
+
+const userService = {
+  _addClientProfile,
+  _updateClientProfile,
+  _addCoachProfile,
+  _updateCoachProfile,
+};
+
+export default userService;

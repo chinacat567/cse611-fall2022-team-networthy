@@ -36,6 +36,6 @@ export const goalSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-// export const {  } = goalSlice.actions;
+// export const { } = goalSlice.actions;
 
 export default goalSlice;

@@ -1,41 +1,68 @@
 import React from "react";
-import { Formik, Form, ErrorMessage } from "formik";
+import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import Button from "@mui/material/Button";
 import TextareaAutosize from "@mui/material/TextareaAutosize";
+import { Chip } from "@mui/material";
 
 import InputLabel from "@mui/material/InputLabel";
-import Checkbox from "@mui/material/Checkbox";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
-import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
-import CheckBoxIcon from "@mui/icons-material/CheckBox";
+
+import { ROUTES } from "../App/routeConfig";
+import goalService from "../../services/goalService";
 
 import "../../styles/addGoal.scss";
-import { fontWeight } from "@mui/system";
 
-const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
-const checkedIcon = <CheckBoxIcon fontSize="small" />;
+const INIT_VALUES = {
+  goalTittle: "",
+  goalDescription: "",
+  goalSpecific: "",
+  goalMeasurable: "",
+  goalAttainable: "",
+  goalRelevant: "",
+  goalTimeBased: "",
+  goalTags: [],
+};
 
-const addGoal = () => {
-  const tagList = ["a", "b", "c"];
+const ValidationSchema = Yup.object().shape({});
 
-  const ValidationSchema = Yup.object().shape({});
+const onCancel = () => (window.location.href = "/" + ROUTES.CLIENT_DASHBOARD);
+
+const AddGoal = ({ user }) => {
+  const editGoal = JSON.parse(localStorage.getItem("EDIT_GOAL"));
+  const tagList = ["Goal Tag-1", "Goal Tag-2", "Goal Tag-3", "Goal Tag-4"];
 
   const getInitValues = () => {
-    return INIT_VALUES;
+    return editGoal ? editGoal : INIT_VALUES;
   };
 
-  const submitForm = async (values) => {};
+  const submitForm = async (values) => {
+    values = {
+      ...values,
+      clientUsername: user?.username || "",
+    };
 
-  const INIT_VALUES = {
-    title: "",
-    description: "",
-    s: "",
-    m: "",
-    a: "",
-    r: "",
-    t: "",
+    if (!editGoal) {
+      // New Goal
+      values = {
+        ...values,
+        goalStatus: "NOT_STARTED",
+        goalReviewCoachId: "",
+      };
+      goalService._addGoal(values).then((res) => {
+        window.location.href = "/" + ROUTES.CLIENT_DASHBOARD;
+      });
+    } else {
+      // Existing Goal
+      values = {
+        ...values,
+        goalId: editGoal.goalId,
+      };
+      goalService._updateGoal(values).then((res) => {
+        window.location.href = "/" + ROUTES.CLIENT_DASHBOARD;
+      });
+    }
   };
 
   return (
@@ -66,27 +93,28 @@ const addGoal = () => {
 
                   <TextareaAutosize
                     aria-label="empt"
-                    name="title"
+                    name="goalTittle"
                     className="addGoal__generic"
-                    value={values.title}
-                    style={{ width: "20vw", height: 50 }}
+                    value={values.goalTittle}
+                    style={{ width: "400px" }}
                     onChange={({ target }) => {
-                      setFieldValue("title", target.value);
+                      setFieldValue("goalTittle", target.value);
                     }}
+                    minRows={4}
                   />
                 </div>
                 <div className="addGoal__generic">
-                  <InputLabel id="description">Goal Description</InputLabel>
-
+                  <InputLabel id="goalDescription">Goal Description</InputLabel>
                   <TextareaAutosize
                     aria-label="empty textarea"
-                    name="description"
+                    name="goalDescription"
                     className="addGoal__smart"
-                    value={values.description}
-                    style={{ width: "40vw", height: 50 }}
+                    value={values.goalDescription}
+                    style={{ width: "430px" }}
                     onChange={({ target }) => {
-                      setFieldValue("description", target.value);
+                      setFieldValue("goalDescription", target.value);
                     }}
+                    minRows={4}
                   />
                 </div>
               </div>
@@ -100,11 +128,12 @@ const addGoal = () => {
                   name="smart-s"
                   placeholder="Specific"
                   className="addGoal__smart"
-                  value={values.s}
-                  style={{ width: "60vw", height: 25 }}
+                  value={values.goalSpecific}
+                  style={{ width: "60vw" }}
                   onChange={({ target }) => {
-                    setFieldValue("s", target.value);
+                    setFieldValue("goalSpecific", target.value);
                   }}
+                  minRows={4}
                 />
               </div>
               <div className="addGoal__text">
@@ -117,11 +146,12 @@ const addGoal = () => {
                   name="smart-m"
                   placeholder="Measurable"
                   className="addGoal__smart"
-                  value={values.m}
-                  style={{ width: "60vw", height: 25 }}
+                  value={values.goalMeasurable}
+                  style={{ width: "60vw" }}
                   onChange={({ target }) => {
-                    setFieldValue("m", target.value);
+                    setFieldValue("goalMeasurable", target.value);
                   }}
+                  minRows={4}
                 />
               </div>
               <div className="addGoal__text">
@@ -134,12 +164,12 @@ const addGoal = () => {
                   name="general"
                   placeholder="Attainable"
                   className="addGoal__smart"
-                  value={values.a}
-                  style={{ width: "60vw", height: 25 }}
+                  value={values.goalAttainable}
+                  style={{ width: "60vw" }}
                   onChange={({ target }) => {
-                    setFieldValue("a", target.value);
+                    setFieldValue("goalAttainable", target.value);
                   }}
-                  minRows={2}
+                  minRows={4}
                 />
               </div>
               <div className="addGoal__text">
@@ -152,11 +182,12 @@ const addGoal = () => {
                   name="general"
                   placeholder="Relevant"
                   className="addGoal__smart"
-                  value={values.r}
-                  style={{ width: "60vw", height: 25 }}
+                  value={values.goalRelevant}
+                  style={{ width: "60vw" }}
                   onChange={({ target }) => {
-                    setFieldValue("r", target.value);
+                    setFieldValue("goalRelevant", target.value);
                   }}
+                  minRows={4}
                 />
               </div>
               <div className="addGoal__text">
@@ -169,32 +200,43 @@ const addGoal = () => {
                   name="general"
                   placeholder="Time-Bound"
                   className="addGoal__smart"
-                  value={values.t}
-                  style={{ width: "60vw", height: 25 }}
+                  value={values.goalTimeBased}
+                  style={{ width: "60vw" }}
                   onChange={({ target }) => {
-                    setFieldValue("t", target.value);
+                    setFieldValue("goalTimeBased", target.value);
                   }}
+                  minRows={4}
                 />
               </div>
               <div className="addGoal__text">
                 <Autocomplete
                   multiple
                   id="checkboxes-tags"
+                  value={values.goalTags}
+                  onChange={(event, newValue) => {
+                    setFieldValue("goalTags", [
+                      ...new Set([...values.goalTags, ...newValue]),
+                    ]);
+                  }}
                   options={tagList}
                   disableCloseOnSelect
+                  clearIcon={<></>}
                   getOptionLabel={(option) => option}
-                  renderOption={(props, option, { selected }) => (
-                    <li {...props}>
-                      <Checkbox
-                        icon={icon}
-                        checkedIcon={checkedIcon}
-                        style={{ marginRight: 8 }}
-                        checked={selected}
+                  renderTags={(tagValue, getTagProps) =>
+                    tagValue.map((option, index) => (
+                      <Chip
+                        label={option}
+                        {...getTagProps({ index })}
+                        onDelete={(e) => {
+                          setFieldValue(
+                            "goalTags",
+                            values.goalTags.filter((x) => x !== option)
+                          );
+                        }}
                       />
-                      {option}
-                    </li>
-                  )}
-                  style={{ width: 300, height: 10 }}
+                    ))
+                  }
+                  style={{ width: 300 }}
                   renderInput={(params) => (
                     <TextField
                       {...params}
@@ -212,7 +254,7 @@ const addGoal = () => {
                   disabled={false}
                   sx={{ width: 200 }}
                 >
-                  Add
+                  {editGoal ? "Update" : "Add"}
                 </Button>
 
                 <Button
@@ -222,6 +264,7 @@ const addGoal = () => {
                   disabled={false}
                   color="inherit"
                   sx={{ width: 200 }}
+                  onClick={onCancel}
                 >
                   Cancel
                 </Button>
@@ -234,4 +277,4 @@ const addGoal = () => {
   );
 };
 
-export default addGoal;
+export default AddGoal;

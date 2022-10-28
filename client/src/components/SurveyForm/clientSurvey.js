@@ -19,14 +19,16 @@ import {
   updateClientProfile,
 } from "../../redux/slices/authSlice";
 
-import "../../styles/surveyForm.scss";
 import { ROUTES } from "../App/routeConfig";
+
+import "../../styles/surveyForm.scss";
 
 const GENDER = {
   MALE: "Male",
   FEMALE: "Female",
   TRANSGENDER: "Transgender",
   NONBINARY: "Non-Binary",
+  OTHER: "Other",
 };
 
 const HIGHEST_EDUCATION = [
@@ -146,9 +148,12 @@ const ValidationSchema = Yup.object().shape({
 });
 
 const getDate = (date) => {
-  let dob = new Date(date?.split("-") || "");
-  let month = dob.getUTCMonth() + 1; //months from 1-12
-  let day = dob.getUTCDate();
+  let splitDate = date.split("-");
+  let dob = new Date(splitDate[0], splitDate[1], splitDate[2]);
+  let month = dob.getUTCMonth().toString(); //months from 1-12
+  month = month.length > 1 ? month : "0" + month;
+  let day = dob.getUTCDate().toString();
+  day = day.length > 1 ? day : "0" + day;
   let year = dob.getUTCFullYear();
   return year + "-" + month + "-" + day;
 };
@@ -214,7 +219,6 @@ const ClientSurvey = ({ user }) => {
               <div className="surveyWizard__sub">
                 <div>
                   <InputLabel id="education">First Name</InputLabel>
-
                   <TextField
                     name="firstName"
                     className="surveyWizard__textField"

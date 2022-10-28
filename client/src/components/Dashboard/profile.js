@@ -6,8 +6,9 @@ import BoyIcon from "../../assets/Icons/boy.png";
 import GirlIcon from "../../assets/Icons/girl.png";
 import UserIcon from "../../assets/Icons/user.png";
 
-import "../../styles/profileCard.scss";
 import { ROUTES } from "../App/routeConfig";
+
+import "../../styles/profileCard.scss";
 
 const getIcon = (gender) => {
   switch (gender) {
@@ -20,29 +21,10 @@ const getIcon = (gender) => {
   }
 };
 
-const Profile = ({
-  user: {
-    clientProfile: {
-      gender,
-      firstName,
-      lastName,
-      emailId,
-      occupation,
-      username,
-      dateOfBirth,
-      education,
-      university,
-      location,
-      financialLevel,
-      learningMethod,
-      income,
-      debt,
-      general,
-    },
-  },
-}) => {
+const Profile = ({ user, isClient }) => {
+  const userProfile = isClient ? user.clientProfile : user.coachProfile;
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const Icon = getIcon(gender);
+  const Icon = getIcon(userProfile.gender);
 
   const toggleDrawer = (open) => (event) => {
     if (
@@ -55,16 +37,21 @@ const Profile = ({
   };
 
   const onEditClick = () => {
-    window.location.href = "/" + ROUTES.CLIENT_PROFILE_SURVEY;
+    let url = isClient
+      ? ROUTES.CLIENT_PROFILE_SURVEY
+      : ROUTES.COACH_PROFILE_SURVEY;
+    window.location.href = "/" + url;
   };
 
   return (
     <div className="profileCard">
       <img src={Icon} className="profileCard__icon" />
       <div className="profileCard__details">
-        <p className="profileCard__details--large">Hi {firstName}!</p>
-        <p className="profileCard__details--medium">{emailId}</p>
-        <p className="profileCard__details--small">{occupation}</p>
+        <p className="profileCard__details--large">
+          Hi {userProfile.firstName}!
+        </p>
+        <p className="profileCard__details--medium">{userProfile.emailId}</p>
+        <p className="profileCard__details--small">{userProfile.occupation}</p>
         <p
           className="profileCard__details--small profileCard__details--link"
           onClick={toggleDrawer(true)}
@@ -76,54 +63,94 @@ const Profile = ({
         <div className="profileCard__drawer drawer">
           <EditIcon className="drawer__editIcon" onClick={onEditClick} />
           <img src={Icon} className="drawer__icon drawer__icon--large" />
-          <p className="drawer__details--large">{firstName + " " + lastName}</p>
-          <p className="drawer__details--medium">{emailId}</p>
-          <p className="drawer__details--small">{occupation}</p>
+          <p className="drawer__details--large">
+            {userProfile.firstName + " " + userProfile.lastName}
+          </p>
+          <p className="drawer__details--medium">{userProfile.emailId}</p>
+          <p className="drawer__details--small">{userProfile.occupation}</p>
           <br />
           <div className="drawer__specificDetails">
             <p className="drawer__specificDetails--label">Username</p>
-            <p className="drawer__specificDetails--value">{username}</p>
+            <p className="drawer__specificDetails--value">
+              {userProfile.username}
+            </p>
           </div>
           <div className="drawer__specificDetails">
             <p className="drawer__specificDetails--label">Date of Birth</p>
-            <p className="drawer__specificDetails--value">{dateOfBirth}</p>
+            <p className="drawer__specificDetails--value">
+              {userProfile.dateOfBirth}
+            </p>
           </div>
           <div className="drawer__specificDetails">
             <p className="drawer__specificDetails--label">Gender</p>
-            <p className="drawer__specificDetails--value">{gender}</p>
+            <p className="drawer__specificDetails--value">
+              {userProfile.gender}
+            </p>
           </div>
           <div className="drawer__specificDetails">
             <p className="drawer__specificDetails--label">Education</p>
-            <p className="drawer__specificDetails--value">{education}</p>
+            <p className="drawer__specificDetails--value">
+              {userProfile.education}
+            </p>
           </div>
           <div className="drawer__specificDetails">
             <p className="drawer__specificDetails--label">University</p>
-            <p className="drawer__specificDetails--value">{university}</p>
+            <p className="drawer__specificDetails--value">
+              {userProfile.university}
+            </p>
           </div>
           <div className="drawer__specificDetails">
             <p className="drawer__specificDetails--label">Location</p>
-            <p className="drawer__specificDetails--value">{location}</p>
+            <p className="drawer__specificDetails--value">
+              {userProfile.location}
+            </p>
           </div>
+          {isClient && (
+            <>
+              <div className="drawer__specificDetails">
+                <p className="drawer__specificDetails--label">
+                  Financial Level
+                </p>
+                <p className="drawer__specificDetails--value">
+                  {userProfile.financialLevel}
+                </p>
+              </div>
+              <div className="drawer__specificDetails">
+                <p className="drawer__specificDetails--label">
+                  Learning Method
+                </p>
+                <p className="drawer__specificDetails--value">
+                  {userProfile.learningMethod}
+                </p>
+              </div>
+              <div className="drawer__specificDetails">
+                <p className="drawer__specificDetails--label">Income</p>
+                <p className="drawer__specificDetails--value">
+                  {userProfile.income}
+                </p>
+              </div>
+              <div className="drawer__specificDetails">
+                <p className="drawer__specificDetails--label">Debt</p>
+                <p className="drawer__specificDetails--value">
+                  {userProfile.debt}
+                </p>
+              </div>
+            </>
+          )}
           <div className="drawer__specificDetails">
-            <p className="drawer__specificDetails--label">Financial Level</p>
-            <p className="drawer__specificDetails--value">{financialLevel}</p>
+            <p className="drawer__specificDetails--label">What is your why?</p>
+            <p className="drawer__specificDetails--value">
+              {userProfile.general}
+            </p>
           </div>
-          <div className="drawer__specificDetails">
-            <p className="drawer__specificDetails--label">Learning Method</p>
-            <p className="drawer__specificDetails--value">{learningMethod}</p>
-          </div>
-          <div className="drawer__specificDetails">
-            <p className="drawer__specificDetails--label">Income</p>
-            <p className="drawer__specificDetails--value">{income}</p>
-          </div>
-          <div className="drawer__specificDetails">
-            <p className="drawer__specificDetails--label">Debt</p>
-            <p className="drawer__specificDetails--value">{debt}</p>
-          </div>
-          <div className="drawer__specificDetails">
-            <p className="drawer__specificDetails--label">Other</p>
-            <p className="drawer__specificDetails--value">{general}</p>
-          </div>
+          {!isClient && (
+            <div className="drawer__specificDetails">
+              <p className="drawer__specificDetails--label">Credentials</p>
+              <p className="drawer__specificDetails--value">
+                {userProfile.credentials}
+              </p>
+            </div>
+          )}
         </div>
       </Drawer>
     </div>

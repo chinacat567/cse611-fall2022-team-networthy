@@ -9,8 +9,12 @@ export const API = {
   EMAIL_VERIFICATION: "/api/auth/verify",
   ADD_CLIENT_PROFILE: "/api/client/add/clientProfile",
   UPDATE_CLIENT_PROFILE: "/api/client/edit/clientProfile",
+  ADD_COACH_PROFILE: "/api/coach/add/data",
+  UPDATE_COACH_PROFILE: "/api/admin/edit/coachProfile",
   GET_ALL_CLIENT_GOALS: "/api/clientGoal/getAllGoals",
   UPDATE_GOAL_STATUS: "/api/clientGoal/updateGoal",
+  ADD_GOAL: "/api/clientGoal/addGoal",
+  UPDATE_GOAL: "/api/clientGoal/editGoal",
 };
 
 // Helper Functions

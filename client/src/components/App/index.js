@@ -19,6 +19,9 @@ import { ROUTES } from "./routeConfig";
 import { useSelector } from "react-redux";
 
 import Loader from "../Loading";
+import CoachSurvey from "../SurveyForm/coachSurvey";
+import CoachDashboard from "../Dashboard/coachDashboard";
+import AddGoal from "../Dashboard/addGoal";
 
 const App = () => {
   const { user, isLoggedIn } = useSelector((state) => state?.auth);
@@ -45,22 +48,6 @@ const App = () => {
               }
             />
             <Route
-              path={ROUTES.COACH_LOGIN}
-              element={
-                <Home
-                  authWizard={<AuthWizard state={LOGIN_CONFIG.COACH_LOGIN} />}
-                />
-              }
-            />
-            <Route
-              path={ROUTES.COACH_SIGNUP}
-              element={
-                <Home
-                  authWizard={<AuthWizard state={LOGIN_CONFIG.COACH_SIGNUP} />}
-                />
-              }
-            />
-            <Route
               path={ROUTES.ADMIN}
               element={
                 <Home authWizard={<AuthWizard state={LOGIN_CONFIG.ADMIN} />} />
@@ -70,7 +57,15 @@ const App = () => {
               path={ROUTES.CLIENT_DASHBOARD}
               element={
                 <PrivateRoute>
-                  <Dashboard role={null} user={user} />
+                  <Dashboard user={user} />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path={ROUTES.COACH_DASHBOARD}
+              element={
+                <PrivateRoute>
+                  <CoachDashboard user={user} />
                 </PrivateRoute>
               }
             />
@@ -79,6 +74,22 @@ const App = () => {
               element={
                 <PrivateRoute>
                   <ClientSurvey user={user} />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path={ROUTES.COACH_PROFILE_SURVEY}
+              element={
+                <PrivateRoute>
+                  <CoachSurvey user={user} />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path={ROUTES.ADD_GOAL}
+              element={
+                <PrivateRoute>
+                  <AddGoal user={user} />
                 </PrivateRoute>
               }
             />

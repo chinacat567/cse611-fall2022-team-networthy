@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { ROUTES } from "../../components/App/routeConfig";
 import authService from "../../services/authService";
-import clientService from "../../services/clientService";
+import userService from "../../services/userService";
 
 export const signup = createAsyncThunk("auth/signup", async (payload) => {
   return await authService._signup(payload);
@@ -14,14 +14,14 @@ export const signin = createAsyncThunk("auth/signin", async (payload) => {
 export const addClientProfile = createAsyncThunk(
   "auth/clientProfile",
   async (payload) => {
-    return await clientService._addClientProfile(payload);
+    return await userService._addClientProfile(payload);
   }
 );
 
 export const updateClientProfile = createAsyncThunk(
   "auth/updateClientProfile",
   async (payload) => {
-    return await clientService._updateClientProfile(payload);
+    return await userService._updateClientProfile(payload);
   }
 );
 
@@ -29,7 +29,7 @@ export const addCoachProfile = createAsyncThunk(
   "auth/coachProfile",
   async (payload) => {
     //to be updated to coachprofile service
-    return await clientService._addClientProfile(payload);
+    return await userService._addCoachProfile(payload);
   }
 );
 
@@ -37,7 +37,7 @@ export const updateCoachProfile = createAsyncThunk(
   "auth/updateCoachProfile",
   async (payload) => {
     //to be updated to coachprofile service
-    return await clientService._updateClientProfile(payload);
+    return await userService._updateCoachProfile(payload);
   }
 );
 
@@ -67,6 +67,16 @@ export const authSlice = createSlice({
       state.user.clientProfile = action?.payload;
       localStorage.setItem("USER", JSON.stringify(state.user));
       window.location.href = "/" + ROUTES.CLIENT_DASHBOARD;
+    },
+    [addCoachProfile.fulfilled]: (state, action) => {
+      state.user.coachProfile = action?.payload;
+      localStorage.setItem("USER", JSON.stringify(state.user));
+      window.location.href = "/" + ROUTES.COACH_DASHBOARD;
+    },
+    [updateCoachProfile.fulfilled]: (state, action) => {
+      state.user.coachProfile = action?.payload;
+      localStorage.setItem("USER", JSON.stringify(state.user));
+      window.location.href = "/" + ROUTES.COACH_DASHBOARD;
     },
   },
 });

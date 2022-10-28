@@ -1,6 +1,7 @@
 import React, { useRef } from "react";
 import * as Yup from "yup";
 import { Formik, Form, ErrorMessage } from "formik";
+import { useDispatch } from "react-redux";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import TextareaAutosize from "@mui/material/TextareaAutosize";
@@ -13,7 +14,6 @@ import countryList from "react-select-country-list";
 import US_STATES from "./usStates.json";
 import useFileUpload from "react-use-file-upload";
 
-import { useDispatch } from "react-redux";
 import {
   addCoachProfile,
   updateCoachProfile,
@@ -41,30 +41,6 @@ const HIGHEST_EDUCATION = [
   "No schooling completed",
 ];
 
-const LEARNING_METHODS = ["Books", "Articles", "Videos", "Podcasts"];
-
-const ANNUAL_INCOMES = [
-  "0-$20k",
-  "$21-$40k",
-  "$41-$60k",
-  "$61-$80k",
-  "$81-$100k",
-  "$101-$125k",
-  "$126-$150k",
-  "$150k+",
-];
-
-const DEBTS = [
-  "0-$20k",
-  "$21-$40k",
-  "$41-$60k",
-  "$61-$80k",
-  "$81-$100k",
-  "$101-$125k",
-  "$126-$150k",
-  "$150k+",
-];
-
 const INIT_VALUES = {
   firstName: "",
   lastName: "",
@@ -75,11 +51,8 @@ const INIT_VALUES = {
   university: "",
   country: "",
   state: "",
-  financialLevel: 0,
-  learningMethod: "",
-  income: "",
-  debt: "",
   general: "",
+  credentials: "",
 };
 
 const ValidationSchema = Yup.object().shape({
@@ -92,13 +65,17 @@ const ValidationSchema = Yup.object().shape({
   university: Yup.string().required("University name cannot be empty."),
   country: Yup.string().required("Country selection cannot be empty."),
   state: Yup.string().required("State selection cannot be empty."),
-  general: Yup.string().optional(),
+  general: Yup.string().required("This cannot be empty."),
+  credentials: Yup.string().required("Credentials selection cannot be empty."),
 });
 
 const getDate = (date) => {
-  let dob = new Date(date?.split("-") || "");
-  let month = dob.getUTCMonth() + 1; //months from 1-12
-  let day = dob.getUTCDate();
+  let splitDate = date.split("-");
+  let dob = new Date(splitDate[0], splitDate[1], splitDate[2]);
+  let month = dob.getUTCMonth().toString(); //months from 1-12
+  month = month.length > 1 ? month : "0" + month;
+  let day = dob.getUTCDate().toString();
+  day = day.length > 1 ? day : "0" + day;
   let year = dob.getUTCFullYear();
   return year + "-" + month + "-" + day;
 };
@@ -106,14 +83,14 @@ const getDate = (date) => {
 const CoachSurvey = ({ user }) => {
   const dispatch = useDispatch();
   const countries = countryList().getData();
-  const isEdit = !!user?.clientProfile;
+  const isEdit = !!user?.coachProfile;
 
   const getInitValues = () => {
     if (isEdit) {
-      let locationArr = user?.clientProfile?.location?.split(", ") || "";
+      let locationArr = user?.coachProfile?.location?.split(", ") || "";
       let initProfile = {
-        ...user.clientProfile,
-        dateOfBirth: getDate(user?.clientProfile?.dateOfBirth),
+        ...user.coachProfile,
+        dateOfBirth: getDate(user?.coachProfile?.dateOfBirth),
         country: locationArr[1],
         state: locationArr[0],
       };
@@ -152,7 +129,7 @@ const CoachSurvey = ({ user }) => {
 
   const inputRef = useRef();
 
-  const onCancel = () => (window.location.href = "/" + ROUTES.CLIENT_DASHBOARD);
+  const onCancel = () => (window.location.href = "/" + ROUTES.COACH_DASHBOARD);
 
   return (
     <div className="surveyWizard">
@@ -285,7 +262,6 @@ const CoachSurvey = ({ user }) => {
                   <InputLabel id="education">University</InputLabel>
                   <TextField
                     name="university"
-                    label="University"
                     className="surveyWizard__textField"
                     value={values.university}
                     onChange={handleChange}
@@ -345,7 +321,7 @@ const CoachSurvey = ({ user }) => {
                 </div>
               </div>
 
-              <div className="surveyWizard__sub">
+              {/* <div className="surveyWizard__sub">
                 <div>
                   <InputLabel id="state">
                     Resume and 2 Letter of Recommendations
@@ -365,10 +341,6 @@ const CoachSurvey = ({ user }) => {
 
                     {files.length > 0 && (
                       <ul>
-                        {/* <li>File types found: {fileTypes.join(", ")}</li> */}
-                        {/* <li>Total Size: {totalSize}</li>
-                        <li>Total Bytes: {totalSizeInBytes}</li> */}
-
                         <p className="clear-all">
                           <button onClick={() => clearAllFiles()}>
                             Clear All
@@ -394,7 +366,7 @@ const CoachSurvey = ({ user }) => {
                     }}
                   />
                 </div>
-              </div>
+              </div> */}
 
               <div className="surveyWizard__sub">
                 <div>
@@ -418,13 +390,13 @@ const CoachSurvey = ({ user }) => {
                   <InputLabel id="state">Credentials</InputLabel>
                   <TextareaAutosize
                     aria-label="empty textarea"
-                    name="general"
+                    name="credentials"
                     placeholder="This is your time to sell yourself to the users, think of it as an elevator pitch."
                     className="surveyWizard__textbox"
-                    value={values.general}
+                    value={values.credentials}
                     style={{ width: "60vw", height: 100 }}
                     onChange={({ target }) => {
-                      setFieldValue("general", target.value);
+                      setFieldValue("credentials", target.value);
                     }}
                   />
                 </div>

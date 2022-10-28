@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getAllClientGoals,
-  updateGoalStatus,
-} from "../../redux/slices/goalSlice";
-import BookmarkIcon from "@mui/icons-material/Bookmark";
+import { updateGoalStatus } from "../../redux/slices/goalSlice";
 
-import "../../styles/goalDashboard.scss";
+import BookmarkIcon from "@mui/icons-material/Bookmark";
+import EditIcon from "@mui/icons-material/Edit";
 import {
   Button,
   Chip,
@@ -15,6 +12,10 @@ import {
   MenuItem,
   Select,
 } from "@mui/material";
+
+import { ROUTES } from "../App/routeConfig";
+
+import "../../styles/goalDashboard.scss";
 
 const GoalDashboard = ({ username }) => {
   const [selectedGoal, setSelectedGoal] = useState({});
@@ -26,6 +27,11 @@ const GoalDashboard = ({ username }) => {
       setSelectedGoal(clientGoals[4]);
     }
   }, [clientGoals]);
+
+  const onEditClick = () => {
+    localStorage.setItem("EDIT_GOAL", JSON.stringify(selectedGoal));
+    window.location.href = "/" + ROUTES.ADD_GOAL;
+  };
 
   return (
     <div className="goalDashboard">
@@ -50,6 +56,10 @@ const GoalDashboard = ({ username }) => {
           variant="contained"
           disabled={false}
           sx={{ width: 200 }}
+          onClick={() => {
+            localStorage.removeItem("EDIT_GOAL");
+            window.location.href = "/" + ROUTES.ADD_GOAL;
+          }}
         >
           Add Goal
         </Button>
@@ -58,7 +68,17 @@ const GoalDashboard = ({ username }) => {
         <div className="goalDashboard__goalContent goalContent">
           <div className="goalContent__header">
             <div style={{ display: "flex" }}>
-              <h2 style={{ flexGrow: "1" }}>{selectedGoal.goalTittle}</h2>
+              <h2 style={{ flexGrow: "1" }}>
+                {selectedGoal.goalTittle}{" "}
+                <EditIcon
+                  className="editIcon"
+                  onClick={onEditClick}
+                  style={{
+                    marginLeft: "10px",
+                    cursor: "pointer",
+                  }}
+                />
+              </h2>
               <FormControl sx={{ width: "200px" }}>
                 <InputLabel id="goal-status">Status</InputLabel>
                 <Select
