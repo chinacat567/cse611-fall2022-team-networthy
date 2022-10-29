@@ -75,6 +75,8 @@ const GoalSummary = ({ selectedGoalId }) => {
       } else {
         setGoal(clientGoals[0]);
       }
+    } else if (clientGoals.length && !selectedGoalId) {
+      setGoal(clientGoals[0]);
     }
   }, [clientGoals, selectedGoalId]);
 

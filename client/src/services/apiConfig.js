@@ -15,6 +15,10 @@ export const API = {
   UPDATE_GOAL_STATUS: "/api/clientGoal/updateGoal",
   ADD_GOAL: "/api/clientGoal/addGoal",
   UPDATE_GOAL: "/api/clientGoal/editGoal",
+  GET_ALL_COACHES: "/api/coach/getAll",
+  GET_ASSIGNED_COACH: "/api/clientAndCoach/get/coach",
+  DELETE_COACH_ASIGNMENT: "/api/clientAndCoach/delete",
+  ASSIGN_COACH: "/api/clientAndCoach/add",
 };
 
 // Helper Functions

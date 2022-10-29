@@ -1,0 +1,119 @@
+@import "./common_styles/index.scss";
+
+.clientCoach {
+  display: flex;
+
+  &__assignedCoach {
+    padding: 48px 20px;
+    & > div {
+      background-color: $--background-light-gray-2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+    }
+
+    width: 28%;
+
+    .pic {
+      height: 120px;
+      width: 120px;
+    }
+
+    .coachName {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .details {
+      word-wrap: break-word;
+      color: $--slightly-dark-gray;
+      display: flex;
+      align-items: center;
+
+      &--m {
+        margin-top: 18px;
+      }
+    }
+  }
+
+  &__allCoaches {
+    width: 72%;
+    padding: 40px 80px 40px 20px;
+
+    h3 {
+      border-bottom: 1px solid $--gray-2;
+      color: $--slightly-dark-gray;
+      margin-bottom: 16px;
+    }
+  }
+}
+
+.calendlyBtn {
+  width: 200px;
+  margin-top: 12px;
+  padding: 10px 40px;
+  background-color: $--nw-primary-light-2;
+  border: 0px;
+  border-radius: 2px;
+  font-size: 16px;
+
+  &:hover {
+    cursor: pointer;
+    font-weight: 500;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.individualCoach {
+  background-color: $--background-light-gray-2;
+  border-radius: 4px;
+  margin-bottom: 24px;
+  padding: 24px;
+  display: flex;
+
+  &__icon {
+    padding-top: 10px;
+    .pic {
+      height: 60px;
+      width: 60px;
+    }
+  }
+
+  &__details {
+    word-wrap: break-word;
+    flex-grow: 1;
+    padding-left: 15px;
+    color: $--slightly-dark-gray;
+
+    .name {
+      font-size: 20px;
+      color: $--black;
+    }
+
+    .detail {
+      font-size: 14px;
+      font-weight: bold;
+
+      &--mbelow {
+        margin-bottom: 12px;
+      }
+    }
+
+    p {
+      display: flex;
+      align-items: center;
+    }
+
+    .coachActionPanel {
+      display: flex;
+      width: 100%;
+      justify-content: space-between;
+      .btn {
+        background-color: $--nw-primary !important;
+        color: $--white;
+      }
+    }
+  }
+}
