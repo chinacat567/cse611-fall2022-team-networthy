@@ -7,7 +7,7 @@ import "../../styles/dashboard.scss";
 import { useSearchParams } from "react-router-dom";
 import GoalDashboard from "./goalDashboard";
 import { getAllClientGoals } from "../../redux/slices/goalSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const TABS = {
   goals: "Goal Updates",
@@ -15,10 +15,10 @@ const TABS = {
   coaches: "View Coaches",
 };
 
-const getTabFromURL = () => {
+const getKeyFromURL = (iKey) => {
   const params = new URLSearchParams(window.location.search);
   for (const [key, value] of params.entries()) {
-    if (key === "tab") return value;
+    if (key === iKey) return value;
   }
   return "";
 };
@@ -26,23 +26,32 @@ const getTabFromURL = () => {
 const Dashboard = ({ user }) => {
   const dispatch = useDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
-  const [tab, setTab] = useState(getTabFromURL());
+  const [tab, setTab] = useState(getKeyFromURL("tab"));
+  const [selectedGoalId, setSelectedGoalId] = useState(getKeyFromURL("goalId"));
 
   useEffect(() => {
     if (!tab) {
-      setSearchParams({ tab: "content" });
-      setTab("content");
+      setTab("goals");
     }
     if (user.username) {
       dispatch(getAllClientGoals({ username: user.username }));
     }
   }, []);
 
+  useEffect(() => {
+    if (selectedGoalId) {
+      setSearchParams({
+        tab: "goals",
+        goalId: selectedGoalId,
+      });
+    }
+  }, [selectedGoalId]);
+
   return (
     <div className="dashboard">
       <div className="dashboard__userCenter">
         <Profile user={user} isClient={true} />
-        <GoalSummary />
+        <GoalSummary selectedGoalId={selectedGoalId} />
       </div>
       <div className="dashboard__tabs">
         {Object.entries(TABS).map(([k, v]) => (
@@ -59,7 +68,15 @@ const Dashboard = ({ user }) => {
         ))}
       </div>
       <div className="dashboard__content">
-        {tab === "goals" && <GoalDashboard username={user?.username || ""} />}
+        {tab === "goals" && (
+          <GoalDashboard
+            username={user?.username || ""}
+            selectedGoalId={selectedGoalId}
+            setSelectedGoalId={(goalId) => {
+              setSelectedGoalId(goalId);
+            }}
+          />
+        )}
       </div>
     </div>
   );

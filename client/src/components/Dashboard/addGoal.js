@@ -27,8 +27,6 @@ const INIT_VALUES = {
 
 const ValidationSchema = Yup.object().shape({});
 
-const onCancel = () => (window.location.href = "/" + ROUTES.CLIENT_DASHBOARD);
-
 const AddGoal = ({ user }) => {
   const editGoal = JSON.parse(localStorage.getItem("EDIT_GOAL"));
   const tagList = ["Goal Tag-1", "Goal Tag-2", "Goal Tag-3", "Goal Tag-4"];
@@ -51,7 +49,7 @@ const AddGoal = ({ user }) => {
         goalReviewCoachId: "",
       };
       goalService._addGoal(values).then((res) => {
-        window.location.href = "/" + ROUTES.CLIENT_DASHBOARD;
+        window.location.href = "/" + ROUTES.CLIENT_DASHBOARD + "?tab=goals";
       });
     } else {
       // Existing Goal
@@ -60,8 +58,21 @@ const AddGoal = ({ user }) => {
         goalId: editGoal.goalId,
       };
       goalService._updateGoal(values).then((res) => {
-        window.location.href = "/" + ROUTES.CLIENT_DASHBOARD;
+        window.location.href =
+          "/" +
+          ROUTES.CLIENT_DASHBOARD +
+          "?tab=goals&goalId=" +
+          editGoal?.goalId;
       });
+    }
+  };
+
+  const onCancel = () => {
+    if (editGoal) {
+      window.location.href =
+        "/" + ROUTES.CLIENT_DASHBOARD + "?tab=goals&goalId=" + editGoal?.goalId;
+    } else {
+      window.location.href = "/" + ROUTES.CLIENT_DASHBOARD + "?tab=goals";
     }
   };
 

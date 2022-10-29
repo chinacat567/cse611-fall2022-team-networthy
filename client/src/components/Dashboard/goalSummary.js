@@ -1,13 +1,13 @@
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { Box, MenuItem, TextField, Typography } from "@mui/material";
 import LinearProgress, {
   linearProgressClasses,
 } from "@mui/material/LinearProgress";
 import CircularProgress from "@mui/material/CircularProgress";
 import { styled } from "@mui/material/styles";
-import React, { useEffect, useState } from "react";
 
 import "../../styles/goalSummary.scss";
-import { useSelector } from "react-redux";
 
 const CssTextField = styled(TextField)({
   "& .MuiInput-input": {
@@ -60,15 +60,23 @@ const GOAL_STATUSES = {
   },
 };
 
-const GoalSummary = () => {
+const GoalSummary = ({ selectedGoalId }) => {
   const clientGoals = useSelector((state) => state?.goal?.goalList);
   const [goal, setGoal] = useState({});
 
   useEffect(() => {
-    if (clientGoals.length) {
-      setGoal(clientGoals[0]);
+    if (clientGoals.length && selectedGoalId) {
+      // all goals exists
+      let existingGoal = clientGoals?.filter(
+        (x) => x?.goalId == selectedGoalId
+      )[0];
+      if (existingGoal) {
+        setGoal(existingGoal);
+      } else {
+        setGoal(clientGoals[0]);
+      }
     }
-  }, [clientGoals]);
+  }, [clientGoals, selectedGoalId]);
 
   const value = clientGoals.filter((x) => x.goalStatus === "FINISHED").length,
     total = clientGoals.length;

@@ -30,7 +30,7 @@ const About = () => {
           </Typography>
           <br></br>
           <Typography variant="body2" color="text.secondary">
-            At NetWorthy we help young alumni begin their journey towards
+            At Gooroo Wealth, we help young alumni begin their journey towards
             achieving financial wellness. Our clients receive personalized
             coaching and engaging content. Our mission is to educate and empower
             the next generation through financial literacy

@@ -17,16 +17,29 @@ import { ROUTES } from "../App/routeConfig";
 
 import "../../styles/goalDashboard.scss";
 
-const GoalDashboard = ({ username }) => {
+const GoalDashboard = ({ username, selectedGoalId, setSelectedGoalId }) => {
   const [selectedGoal, setSelectedGoal] = useState({});
   const dispatch = useDispatch();
   const clientGoals = useSelector((state) => state?.goal?.goalList);
 
   useEffect(() => {
     if (clientGoals.length) {
-      setSelectedGoal(clientGoals[4]);
+      let existingGoal = clientGoals?.filter(
+        (x) => x?.goalId == selectedGoalId
+      )[0];
+      if (existingGoal) {
+        setSelectedGoal(existingGoal);
+      } else {
+        setSelectedGoal(clientGoals[0]);
+        setSelectedGoalId(clientGoals[0]?.goalId);
+      }
     }
   }, [clientGoals]);
+
+  const onGoalClick = (goal) => {
+    setSelectedGoalId(goal?.goalId);
+    setSelectedGoal(goal);
+  };
 
   const onEditClick = () => {
     localStorage.setItem("EDIT_GOAL", JSON.stringify(selectedGoal));
@@ -36,16 +49,14 @@ const GoalDashboard = ({ username }) => {
   return (
     <div className="goalDashboard">
       <div className="goalDashboard__goalList">
-        {!!clientGoals.length &&
+        {clientGoals &&
           clientGoals.map((goal) => (
             <div
               key={goal.goalId}
               className={`goalTab ${
-                selectedGoal.goalId === goal.goalId && "goalTab--selected"
+                selectedGoal?.goalId === goal.goalId && "goalTab--selected"
               }`}
-              onClick={() => {
-                setSelectedGoal(goal);
-              }}
+              onClick={() => onGoalClick(goal)}
             >
               <BookmarkIcon className="icon" />
               {goal.goalTittle}

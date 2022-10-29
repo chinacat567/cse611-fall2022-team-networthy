@@ -19,9 +19,9 @@ export default function IconLabelTabs() {
   return (
     <div className={`header ${user ? "header--solid" : "header--gradient"}`}>
       <div className="header__left">
-        <img src={logo} className="logo" />
+        {/* <img src={logo} className="logo" /> */}
         <div className="header__title">
-          NetWorthy
+          Gooroo Wealth
           {isLoggedIn && (
             <div className="roleTitle">
               {userRole === ROLE_CONFIG.CLIENT
