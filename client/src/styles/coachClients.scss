@@ -32,12 +32,12 @@
     }
   }
 
-  &__goalContent {
+  &__clientContent {
     width: 72%;
   }
-  .goalContent {
+  .clientGoalContent {
     width: 100%;
-    padding: 40px 150px;
+    padding: 40px 40px;
 
     &__header {
       h2 {
@@ -66,12 +66,5 @@
         }
       }
     }
-  }
-
-  .addGoalBtn {
-    margin-top: 24px;
-    border-radius: 0px;
-    width: 120px !important;
-    background-color: $--nw-primary !important;
   }
 }

@@ -60,7 +60,7 @@ const GOAL_STATUSES = {
   },
 };
 
-const GoalSummary = ({ selectedGoalId }) => {
+const GoalSummary = ({ selectedGoalId, setSelectedGoal }) => {
   const clientGoals = useSelector((state) => state?.goal?.goalList);
   const [goal, setGoal] = useState({});
 
@@ -72,11 +72,17 @@ const GoalSummary = ({ selectedGoalId }) => {
       )[0];
       if (existingGoal) {
         setGoal(existingGoal);
+        if (setSelectedGoal && typeof setSelectedGoal == "function")
+          setSelectedGoal(existingGoal);
       } else {
         setGoal(clientGoals[0]);
+        if (setSelectedGoal && typeof setSelectedGoal == "function")
+          setSelectedGoal(clientGoals[0]);
       }
     } else if (clientGoals.length && !selectedGoalId) {
       setGoal(clientGoals[0]);
+      if (setSelectedGoal && typeof setSelectedGoal == "function")
+        setSelectedGoal(clientGoals[0]);
     }
   }, [clientGoals, selectedGoalId]);
 
@@ -85,6 +91,9 @@ const GoalSummary = ({ selectedGoalId }) => {
 
   const handleChange = (e) => {
     setGoal(e?.target?.value);
+    if (setSelectedGoal && typeof setSelectedGoal == "function") {
+      setSelectedGoal(e?.target?.value);
+    }
   };
 
   if (clientGoals.length < 1) return <></>;

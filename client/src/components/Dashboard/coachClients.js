@@ -2,11 +2,20 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import PermIdentityIcon from "@mui/icons-material/PermIdentity";
+import { Chip, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+
+import {
+  getAllClientGoals,
+  updateGoalStatus,
+} from "../../redux/slices/goalSlice";
+
+import GoalSummary from "./goalSummary";
 
 import "../../styles/coachClients.scss";
 
 const CoachClients = ({ username, selectedClientId, setSelectedClientId }) => {
   const [selectedClient, setSelectedClient] = useState({});
+  const [selectedGoal, setSelectedGoal] = useState(null);
   const dispatch = useDispatch();
   const coachClients = useSelector((state) => state?.coach?.coachClients);
 
@@ -17,9 +26,11 @@ const CoachClients = ({ username, selectedClientId, setSelectedClientId }) => {
       )[0];
       if (existingClient) {
         setSelectedClient(existingClient);
+        dispatch(getAllClientGoals({ username: existingClient?.username }));
       } else {
         setSelectedClient(coachClients[0]);
         setSelectedClientId(coachClients[0]?.username);
+        dispatch(getAllClientGoals({ username: coachClients[0]?.username }));
       }
     }
   }, [coachClients]);
@@ -27,6 +38,7 @@ const CoachClients = ({ username, selectedClientId, setSelectedClientId }) => {
   const onClientClick = (client) => {
     setSelectedClientId(client?.username);
     setSelectedClient(client);
+    dispatch(getAllClientGoals({ username: client?.username }));
   };
 
   return (
@@ -52,6 +64,95 @@ const CoachClients = ({ username, selectedClientId, setSelectedClientId }) => {
           </div>
         )}
       </div>
+      {!!selectedClient?.username && (
+        <div className="coachClients__clientContent">
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              paddingLeft: "40px",
+              marginTop: "32px",
+            }}
+          >
+            <GoalSummary
+              selectedGoalId={null}
+              setSelectedGoal={(goal) => {
+                setSelectedGoal(goal);
+              }}
+            />
+          </div>
+
+          {!!selectedGoal?.goalId && (
+            <div className="clientGoalContent">
+              <div className="clientGoalContent__header">
+                <div style={{ display: "flex" }}>
+                  <h2 style={{ flexGrow: "1" }}>{selectedGoal.goalTittle}</h2>
+                  <FormControl sx={{ width: "200px" }}>
+                    <InputLabel id="goal-status">Status</InputLabel>
+                    <Select
+                      labelId="goal-status"
+                      value={selectedGoal.goalStatus}
+                      label="Status"
+                      onChange={(e) => {
+                        dispatch(
+                          updateGoalStatus({
+                            clientId: selectedClient?.username,
+                            goalId: selectedGoal.goalId,
+                            updatedStatus: e.target.value,
+                          })
+                        );
+                      }}
+                    >
+                      <MenuItem value={"NOT_STARTED"}>Not Started</MenuItem>
+                      <MenuItem value={"IN_PROGRESS"}>In Progress</MenuItem>
+                      <MenuItem value={"IN_REVIEW"}>In Review</MenuItem>
+                      <MenuItem value={"FINISHED"}>Finished</MenuItem>
+                    </Select>
+                  </FormControl>
+                </div>
+                {selectedGoal.goalTags?.map((tag) => (
+                  <Chip label={tag} key={tag} style={{ marginRight: "5px" }} />
+                ))}
+                <p style={{ marginTop: "12px" }}>
+                  {selectedGoal.goalDescription}
+                </p>
+              </div>
+              <div className="clientGoalContent__details">
+                <div className="clientGoalContent__smart">
+                  <div className="smartTag">
+                    <div>Specific</div>
+                  </div>
+                  <p>{selectedGoal.goalSpecific}</p>
+                </div>
+                <div className="clientGoalContent__smart">
+                  <div className="smartTag">
+                    <div>Measurable</div>
+                  </div>
+                  <p>{selectedGoal.goalMeasurable}</p>
+                </div>
+                <div className="clientGoalContent__smart">
+                  <div className="smartTag">
+                    <div>Attainable</div>
+                  </div>
+                  <p>{selectedGoal.goalAttainable}</p>
+                </div>
+                <div className="clientGoalContent__smart">
+                  <div className="smartTag">
+                    <div>Relevant</div>
+                  </div>
+                  <p>{selectedGoal.goalRelevant}</p>
+                </div>
+                <div className="clientGoalContent__smart">
+                  <div className="smartTag">
+                    <div>Time Based</div>
+                  </div>
+                  <p>{selectedGoal.goalTimeBased}</p>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };

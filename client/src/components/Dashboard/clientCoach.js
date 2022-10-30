@@ -37,7 +37,6 @@ const ClientCoach = ({ username }) => {
   }, []);
 
   const onAssignCoach = (coach) => {
-    console.log(coach);
     dispatch(
       assignCoach({
         newCoach: coach,
