@@ -9,6 +9,13 @@ export const getAllCoaches = createAsyncThunk(
   }
 );
 
+export const getAllCoachClients = createAsyncThunk(
+  "coach/getAllCoachClients",
+  async (payload) => {
+    return await coachService._getAllCoachClients(payload);
+  }
+);
+
 export const getAssignedCoach = createAsyncThunk(
   "coach/getAssignedCoach",
   async (payload) => {
@@ -19,11 +26,15 @@ export const getAssignedCoach = createAsyncThunk(
 export const assignCoach = createAsyncThunk(
   "coach/assignCoach",
   async (payload) => {
-    let res = await coachService._deleteAssignedCoach(payload);
-    if (res) {
+    if (payload?.assignedCoach?.username) {
+      // Nothing to delete when no coach is assigned
+      let res = await coachService._deleteAssignedCoach(payload);
+      if (res) {
+        return await coachService._assignCoach(payload);
+      }
+    } else {
       return await coachService._assignCoach(payload);
     }
-    return;
   }
 );
 
@@ -32,11 +43,15 @@ export const coachSlice = createSlice({
   initialState: {
     allCoaches: [],
     assignedCoach: {},
+    coachClients: [],
   },
   reducers: {},
   extraReducers: {
     [getAllCoaches.fulfilled]: (state, action) => {
       state.allCoaches = action?.payload;
+    },
+    [getAllCoachClients.fulfilled]: (state, action) => {
+      state.coachClients = action?.payload;
     },
     [getAssignedCoach.fulfilled]: (state, action) => {
       state.assignedCoach = action?.payload;

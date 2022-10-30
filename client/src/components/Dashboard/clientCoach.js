@@ -37,6 +37,7 @@ const ClientCoach = ({ username }) => {
   }, []);
 
   const onAssignCoach = (coach) => {
+    console.log(coach);
     dispatch(
       assignCoach({
         newCoach: coach,
@@ -52,19 +53,25 @@ const ClientCoach = ({ username }) => {
         <div>
           <img src={getIcon(assignedCoach?.gender)} className="pic" />
           <p className="coachName">
-            {assignedCoach?.firstName + " " + assignedCoach?.lastName}
+            {assignedCoach.firstName
+              ? assignedCoach?.firstName + " " + assignedCoach?.lastName
+              : "Start by assigning a coach!"}
           </p>
-          <p className="details">{assignedCoach?.general}</p>
-          <p className="details details--m">
-            <LocationOnIcon fontSize="small" />
-            {assignedCoach?.location}
-          </p>
-          <PopupButton
-            url="https://calendly.com/rahulsharma24/15min"
-            rootElement={document.getElementById("root")}
-            text="Schedule Meet"
-            className="calendlyBtn"
-          />
+          {assignedCoach.firstName && (
+            <>
+              <p className="details">{assignedCoach?.credentials}</p>
+              <p className="details details--m">
+                <LocationOnIcon fontSize="small" />
+                {assignedCoach?.location}
+              </p>
+              <PopupButton
+                url="https://calendly.com/rahulsharma24/15min"
+                rootElement={document.getElementById("root")}
+                text="Schedule Meet"
+                className="calendlyBtn"
+              />
+            </>
+          )}
         </div>
       </div>
       <div className="clientCoach__allCoaches">
@@ -74,13 +81,12 @@ const ClientCoach = ({ username }) => {
             if (coach?.username === assignedCoach?.username) return <></>;
             return (
               <div className="individualCoach" key={index}>
-                <div className="individualCoach__icon"></div>
                 <div className="individualCoach__details">
                   <p className="name">
                     {coach?.firstName + " " + coach?.lastName}
                   </p>
                   <p className="detail">{coach?.occupation}</p>
-                  <p className="detail detail--mbelow">{coach?.general}</p>
+                  <p className="detail detail--mbelow">{coach?.credentials}</p>
                   <div className="coachActionPanel">
                     <p className="detail">
                       <LocationOnIcon fontSize="small" />

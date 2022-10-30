@@ -20,6 +20,24 @@ const _getAllCoaches = () => {
     });
 };
 
+const _getAllCoachClients = ({ coachUserName }) => {
+  return httpService
+    .get(getApi(API.GET_ALL_COACH_CLIENTS) + "/" + coachUserName)
+    .then((res) => {
+      return res?.data || [];
+    })
+    .catch((err) => {
+      toast.error(
+        err?.data?.message ||
+          "Unable to fetch clients for the coach, please try again.",
+        {
+          className: "warn-toast",
+        }
+      );
+      return [];
+    });
+};
+
 const _getAssignedCoach = ({ clientUserName }) => {
   return httpService
     .get(getApi(API.GET_ASSIGNED_COACH) + "/" + clientUserName)
@@ -84,6 +102,7 @@ const _assignCoach = ({ clientUserName, newCoach }) => {
 
 const coachService = {
   _getAllCoaches,
+  _getAllCoachClients,
   _getAssignedCoach,
   _assignCoach,
   _deleteAssignedCoach,

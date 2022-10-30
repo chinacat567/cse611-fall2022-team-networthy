@@ -49,7 +49,7 @@ const GoalDashboard = ({ username, selectedGoalId, setSelectedGoalId }) => {
   return (
     <div className="goalDashboard">
       <div className="goalDashboard__goalList">
-        {clientGoals &&
+        {clientGoals.length ? (
           clientGoals.map((goal) => (
             <div
               key={goal.goalId}
@@ -61,7 +61,10 @@ const GoalDashboard = ({ username, selectedGoalId, setSelectedGoalId }) => {
               <BookmarkIcon className="icon" />
               {goal.goalTittle}
             </div>
-          ))}
+          ))
+        ) : (
+          <div style={{ marginTop: "40px" }}>Let's start by adding a goal!</div>
+        )}
         <Button
           className="addGoalBtn"
           variant="contained"

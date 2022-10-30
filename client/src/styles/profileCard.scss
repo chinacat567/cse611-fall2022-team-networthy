@@ -3,6 +3,7 @@
 .profileCard {
   padding: 20px;
   border-radius: 6px;
+  max-width: 750px;
   //   background-color: aliceblue;
   display: flex;
   align-items: center;
@@ -35,7 +36,7 @@
     &--small {
       color: $--slightly-dark-gray;
       font-size: 14px;
-      margin-top: -5px;
+      margin-top: -2px;
     }
     &--link {
       color: $--nw-primary;

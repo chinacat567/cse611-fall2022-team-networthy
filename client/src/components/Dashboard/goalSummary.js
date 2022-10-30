@@ -87,6 +87,8 @@ const GoalSummary = ({ selectedGoalId }) => {
     setGoal(e?.target?.value);
   };
 
+  if (clientGoals.length < 1) return <></>;
+
   return (
     <div className="goalSummary">
       <div className="goalSummary__summary">

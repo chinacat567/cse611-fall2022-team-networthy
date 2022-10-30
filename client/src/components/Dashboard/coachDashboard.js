@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useSearchParams } from "react-router-dom";
+import { getAllCoachClients } from "../../redux/slices/coachSlice";
 
 import "../../styles/dashboard.scss";
+import CoachClients from "./coachClients";
 import Profile from "./profile";
 
 const TABS = {
   clients: "Your Clients",
 };
 
-const getTabFromURL = () => {
+const getKeyFromURL = (iKey) => {
   const params = new URLSearchParams(window.location.search);
   for (const [key, value] of params.entries()) {
-    if (key === "tab") return value;
+    if (key === iKey) return value;
   }
   return "";
 };
@@ -20,17 +22,28 @@ const getTabFromURL = () => {
 const CoachDashboard = ({ user }) => {
   const dispatch = useDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
-  const [tab, setTab] = useState(getTabFromURL());
+  const [tab, setTab] = useState(getKeyFromURL("tab"));
+  const [selectedClientId, setSelectedClientId] = useState(
+    getKeyFromURL("clientId")
+  );
 
   useEffect(() => {
     if (!tab) {
-      setSearchParams({ tab: "clients" });
       setTab("clients");
     }
     if (user.username) {
-      //   dispatch(getAllClientGoals({ username: user.username }));
+      dispatch(getAllCoachClients({ coachUserName: user.username }));
     }
   }, []);
+
+  useEffect(() => {
+    if (selectedClientId) {
+      setSearchParams({
+        tab: "clients",
+        clientId: selectedClientId,
+      });
+    }
+  }, [selectedClientId]);
 
   return (
     <div className="dashboard">
@@ -51,7 +64,17 @@ const CoachDashboard = ({ user }) => {
           </div>
         ))}
       </div>
-      <div className="dashboard__content"></div>
+      <div className="dashboard__content">
+        {tab === "clients" && (
+          <CoachClients
+            username={user?.username || ""}
+            selectedClientId={selectedClientId}
+            setSelectedClientId={(clientId) => {
+              setSelectedClientId(clientId);
+            }}
+          />
+        )}
+      </div>
     </div>
   );
 };

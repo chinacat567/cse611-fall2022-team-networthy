@@ -19,6 +19,7 @@ export const API = {
   GET_ASSIGNED_COACH: "/api/clientAndCoach/get/coach",
   DELETE_COACH_ASIGNMENT: "/api/clientAndCoach/delete",
   ASSIGN_COACH: "/api/clientAndCoach/add",
+  GET_ALL_COACH_CLIENTS: "/api/clientAndCoach/get/clients",
 };
 
 // Helper Functions

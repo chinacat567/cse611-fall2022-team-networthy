@@ -21,6 +21,13 @@ const getIcon = (gender) => {
   }
 };
 
+const truncateString = (str) => {
+  if (str.length > 200) {
+    return str.substring(0, 200) + "...";
+  }
+  return str;
+};
+
 const Profile = ({ user, isClient }) => {
   const userProfile = isClient ? user.clientProfile : user.coachProfile;
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -50,8 +57,14 @@ const Profile = ({ user, isClient }) => {
         <p className="profileCard__details--large">
           Hi {userProfile.firstName}!
         </p>
-        <p className="profileCard__details--medium">{userProfile.emailId}</p>
-        <p className="profileCard__details--small">{userProfile.occupation}</p>
+        {isClient && (
+          <p className="profileCard__details--medium">
+            Financial Literacy Level - {userProfile.financialLevel}
+          </p>
+        )}
+        <p className="profileCard__details--small">
+          {truncateString(userProfile.general)}
+        </p>
         <p
           className="profileCard__details--small profileCard__details--link"
           onClick={toggleDrawer(true)}
