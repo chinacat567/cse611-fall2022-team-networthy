@@ -117,9 +117,9 @@ public class ClientController {
 				clientProfileRequest.getGender(), clientProfileRequest.getOccupation(),
 				clientProfileRequest.getEducation(), clientProfileRequest.getUniversity(),
 				clientProfileRequest.getLocation(), clientProfileRequest.getFinancialLevel(),
-				clientProfileRequest.getLearningMethod(), clientProfileRequest.getIncome(),
-				clientProfileRequest.getDebt(), clientProfileRequest.getGeneral(),
-				clientProfileRequest.isProfileStatus());
+				clientProfileRequest.getLearningMethod(), clientProfileRequest.getSecondaryLearningMethod(), 
+				clientProfileRequest.getIncome(),clientProfileRequest.getDebt(), 
+				clientProfileRequest.getGeneral(),clientProfileRequest.isProfileStatus());
 				
 		clientProfileRepository.save(clientProfile);
 		logger.info("Success: Client Profile Created - " +clientProfileRequest.getUsername());
@@ -151,6 +151,7 @@ public class ClientController {
 		if(clientProfileRequest.getLocation() != null) existingClientProfile.setLocation(clientProfileRequest.getLocation());
 		if(clientProfileRequest.getFinancialLevel() != 0) existingClientProfile.setFinancialLevel(clientProfileRequest.getFinancialLevel());
 		if(clientProfileRequest.getLearningMethod() != null) existingClientProfile.setLearningMethod(clientProfileRequest.getLearningMethod());
+		if(clientProfileRequest.getSecondaryLearningMethod() != null) existingClientProfile.setSecondaryLearningMethod(clientProfileRequest.getSecondaryLearningMethod());
 		if(clientProfileRequest.getIncome() != null) existingClientProfile.setIncome(clientProfileRequest.getIncome());
 		if(clientProfileRequest.getDebt() != null) existingClientProfile.setDebt(clientProfileRequest.getDebt());
 		if(clientProfileRequest.getGeneral() != null) existingClientProfile.setGeneral(clientProfileRequest.getGeneral());

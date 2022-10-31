@@ -68,6 +68,9 @@ public class ClientProfile {
 	@NotBlank
 	private String learningMethod;
 	
+	@Field("CLI_SECONDARY_LEARNING_METHOD")
+	private String secondaryLearningMethod;//not a mandatory field
+	
 	@Field("CLI_INCOME")
 	@NotBlank
 	private String income;
@@ -91,7 +94,7 @@ public class ClientProfile {
 	public ClientProfile(@NotBlank String userId, @NotBlank String emailId, @NotBlank String firstName,
 			@NotBlank String lastName, @NotBlank Date dateOfBirth, @NotBlank String gender, @NotBlank String occupation,
 			@NotBlank String education, @NotBlank String university, @NotBlank String location,
-			@NotBlank int financialLevel, @NotBlank String learningMethod, @NotBlank String income, @NotBlank String debt,
+			@NotBlank int financialLevel, @NotBlank String learningMethod, String secondaryLearningMethod, @NotBlank String income, @NotBlank String debt,
 			@NotBlank String general, @NotBlank boolean profileStatus) {
 		super();
 		this.username = userId;
@@ -106,6 +109,7 @@ public class ClientProfile {
 		this.location = location;
 		this.financialLevel = financialLevel;
 		this.learningMethod = learningMethod;
+		this.secondaryLearningMethod = secondaryLearningMethod;
 		this.income = income;
 		this.debt = debt;
 		this.general = general;
@@ -208,6 +212,15 @@ public class ClientProfile {
 		this.learningMethod = learningMethod;
 	}
 
+
+	public String getSecondaryLearningMethod() {
+		return secondaryLearningMethod;
+	}
+
+	public void setSecondaryLearningMethod(String secondaryLearningMethod) {
+		this.secondaryLearningMethod = secondaryLearningMethod;
+	}
+	
 	public String getIncome() {
 		return income;
 	}

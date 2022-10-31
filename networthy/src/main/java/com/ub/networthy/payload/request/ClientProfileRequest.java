@@ -45,6 +45,8 @@ public class ClientProfileRequest {
 	@NotBlank
 	private String learningMethod;
 
+	
+	private String secondaryLearningMethod;
 	@NotBlank
 	private String income;
 
@@ -151,6 +153,14 @@ public class ClientProfileRequest {
 
 	public void setLearningMethod(String learningMethod) {
 		this.learningMethod = learningMethod;
+	}
+	
+	public String getSecondaryLearningMethod() {
+		return secondaryLearningMethod;
+	}
+
+	public void setSecondaryLearningMethod(String secondaryLearningMethod) {
+		this.secondaryLearningMethod = secondaryLearningMethod;
 	}
 
 	public String getIncome() {
