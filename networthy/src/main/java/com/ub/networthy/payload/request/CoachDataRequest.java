@@ -47,11 +47,15 @@ public class CoachDataRequest {
 	
 	@NotBlank
 	private String general;
+	
+	@NotBlank
+	private String calendlyLink;
 
 	public CoachDataRequest(@NotBlank String username, @NotBlank String emailId, @NotBlank String firstName,
 							@NotBlank String lastName, @NotBlank Date dateOfBirth, @NotBlank String gender,
 							@NotBlank String occupation, @NotBlank String education, @NotBlank String university,
-							@NotBlank String location, String credentials, @NotBlank boolean profileStatus, @NotBlank String general) {
+							@NotBlank String location, String credentials, @NotBlank boolean profileStatus, 
+							@NotBlank String general, @NotBlank String calendlyLink) {
 		this.username = username;
 		this.emailId = emailId;
 		this.firstName = firstName;
@@ -65,6 +69,7 @@ public class CoachDataRequest {
 		this.credentials = credentials;
 		this.profileStatus = profileStatus;
 		this.general = general;
+		this.calendlyLink = calendlyLink;
 	}
 
 	public CoachDataRequest() {
@@ -174,5 +179,14 @@ public class CoachDataRequest {
 	public void setGeneral(String general) {
 		this.general = general;
 	}
-
+	
+	public String getCalendlyLink()
+	{
+		return calendlyLink;
+	}
+	
+	public void setCalendlyLink(String calendlyLink)
+	{
+		this.calendlyLink = calendlyLink;
+	}
 }

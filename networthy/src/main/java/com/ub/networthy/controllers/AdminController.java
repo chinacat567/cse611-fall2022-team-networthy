@@ -113,6 +113,7 @@ public class AdminController
 			if(coachProfileRequest.getLocation() != null) existingCoachProfile.get().setLocation(coachProfileRequest.getLocation());
 			if(coachProfileRequest.getCredentials() != null) existingCoachProfile.get().setCredentials(coachProfileRequest.getCredentials());
 			if(coachProfileRequest.getGeneral() != null)existingCoachProfile.get().setGeneral(coachProfileRequest.getGeneral());
+			if(coachProfileRequest.getCalendlyLink() != null)existingCoachProfile.get().setCalendlyLink(coachProfileRequest.getCalendlyLink());
 //			if(coachProfileRequest.getResume() != null)existingCoachProfile.get().setResume(coachProfileRequest.getResume());
 //			if(coachProfileRequest.getLor1() != null)existingCoachProfile.get().setLor1(coachProfileRequest.getLor1());
 //			if(coachProfileRequest.getLor2() != null)existingCoachProfile.get().setLor2(coachProfileRequest.getLor2());

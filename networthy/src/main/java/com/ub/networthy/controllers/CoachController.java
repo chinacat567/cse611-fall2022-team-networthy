@@ -78,7 +78,7 @@ public class CoachController {
                     coachDataRequest.getOccupation(), coachDataRequest.getEducation(),
                     coachDataRequest.getUniversity(), coachDataRequest.getLocation(),
                     coachDataRequest.getCredentials(), coachDataRequest.isProfileStatus(),
-                    coachDataRequest.getGeneral());
+                    coachDataRequest.getGeneral(), coachDataRequest.getCalendlyLink());
 
             coachProfileRepo.save(coachProfile);
         } catch (Exception e) {
@@ -129,7 +129,7 @@ public class CoachController {
                     coachDataRequest.getOccupation(), coachDataRequest.getEducation(),
                     coachDataRequest.getUniversity(), coachDataRequest.getLocation(),
                     coachDataRequest.getCredentials(), coachDataRequest.isProfileStatus(),
-                    coachDataRequest.getGeneral(),
+                    coachDataRequest.getGeneral(), coachDataRequest.getCalendlyLink(),
                     resume, lor1, lor2);
 
             coachProfileRepo.save(coachProfile);

@@ -69,6 +69,10 @@ public class CoachProfile {
     @Field("COA_GENERAL")
     @NotBlank
     private String general;
+    
+    @Field("COA_CALENDLY")
+    @NotBlank
+    private String calendlyLink;
 
     /* resume, lor1, lor2 can be NULL */
     @Field("COA_RESUME")
@@ -88,7 +92,7 @@ public class CoachProfile {
     public CoachProfile(@NotBlank String username, @NotBlank String emailId, @NotBlank String firstName,
                         @NotBlank String lastName, @NotBlank Date dateOfBirth, @NotBlank String gender, @NotBlank String occupation,
                         @NotBlank String education, @NotBlank String university, @NotBlank String location, String credentials,
-                        @NotBlank boolean profileStatus, @NotBlank String general) {
+                        @NotBlank boolean profileStatus, @NotBlank String general, @NotBlank String calendlyLink) {
         super();
         this.username = username;
         this.emailId = emailId;
@@ -102,16 +106,18 @@ public class CoachProfile {
         this.location = location;
         this.credentials = credentials;
         this.profileStatus = profileStatus;
+        this.general = general;
+        this.calendlyLink = calendlyLink;
     }
 
     /* constructor for POSTING "multipart/form-data" */
     public CoachProfile(@NotBlank String userId, @NotBlank String emailId, @NotBlank String firstName,
                         @NotBlank String lastName, @NotBlank Date dateOfBirth, @NotBlank String gender, @NotBlank String occupation,
                         @NotBlank String education, @NotBlank String university, @NotBlank String location, String credentials,
-                        @NotBlank boolean profileStatus, @NotNull String general, @NotNull Binary resume, @NotNull Binary lor1, @NotNull Binary lor2) {
+                        @NotBlank boolean profileStatus, @NotBlank String general, @NotBlank String calendlyLink, @NotNull Binary resume, @NotNull Binary lor1, @NotNull Binary lor2) {
 
         this(userId, emailId, firstName, lastName, dateOfBirth, gender, occupation,
-                education, university, location, credentials, profileStatus, general);
+                education, university, location, credentials, profileStatus, general, calendlyLink);
 
         this.resume = resume;
         this.lor1 = lor1;
@@ -223,6 +229,15 @@ public class CoachProfile {
 		this.general = general;
 	}
 
+	public String getCalendlyLink()
+	{
+		return calendlyLink;
+	}
+	
+	public void setCalendlyLink(String calendlyLink)
+	{
+		this.calendlyLink = calendlyLink;
+	}
 
     public void setResume(Binary resume) {
         this.resume = resume;
