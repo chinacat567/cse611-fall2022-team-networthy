@@ -1,5 +1,6 @@
 package com.ub.networthy.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -15,12 +16,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ub.networthy.models.ClientAndCoachRelation;
 import com.ub.networthy.models.ClientProfile;
 import com.ub.networthy.models.ERole;
 import com.ub.networthy.models.Role;
 import com.ub.networthy.models.User;
 import com.ub.networthy.payload.request.ClientProfileRequest;
+import com.ub.networthy.payload.response.ClientProfileResponse;
 import com.ub.networthy.payload.response.MessageResponse;
+import com.ub.networthy.repository.ClientAndCoachRelationRepository;
 import com.ub.networthy.repository.ClientProfileRepository;
 import com.ub.networthy.repository.UserRepository;
 import com.ub.networthy.utils.Utils;
@@ -41,6 +45,9 @@ public class ClientController {
 	
 	@Autowired
 	UserRepository userRepository;
+	
+	@Autowired
+	ClientAndCoachRelationRepository clientCoachRelationRepository;
 	
 	@Autowired
 	Utils utils;
@@ -162,9 +169,26 @@ public class ClientController {
 	}
 	@GetMapping("/getAll")
 	//@PreAuthorize("hasAuthority('ROLE_ADMIN')")
-	public List<ClientProfile> getAllClientProfile(){
+	public List<ClientProfileResponse> getAllClientProfile(){
 		
-		return clientProfileRepository.findAll();
+		List<ClientProfileResponse> result = new ArrayList<>();
+		List<ClientProfile> clientProfileList = new ArrayList<>();
+		try {
+			clientProfileList = clientProfileRepository.findAll();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		for(ClientProfile clientProfile : clientProfileList) {
+			
+			if(clientCoachRelationRepository.existsByClientUsername(clientProfile.getUsername())) {
+				ClientAndCoachRelation relation = clientCoachRelationRepository.findFirstByClientUsername(clientProfile.getUsername()).get();
+				result.add(new ClientProfileResponse(clientProfile, relation));
+			}else {
+				result.add(new ClientProfileResponse(clientProfile, null));
+			}
+		}
+		return result;
 	}
 	
 	@GetMapping("/getProfile/{clientId}")
