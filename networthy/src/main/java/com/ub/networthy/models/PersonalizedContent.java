@@ -5,82 +5,84 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-@Document(collection = "personalizedcontent")
+@Document(collection = "content")
 public class PersonalizedContent
 {
-	@Id
-	@Field("PC_ID")
+	@Field("PCO_NUM")
 	@NotBlank
-	private String personalizedContentID;
+	private int contentNumber;
 
-	@Field("PC_TAG")
+	@Field("PCO_TAG")
 	@NotBlank
 	private String tag;
 	
-	@Field("PC_TITLE")
+	@Field("PCO_TITLE")
 	@NotBlank
-	private String pcTitle;
+	private String title;
 	
-	@Field("PC_DESCRIPTION")
+	@Field("PCO_DESC")
 	@NotBlank
-	private String pcDescription;
+	private String description;
 	
-	@Field("PC_AUTHOR")
+	@Field("PCO_AUTHOR")
 	@NotBlank
 	private String pcAuthor;
 
-	@Field("PC_LINK")
+	@Field("PCO_LINK")
 	@NotBlank
 	private String pcLink;
 
-	@Field("PC_TYPE")
+	@Field("PCO_METHOD")
 	@NotBlank
-	private String pcType;
+	private String learningMethod;
 	
+	@Field("PCO_LENGTH")
+	@NotBlank
+	private String length;
 
-	public PersonalizedContent(@NotBlank String personalizedContentID,
-			@NotBlank String tag, @NotBlank String pcTitle, @NotBlank String pcDescription, @NotBlank String pcAuthor,
-			@NotBlank String pcLink, @NotBlank String pcType) {
-		super();
-		this.personalizedContentID = personalizedContentID;
+	public PersonalizedContent(@NotBlank int contentNumber, @NotBlank String tag, @NotBlank String title,
+			@NotBlank String description, @NotBlank String pcAuthor, @NotBlank String pcLink,
+			@NotBlank String learningMethod, @NotBlank String length) {
+		this.contentNumber = contentNumber;
 		this.tag = tag;
-		this.pcTitle = pcTitle;
-		this.pcDescription = pcDescription;
+		this.title = title;
+		this.description = description;
 		this.pcAuthor = pcAuthor;
 		this.pcLink = pcLink;
-		this.pcType = pcType;
+		this.learningMethod = learningMethod;
+		this.length = length;
 	}
 
-	public String getPersonalizedContentID() {
-		return personalizedContentID;
+	public int getContentNumber() {
+		return contentNumber;
 	}
 
-	public void setPersonalizedContentID(String personalizedContentID) {
-		this.personalizedContentID = personalizedContentID;
+	public void setContentNumber(int contentNumber) {
+		this.contentNumber = contentNumber;
 	}
 
-	public String getPcTag() {
+	public String getTag() {
 		return tag;
 	}
 
-	public void setPcTag(String pcTag) {
-		this.tag = pcTag;
+	public void setTag(String tag) {
+		this.tag = tag;
 	}
 
-	public String getPcTitle() {
-		return pcTitle;
+	public String getTitle() {
+		return title;
 	}
 
-	public void setPcTitle(String pcTitle) {
-		this.pcTitle = pcTitle;
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
-	public String getPcDescription() {
-		return pcDescription;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setPcDescription(String pcDescription) {
-		this.pcDescription = pcDescription;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public String getPcAuthor() {
@@ -99,13 +101,24 @@ public class PersonalizedContent
 		this.pcLink = pcLink;
 	}
 
-	public String getPcType() {
-		return pcType;
+	public String getLearningMethod() {
+		return learningMethod;
 	}
 
-	public void setPcType(String pcType) {
-		this.pcType = pcType;
+	public void setLearningMethod(String learningMethod) {
+		this.learningMethod = learningMethod;
 	}
+
+	public String getLength() {
+		return length;
+	}
+
+	public void setLength(String length) {
+		this.length = length;
+	}
+	
+	
+	
 
 	
 }
