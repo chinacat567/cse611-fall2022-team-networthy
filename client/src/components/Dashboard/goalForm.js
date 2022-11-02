@@ -12,7 +12,7 @@ import Autocomplete from "@mui/material/Autocomplete";
 import { ROUTES } from "../App/routeConfig";
 import goalService from "../../services/goalService";
 
-import "../../styles/addGoal.scss";
+import "../../styles/goalForm.scss";
 
 const INIT_VALUES = {
   goalTittle: "",
@@ -27,9 +27,29 @@ const INIT_VALUES = {
 
 const ValidationSchema = Yup.object().shape({});
 
-const AddGoal = ({ user }) => {
+const GoalForm = ({ user }) => {
   const editGoal = JSON.parse(localStorage.getItem("EDIT_GOAL"));
-  const tagList = ["Goal Tag-1", "Goal Tag-2", "Goal Tag-3", "Goal Tag-4"];
+  const tagList = [
+    "Budgeting",
+    "Debt",
+    "Net Worth",
+    "Investing",
+    "Real Estate",
+    "Taxes",
+    "Insurance",
+    "Crypto Currency",
+    "Mindset",
+    "Entrepreneruship",
+    "Credit",
+    "Financial Freedom",
+    "Automating your financial life",
+    "Cutting Expenses",
+    "Student Loans",
+    "Mortgages",
+    "Stock Market",
+    "Passive Income Ideas",
+    "Savings",
+  ];
 
   const getInitValues = () => {
     return editGoal ? editGoal : INIT_VALUES;
@@ -288,4 +308,4 @@ const AddGoal = ({ user }) => {
   );
 };
 
-export default AddGoal;
+export default GoalForm;

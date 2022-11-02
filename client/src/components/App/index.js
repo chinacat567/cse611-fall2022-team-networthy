@@ -21,7 +21,7 @@ import { useSelector } from "react-redux";
 import Loader from "../Loading";
 import CoachSurvey from "../SurveyForm/coachSurvey";
 import CoachDashboard from "../Dashboard/coachDashboard";
-import AddGoal from "../Dashboard/addGoal";
+import GoalForm from "../Dashboard/goalForm";
 import AdminDashboard from "../Dashboard/adminDashboard";
 
 const App = () => {
@@ -103,7 +103,7 @@ const App = () => {
               path={ROUTES.ADD_GOAL}
               element={
                 <PrivateRoute>
-                  <AddGoal user={user} />
+                  <GoalForm user={user} />
                 </PrivateRoute>
               }
             />
