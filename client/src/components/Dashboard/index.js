@@ -8,7 +8,7 @@ import { useSearchParams } from "react-router-dom";
 import GoalDashboard from "./goalDashboard";
 import { getAllClientGoals } from "../../redux/slices/goalSlice";
 import { useDispatch, useSelector } from "react-redux";
-import ClientCoach from "./clientCoach";
+import ClientCoaches from "./clientCoaches";
 
 const TABS = {
   goals: "Goal Updates",
@@ -78,7 +78,7 @@ const Dashboard = ({ user }) => {
             }}
           />
         )}
-        {tab === "coaches" && <ClientCoach username={user?.username || ""} />}
+        {tab === "coaches" && <ClientCoaches username={user?.username || ""} />}
       </div>
     </div>
   );

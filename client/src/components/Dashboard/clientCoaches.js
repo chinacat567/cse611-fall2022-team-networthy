@@ -27,7 +27,7 @@ const getIcon = (gender) => {
   }
 };
 
-const ClientCoach = ({ username }) => {
+const ClientCoaches = ({ username }) => {
   const dispatch = useDispatch();
   const { allCoaches, assignedCoach } = useSelector((state) => state?.coach);
 
@@ -111,4 +111,4 @@ const ClientCoach = ({ username }) => {
   );
 };
 
-export default ClientCoach;
+export default ClientCoaches;
