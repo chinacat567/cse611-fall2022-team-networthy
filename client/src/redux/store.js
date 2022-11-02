@@ -4,6 +4,7 @@ import authSlice from "./slices/authSlice";
 import loaderSlice from "./slices/loaderSlice";
 import goalSlice from "./slices/goalSlice";
 import coachSlice from "./slices/coachSlice";
+import clientSlice from "./slices/clientSlice";
 
 export default configureStore({
   reducer: {
@@ -12,5 +13,6 @@ export default configureStore({
     loader: loaderSlice.reducer,
     goal: goalSlice.reducer,
     coach: coachSlice.reducer,
+    client: clientSlice.reducer,
   },
 });

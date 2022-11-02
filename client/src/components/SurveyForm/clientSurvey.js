@@ -158,17 +158,22 @@ const getDate = (date) => {
   return year + "-" + month + "-" + day;
 };
 
-const ClientSurvey = ({ user }) => {
+const ClientSurvey = ({
+  clientProfile,
+  isAdmin,
+  newClientEmailId,
+  newClientUsername,
+}) => {
   const dispatch = useDispatch();
   const countries = countryList().getData();
-  const isEdit = !!user?.clientProfile;
+  const isEdit = !!clientProfile;
 
   const getInitValues = () => {
     if (isEdit) {
-      let locationArr = user?.clientProfile?.location?.split(", ") || "";
+      let locationArr = clientProfile?.location?.split(", ") || "";
       let initProfile = {
-        ...user.clientProfile,
-        dateOfBirth: getDate(user?.clientProfile?.dateOfBirth),
+        ...clientProfile,
+        dateOfBirth: getDate(clientProfile?.dateOfBirth),
         country: locationArr[1],
         state: locationArr[0],
       };
@@ -180,8 +185,8 @@ const ClientSurvey = ({ user }) => {
   const submitForm = async (values) => {
     values = {
       ...values,
-      username: user?.username,
-      emailId: user?.email,
+      username: isEdit ? clientProfile?.username : newClientUsername,
+      emailId: isEdit ? clientProfile?.emailId : newClientEmailId,
       profileStatus: true,
       dateOfBirth: getDate(values?.dateOfBirth),
       location: values.state + ", " + values.country,
@@ -192,7 +197,10 @@ const ClientSurvey = ({ user }) => {
       : dispatch(addClientProfile(values));
   };
 
-  const onCancel = () => (window.location.href = "/" + ROUTES.CLIENT_DASHBOARD);
+  const onCancel = () => {
+    let url = isAdmin ? ROUTES.ADMIN_DASHBOARD : ROUTES.CLIENT_DASHBOARD;
+    window.location.href = "/" + url;
+  };
 
   return (
     <div className="surveyWizard">

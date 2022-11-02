@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { ROUTES } from "../../components/App/routeConfig";
+import { ROLE_CONFIG } from "../../components/AuthWizard/config";
 import authService from "../../services/authService";
 import userService from "../../services/userService";
 
@@ -65,8 +66,13 @@ export const authSlice = createSlice({
     },
     [updateClientProfile.fulfilled]: (state, action) => {
       state.user.clientProfile = action?.payload;
-      localStorage.setItem("USER", JSON.stringify(state.user));
-      window.location.href = "/" + ROUTES.CLIENT_DASHBOARD;
+      let isAdmin = state.user?.roles[0] === ROLE_CONFIG.ADMIN || false;
+      if (isAdmin) {
+        window.location.href = "/" + ROUTES.ADMIN_DASHBOARD;
+      } else {
+        localStorage.setItem("USER", JSON.stringify(state.user));
+        window.location.href = "/" + ROUTES.CLIENT_DASHBOARD;
+      }
     },
     [addCoachProfile.fulfilled]: (state, action) => {
       state.user.coachProfile = action?.payload;

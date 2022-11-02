@@ -1,0 +1,17 @@
+@import "./common_styles/index.scss";
+
+.adminDashboard {
+  padding: 100px 50px;
+  min-height: 100vh;
+  background-color: $--nw-primary-lightest;
+
+  .MuiTableCell-root {
+    min-width: 150px;
+  }
+
+  .tableCell {
+    &--xxl {
+      min-width: 300px !important;
+    }
+  }
+}

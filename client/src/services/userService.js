@@ -2,6 +2,23 @@ import httpService from "./httpService";
 import { toast } from "react-toastify";
 import { API, getApi } from "./apiConfig";
 
+const _getAllClients = () => {
+  return httpService
+    .get(getApi(API.GET_ALL_CLIENTS))
+    .then((res) => {
+      return res?.data || [];
+    })
+    .catch((err) => {
+      toast.error(
+        err?.data?.message || "Unable to fetch all clients, please try again.",
+        {
+          className: "warn-toast",
+        }
+      );
+      return [];
+    });
+};
+
 const _addClientProfile = (payload) => {
   return httpService
     .post(getApi(API.ADD_CLIENT_PROFILE), payload)
@@ -91,6 +108,7 @@ const userService = {
   _updateClientProfile,
   _addCoachProfile,
   _updateCoachProfile,
+  _getAllClients,
 };
 
 export default userService;

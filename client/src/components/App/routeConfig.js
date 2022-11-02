@@ -9,4 +9,5 @@ export const ROUTES = {
   COACH_PROFILE_SURVEY: "coach/profile",
   COACH_DASHBOARD: "coach/dashboard",
   ADD_GOAL: "client/goal/",
+  ADMIN_DASHBOARD: "admin/dashboard",
 };

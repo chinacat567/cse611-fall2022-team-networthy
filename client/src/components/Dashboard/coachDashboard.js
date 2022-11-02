@@ -9,6 +9,7 @@ import Profile from "./profile";
 
 const TABS = {
   clients: "Your Clients",
+  // meetingNotes: "Meeting Notes",
 };
 
 const getKeyFromURL = (iKey) => {

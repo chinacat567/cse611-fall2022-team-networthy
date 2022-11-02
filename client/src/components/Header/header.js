@@ -28,6 +28,8 @@ export default function IconLabelTabs() {
                 ? " Client"
                 : userRole === ROLE_CONFIG.COACH
                 ? " Coach"
+                : userRole === ROLE_CONFIG.ADMIN
+                ? " Admin"
                 : ""}
             </div>
           )}

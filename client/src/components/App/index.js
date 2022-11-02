@@ -22,10 +22,13 @@ import Loader from "../Loading";
 import CoachSurvey from "../SurveyForm/coachSurvey";
 import CoachDashboard from "../Dashboard/coachDashboard";
 import AddGoal from "../Dashboard/addGoal";
+import AdminDashboard from "../Dashboard/adminDashboard";
 
 const App = () => {
   const { user, isLoggedIn } = useSelector((state) => state?.auth);
   const { loaderVisible } = useSelector((state) => state?.loader);
+
+  const isAdmin = (!!user && user?.roles[0] === ROLE_CONFIG.ADMIN) || false;
 
   return (
     <div className="app">
@@ -73,7 +76,18 @@ const App = () => {
               path={ROUTES.CLIENT_PROFILE_SURVEY}
               element={
                 <PrivateRoute>
-                  <ClientSurvey user={user} />
+                  <ClientSurvey
+                    clientProfile={
+                      isAdmin
+                        ? JSON.parse(
+                            localStorage.getItem("ADMIN_CLIENT_PROFILE_EDIT")
+                          )
+                        : user?.clientProfile
+                    }
+                    isAdmin={isAdmin}
+                    newClientEmailId={user?.email}
+                    newClientUsername={user?.username}
+                  />
                 </PrivateRoute>
               }
             />
@@ -90,6 +104,14 @@ const App = () => {
               element={
                 <PrivateRoute>
                   <AddGoal user={user} />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path={ROUTES.ADMIN_DASHBOARD}
+              element={
+                <PrivateRoute>
+                  <AdminDashboard />
                 </PrivateRoute>
               }
             />
