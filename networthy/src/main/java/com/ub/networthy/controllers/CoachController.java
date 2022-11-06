@@ -27,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -263,6 +264,14 @@ public class CoachController {
     @GetMapping("/getAll")
 	public List<CoachProfile> getAllCoachProfiles(){
 		
-		return coachProfileRepo.findAll();
+    	List<CoachProfile> temp = coachProfileRepo.findAll(); 
+    	List<CoachProfile> result = new ArrayList<>();
+    	for (CoachProfile coachProfile : temp) {
+    		if (coachProfile.isProfileStatus()) {
+    			result.add(coachProfile);
+    		}
+    	}
+    	
+    	return result;
 	}
 }
