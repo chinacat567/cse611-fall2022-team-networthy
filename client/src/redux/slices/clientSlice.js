@@ -9,6 +9,13 @@ export const getAllClients = createAsyncThunk(
   }
 );
 
+export const deleteClientProfile = createAsyncThunk(
+  "coach/deleteClientProfile",
+  async (payload) => {
+    return await userService._deleteClientProfile(payload);
+  }
+);
+
 export const clientSlice = createSlice({
   name: "client",
   initialState: {
@@ -18,6 +25,13 @@ export const clientSlice = createSlice({
   extraReducers: {
     [getAllClients.fulfilled]: (state, action) => {
       state.allClients = action?.payload;
+    },
+    [deleteClientProfile.fulfilled]: (state, action) => {
+      if (action.payload) {
+        state.allClients = state.allClients.filter(
+          (x) => x?.clientProfile?.username !== action.payload
+        );
+      }
     },
   },
 });

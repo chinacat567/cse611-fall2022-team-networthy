@@ -8,31 +8,39 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 
 import "../../styles/adminDashboard.scss";
+
 import { useDispatch, useSelector } from "react-redux";
-import { getAllClients } from "../../redux/slices/clientSlice";
+import {
+  deleteClientProfile,
+  getAllClients,
+} from "../../redux/slices/clientSlice";
 import { Button } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { ROUTES } from "../App/routeConfig";
 
 function createClientData(allClients) {
   return allClients.map(
     ({
-      firstName,
-      lastName,
-      username,
-      dateOfBirth,
-      financialLevel,
-      emailId,
-      gender,
-      debt,
-      education,
-      general,
-      income,
-      location,
-      occupation,
-      learningMethod,
-      secondaryLearningMethod,
-      university,
+      clientProfile: {
+        firstName,
+        lastName,
+        username,
+        dateOfBirth,
+        financialLevel,
+        emailId,
+        gender,
+        debt,
+        education,
+        general,
+        income,
+        location,
+        occupation,
+        learningMethod,
+        secondaryLearningMethod,
+        university,
+      },
+      clientCoachRelation,
     }) => ({
       firstName,
       lastName,
@@ -50,6 +58,7 @@ function createClientData(allClients) {
       learningMethod,
       secondaryLearningMethod,
       university,
+      coachUserName: clientCoachRelation?.coachUserId || null,
     })
   );
 }
@@ -69,6 +78,10 @@ const AdminDashboard = () => {
       JSON.stringify(clientProfile)
     );
     window.location.href = "/" + ROUTES.CLIENT_PROFILE_SURVEY;
+  };
+
+  const onDeleteClick = (username) => {
+    dispatch(deleteClientProfile({ username }));
   };
 
   return (
@@ -101,6 +114,7 @@ const AdminDashboard = () => {
                 <TableCell align="right" className="tableCell--xxl">
                   University
                 </TableCell>
+                <TableCell align="right">Assigned Coach</TableCell>
                 <TableCell align="right" className="tableCell--xxl">
                   Action
                 </TableCell>
@@ -137,13 +151,23 @@ const AdminDashboard = () => {
                       {row.secondaryLearningMethod}
                     </TableCell>
                     <TableCell align="right">{row.university}</TableCell>
+                    <TableCell align="right">{row.coachUserName}</TableCell>
                     <TableCell align="right">
                       <Button
                         align="right"
                         variant="contained"
                         onClick={() => onEditClick(row)}
+                        sx={{ marginRight: "5px" }}
                       >
                         <EditIcon />
+                      </Button>
+                      <Button
+                        align="right"
+                        variant="contained"
+                        color="error"
+                        onClick={() => onDeleteClick(row.username)}
+                      >
+                        <DeleteIcon />
                       </Button>
                     </TableCell>
                   </TableRow>

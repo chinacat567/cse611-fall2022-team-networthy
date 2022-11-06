@@ -103,12 +103,33 @@ const _updateCoachProfile = (payload) => {
     });
 };
 
+const _deleteClientProfile = ({ username }) => {
+  return httpService
+    .delete(getApi(API.DELETE_CLIENT_PROFILE) + "/" + username)
+    .then(({ data }) => {
+      if (data?.message) {
+        toast.success("Client profile deleted successfully.");
+      }
+      return username;
+    })
+    .catch((err) => {
+      toast.error(
+        err?.data?.message || "Something went wrong, please try again.",
+        {
+          className: "warn-toast",
+        }
+      );
+      return null;
+    });
+};
+
 const userService = {
   _addClientProfile,
   _updateClientProfile,
   _addCoachProfile,
   _updateCoachProfile,
   _getAllClients,
+  _deleteClientProfile,
 };
 
 export default userService;
