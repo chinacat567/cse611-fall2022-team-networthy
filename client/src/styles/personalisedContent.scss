@@ -1,0 +1,64 @@
+@import "./common_styles/index.scss";
+
+.personalizedContent {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 24px 24px 100px 24px;
+
+  .content {
+    max-width: 400px;
+    background-color: $--background-light-gray-2;
+    padding: 24px;
+    margin: 12px;
+    position: relative;
+
+    &__length {
+      position: absolute;
+      top: 8px;
+      right: 12px;
+      font-weight: bold;
+      color: $--nw-primary;
+    }
+
+    &__icon {
+      margin-bottom: 8px;
+
+      .MuiSvgIcon-root {
+        width: 60px;
+        height: 60px;
+        color: $--nw-primary;
+      }
+    }
+
+    &__title {
+      font-size: 24px;
+      cursor: pointer;
+
+      a {
+        text-decoration: none;
+        color: $--black;
+      }
+
+      a:hover {
+        color: $--nw-primary;
+        font-weight: bolder;
+      }
+    }
+
+    &__author {
+      border-bottom: 1px solid $--gray-1;
+      margin-bottom: 16px;
+    }
+
+    &__description {
+      margin-bottom: 16px;
+    }
+
+    &__tag {
+      padding: 2px 8px;
+      border-radius: 4px;
+      background-color: $--nw-primary-light-2;
+      display: inline-block;
+    }
+  }
+}

@@ -9,7 +9,7 @@ import GoalDashboard from "./goalDashboard";
 import { getAllClientGoals } from "../../redux/slices/goalSlice";
 import { useDispatch, useSelector } from "react-redux";
 import ClientCoaches from "./clientCoaches";
-import PersonalizedContent from "./personalisedContent";
+import PersonalisedContent from "./personalisedContent";
 
 const TABS = {
   goals: "Goal Updates",
@@ -87,7 +87,7 @@ const Dashboard = ({ user }) => {
           />
         )}
         {tab === "coaches" && <ClientCoaches username={user?.username || ""} />}
-        {tab === "content" && <PersonalizedContent goalId={selectedGoalId} />}
+        {tab === "content" && <PersonalisedContent goalId={selectedGoalId} />}
       </div>
     </div>
   );
