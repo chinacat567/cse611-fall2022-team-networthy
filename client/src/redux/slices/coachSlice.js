@@ -45,6 +45,13 @@ export const deleteCoachProfile = createAsyncThunk(
   }
 );
 
+export const approveCoach = createAsyncThunk(
+  "coach/approveCoach",
+  async (payload) => {
+    return await coachService._approveCoach(payload);
+  }
+);
+
 export const coachSlice = createSlice({
   name: "coach",
   initialState: {
@@ -73,6 +80,15 @@ export const coachSlice = createSlice({
         state.allCoaches = state.allCoaches.filter(
           (x) => x?.username !== action.payload
         );
+      }
+    },
+    [approveCoach.fulfilled]: (state, action) => {
+      if (action.payload) {
+        state?.allCoaches?.forEach((coach) => {
+          if (coach.username === action.payload) {
+            coach.profileStatus = true;
+          }
+        });
       }
     },
   },

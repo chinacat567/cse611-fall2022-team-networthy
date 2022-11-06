@@ -23,6 +23,7 @@ export const API = {
   GET_ALL_CLIENTS: "/api/client/getAll",
   DELETE_CLIENT_PROFILE: "/api/admin/remove/clientProfile",
   DELETE_COACH_PROFILE: "/api/admin/remove/coachProfile",
+  APPROVE_COACH: "/api/admin/coachProfile/approve",
 };
 
 // Helper Functions

@@ -11,6 +11,7 @@ import "../../styles/adminDashboard.scss";
 
 import { useDispatch, useSelector } from "react-redux";
 import {
+  approveCoach,
   deleteCoachProfile,
   getAllCoaches,
 } from "../../redux/slices/coachSlice";
@@ -18,6 +19,7 @@ import { Button } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { ROUTES } from "../App/routeConfig";
+import { showLoader } from "../../redux/slices/loaderSlice";
 
 function createCoachData(allCoaches) {
   return allCoaches.map(
@@ -72,6 +74,16 @@ const AdminCoach = () => {
 
   const onDeleteClick = (username) => {
     dispatch(deleteCoachProfile({ username }));
+  };
+
+  const onApproveClick = async (username) => {
+    dispatch(showLoader(true));
+    await dispatch(approveCoach({ username }));
+    dispatch(showLoader(false));
+  };
+
+  const onDeclineClick = (username) => {
+    onDeleteClick(username);
   };
 
   return (
@@ -159,7 +171,7 @@ const AdminCoach = () => {
                           <Button
                             align="right"
                             variant="contained"
-                            onClick={() => {}}
+                            onClick={() => onApproveClick(row.username)}
                             sx={{ marginRight: "5px" }}
                           >
                             Approve
@@ -168,7 +180,7 @@ const AdminCoach = () => {
                             align="right"
                             variant="contained"
                             color="error"
-                            onClick={() => {}}
+                            onClick={() => onDeclineClick(row.username)}
                           >
                             Decline & Delete
                           </Button>

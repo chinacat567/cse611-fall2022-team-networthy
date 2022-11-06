@@ -120,6 +120,26 @@ const _deleteCoachProfile = ({ username }) => {
     });
 };
 
+const _approveCoach = ({ username }) => {
+  return httpService
+    .put(getApi(API.APPROVE_COACH) + "/" + username + "/" + true)
+    .then(({ data }) => {
+      if (data?.message) {
+        toast.success("Coach profile approved successfully.");
+      }
+      return username;
+    })
+    .catch((err) => {
+      toast.error(
+        err?.data?.message || "Something went wrong, please try again.",
+        {
+          className: "warn-toast",
+        }
+      );
+      return null;
+    });
+};
+
 const coachService = {
   _getAllCoaches,
   _getAllCoachClients,
@@ -127,6 +147,7 @@ const coachService = {
   _assignCoach,
   _deleteAssignedCoach,
   _deleteCoachProfile,
+  _approveCoach,
 };
 
 export default coachService;
