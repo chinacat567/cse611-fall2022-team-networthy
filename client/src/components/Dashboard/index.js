@@ -9,6 +9,7 @@ import GoalDashboard from "./goalDashboard";
 import { getAllClientGoals } from "../../redux/slices/goalSlice";
 import { useDispatch, useSelector } from "react-redux";
 import ClientCoaches from "./clientCoaches";
+import PersonalizedContent from "./personalisedContent";
 
 const TABS = {
   goals: "Goal Updates",
@@ -42,7 +43,7 @@ const Dashboard = ({ user }) => {
   useEffect(() => {
     if (selectedGoalId) {
       setSearchParams({
-        tab: "goals",
+        tab: tab,
         goalId: selectedGoalId,
       });
     }
@@ -52,7 +53,14 @@ const Dashboard = ({ user }) => {
     <div className="dashboard">
       <div className="dashboard__userCenter">
         <Profile user={user} isClient={true} />
-        <GoalSummary selectedGoalId={selectedGoalId} />
+        <GoalSummary
+          selectedGoalId={selectedGoalId}
+          setSelectedGoal={(goal) => {
+            if (goal?.goalId && selectedGoalId != goal.goalId) {
+              setSelectedGoalId(goal.goalId);
+            }
+          }}
+        />
       </div>
       <div className="dashboard__tabs">
         {Object.entries(TABS).map(([k, v]) => (
@@ -79,6 +87,7 @@ const Dashboard = ({ user }) => {
           />
         )}
         {tab === "coaches" && <ClientCoaches username={user?.username || ""} />}
+        {tab === "content" && <PersonalizedContent goalId={selectedGoalId} />}
       </div>
     </div>
   );

@@ -15,10 +15,18 @@ export const updateGoalStatus = createAsyncThunk(
   }
 );
 
+export const getContentForGoal = createAsyncThunk(
+  "goal/getContentForGoal",
+  async (payload) => {
+    return await goalService._getContentForGoal(payload);
+  }
+);
+
 export const goalSlice = createSlice({
   name: "goal",
   initialState: {
     goalList: [],
+    goalContents: [],
   },
   reducers: {},
   extraReducers: {
@@ -31,6 +39,9 @@ export const goalSlice = createSlice({
           list[index].goalStatus = action.payload.updatedStatus;
         }
       });
+    },
+    [getContentForGoal.fulfilled]: (state, action) => {
+      state.goalContents = action.payload || [];
     },
   },
 });

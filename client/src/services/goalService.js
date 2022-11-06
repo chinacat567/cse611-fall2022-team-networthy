@@ -71,11 +71,29 @@ const _updateGoal = (payload) => {
     });
 };
 
+const _getContentForGoal = ({ goalId }) => {
+  return httpService
+    .get(getApi(API.GET_CONTENT_FOR_GOAL) + "/" + goalId)
+    .then((res) => {
+      return res?.data || [];
+    })
+    .catch((err) => {
+      toast.error(
+        err?.data?.message || "Something went wrong, please try again.",
+        {
+          className: "warn-toast",
+        }
+      );
+      return [];
+    });
+};
+
 const goalService = {
   _getAllClientGoals,
   _updateGoalStatus,
   _addGoal,
   _updateGoal,
+  _getContentForGoal,
 };
 
 export default goalService;

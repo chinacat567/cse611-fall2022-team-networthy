@@ -24,6 +24,7 @@ export const API = {
   DELETE_CLIENT_PROFILE: "/api/admin/remove/clientProfile",
   DELETE_COACH_PROFILE: "/api/admin/remove/coachProfile",
   APPROVE_COACH: "/api/admin/coachProfile/approve",
+  GET_CONTENT_FOR_GOAL: "/api/content/getAll/goal",
 };
 
 // Helper Functions

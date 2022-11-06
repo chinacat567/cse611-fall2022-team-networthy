@@ -122,12 +122,12 @@ const AdminClient = () => {
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
               <StyledTableRow>
-                <StyledTableCell>Firstname</StyledTableCell>
-                <StyledTableCell align="right">Lastname</StyledTableCell>
+                <StyledTableCell>First Name</StyledTableCell>
+                <StyledTableCell align="right">Last Name</StyledTableCell>
                 <StyledTableCell align="right">Username</StyledTableCell>
                 <StyledTableCell align="right">DOB</StyledTableCell>
                 <StyledTableCell align="right">Financial Level</StyledTableCell>
-                <StyledTableCell align="right">EmailID</StyledTableCell>
+                <StyledTableCell align="right">Email ID</StyledTableCell>
                 <StyledTableCell align="right">Gender</StyledTableCell>
                 <StyledTableCell align="right">Debt</StyledTableCell>
                 <StyledTableCell align="right" className="tableCell--xxl">
