@@ -23,6 +23,7 @@ import CoachSurvey from "../SurveyForm/coachSurvey";
 import CoachDashboard from "../Dashboard/coachDashboard";
 import GoalForm from "../Dashboard/goalForm";
 import AdminClient from "../Dashboard/adminClient";
+import AdminCoach from "../Dashboard/adminCoach";
 
 const App = () => {
   const { user, isLoggedIn } = useSelector((state) => state?.auth);
@@ -112,6 +113,14 @@ const App = () => {
               element={
                 <PrivateRoute>
                   <AdminClient />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path={ROUTES.ADMIN_COACH_DASHBOARD}
+              element={
+                <PrivateRoute>
+                  <AdminCoach />
                 </PrivateRoute>
               }
             />

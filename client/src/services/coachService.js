@@ -100,12 +100,33 @@ const _assignCoach = ({ clientUserName, newCoach }) => {
     });
 };
 
+const _deleteCoachProfile = ({ username }) => {
+  return httpService
+    .delete(getApi(API.DELETE_COACH_PROFILE) + "/" + username)
+    .then(({ data }) => {
+      if (data?.message) {
+        toast.success("Coach profile deleted successfully.");
+      }
+      return username;
+    })
+    .catch((err) => {
+      toast.error(
+        err?.data?.message || "Something went wrong, please try again.",
+        {
+          className: "warn-toast",
+        }
+      );
+      return null;
+    });
+};
+
 const coachService = {
   _getAllCoaches,
   _getAllCoachClients,
   _getAssignedCoach,
   _assignCoach,
   _deleteAssignedCoach,
+  _deleteCoachProfile,
 };
 
 export default coachService;

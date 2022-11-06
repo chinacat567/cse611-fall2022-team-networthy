@@ -10,4 +10,5 @@ export const ROUTES = {
   COACH_DASHBOARD: "coach/dashboard",
   ADD_GOAL: "client/goal/",
   ADMIN_CLIENT_DASHBOARD: "admin/dashboard/client",
+  ADMIN_COACH_DASHBOARD: "admin/dashboard/coach",
 };

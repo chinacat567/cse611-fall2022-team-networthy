@@ -55,6 +55,23 @@ const INIT_VALUES = {
   credentials: "",
 };
 
+/*
+{
+      firstName,
+      lastName,
+      username,
+      dateOfBirth,
+      emailId,
+      gender,
+      education,
+      general,
+      credentials,
+      location,
+      occupation,
+      university,
+    }
+*/
+
 const ValidationSchema = Yup.object().shape({
   firstName: Yup.string().required("First name cannot be empty."),
   lastName: Yup.string().required("Last name cannot be empty."),

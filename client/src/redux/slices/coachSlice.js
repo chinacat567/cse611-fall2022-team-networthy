@@ -38,6 +38,13 @@ export const assignCoach = createAsyncThunk(
   }
 );
 
+export const deleteCoachProfile = createAsyncThunk(
+  "coach/deleteCoachProfile",
+  async (payload) => {
+    return await coachService._deleteCoachProfile(payload);
+  }
+);
+
 export const coachSlice = createSlice({
   name: "coach",
   initialState: {
@@ -59,6 +66,13 @@ export const coachSlice = createSlice({
     [assignCoach.fulfilled]: (state, action) => {
       if (action.payload) {
         state.assignedCoach = action.payload;
+      }
+    },
+    [deleteCoachProfile.fulfilled]: (state, action) => {
+      if (action.payload) {
+        state.allCoaches = state.allCoaches.filter(
+          (x) => x?.username !== action.payload
+        );
       }
     },
   },

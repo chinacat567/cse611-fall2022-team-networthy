@@ -3,14 +3,14 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import userService from "../../services/userService";
 
 export const getAllClients = createAsyncThunk(
-  "coach/getAllClients",
+  "client/getAllClients",
   async () => {
     return await userService._getAllClients();
   }
 );
 
 export const deleteClientProfile = createAsyncThunk(
-  "coach/deleteClientProfile",
+  "client/deleteClientProfile",
   async (payload) => {
     return await userService._deleteClientProfile(payload);
   }
