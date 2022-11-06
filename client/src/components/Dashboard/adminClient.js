@@ -87,7 +87,16 @@ const AdminClient = () => {
   return (
     <div className="adminDashboard">
       <div className="adminDashboard__client">
-        <h2>Client Profiles</h2>
+        <div className="actionNav">
+          <h2 className="actionNav--current">Client Profiles&nbsp;| </h2>
+          <h2
+            onClick={() =>
+              (window.location.href = "/" + ROUTES.ADMIN_COACH_DASHBOARD)
+            }
+          >
+            &nbsp; Coach Profiles
+          </h2>
+        </div>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
