@@ -55,23 +55,6 @@ const INIT_VALUES = {
   credentials: "",
 };
 
-/*
-{
-      firstName,
-      lastName,
-      username,
-      dateOfBirth,
-      emailId,
-      gender,
-      education,
-      general,
-      credentials,
-      location,
-      occupation,
-      university,
-    }
-*/
-
 const ValidationSchema = Yup.object().shape({
   firstName: Yup.string().required("First name cannot be empty."),
   lastName: Yup.string().required("Last name cannot be empty."),
@@ -97,17 +80,22 @@ const getDate = (date) => {
   return year + "-" + month + "-" + day;
 };
 
-const CoachSurvey = ({ user }) => {
+const CoachSurvey = ({
+  coachProfile,
+  isAdmin,
+  newCoachEmailId,
+  newCoachUsername,
+}) => {
   const dispatch = useDispatch();
   const countries = countryList().getData();
-  const isEdit = !!user?.coachProfile;
+  const isEdit = !!coachProfile;
 
   const getInitValues = () => {
     if (isEdit) {
-      let locationArr = user?.coachProfile?.location?.split(", ") || "";
+      let locationArr = coachProfile?.location?.split(", ") || "";
       let initProfile = {
-        ...user.coachProfile,
-        dateOfBirth: getDate(user?.coachProfile?.dateOfBirth),
+        ...coachProfile,
+        dateOfBirth: getDate(coachProfile?.dateOfBirth),
         country: locationArr[1],
         state: locationArr[0],
       };
@@ -119,9 +107,9 @@ const CoachSurvey = ({ user }) => {
   const submitForm = async (values) => {
     values = {
       ...values,
-      username: user?.username,
-      emailId: user?.email,
-      profileStatus: true,
+      username: isEdit ? coachProfile?.username : newCoachUsername,
+      emailId: isEdit ? coachProfile?.emailId : newCoachEmailId,
+      profileStatus: false,
       dateOfBirth: getDate(values?.dateOfBirth),
       location: values.state + ", " + values.country,
     };
@@ -146,7 +134,10 @@ const CoachSurvey = ({ user }) => {
 
   const inputRef = useRef();
 
-  const onCancel = () => (window.location.href = "/" + ROUTES.COACH_DASHBOARD);
+  const onCancel = () => {
+    let url = isAdmin ? ROUTES.ADMIN_COACH_DASHBOARD : ROUTES.COACH_DASHBOARD;
+    window.location.href = "/" + url;
+  };
 
   return (
     <div className="surveyWizard">

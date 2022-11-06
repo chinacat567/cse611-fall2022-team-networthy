@@ -34,6 +34,7 @@ function createCoachData(allCoaches) {
       location,
       occupation,
       university,
+      profileStatus,
     }) => ({
       firstName,
       lastName,
@@ -47,6 +48,7 @@ function createCoachData(allCoaches) {
       location,
       occupation,
       university,
+      profileStatus,
     })
   );
 }
@@ -75,7 +77,7 @@ const AdminCoach = () => {
   return (
     <div className="adminDashboard">
       <div className="adminDashboard__client">
-        <h2>Coaches</h2>
+        <h2>Coach Profiles</h2>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
@@ -133,22 +135,45 @@ const AdminCoach = () => {
                     <TableCell align="right">{row.occupation}</TableCell>
                     <TableCell align="right">{row.university}</TableCell>
                     <TableCell align="right">
-                      <Button
-                        align="right"
-                        variant="contained"
-                        onClick={() => onEditClick(row)}
-                        sx={{ marginRight: "5px" }}
-                      >
-                        <EditIcon />
-                      </Button>
-                      <Button
-                        align="right"
-                        variant="contained"
-                        color="error"
-                        onClick={() => onDeleteClick(row.username)}
-                      >
-                        <DeleteIcon />
-                      </Button>
+                      {row.profileStatus ? (
+                        <>
+                          <Button
+                            align="right"
+                            variant="contained"
+                            onClick={() => onEditClick(row)}
+                            sx={{ marginRight: "5px" }}
+                          >
+                            <EditIcon />
+                          </Button>
+                          <Button
+                            align="right"
+                            variant="contained"
+                            color="error"
+                            onClick={() => onDeleteClick(row.username)}
+                          >
+                            <DeleteIcon />
+                          </Button>
+                        </>
+                      ) : (
+                        <>
+                          <Button
+                            align="right"
+                            variant="contained"
+                            onClick={() => {}}
+                            sx={{ marginRight: "5px" }}
+                          >
+                            Approve
+                          </Button>
+                          <Button
+                            align="right"
+                            variant="contained"
+                            color="error"
+                            onClick={() => {}}
+                          >
+                            Decline & Delete
+                          </Button>
+                        </>
+                      )}
                     </TableCell>
                   </TableRow>
                 ))}

@@ -87,7 +87,7 @@ const AdminClient = () => {
   return (
     <div className="adminDashboard">
       <div className="adminDashboard__client">
-        <h2>Clients</h2>
+        <h2>Client Profiles</h2>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>

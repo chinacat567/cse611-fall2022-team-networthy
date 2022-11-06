@@ -96,7 +96,18 @@ const App = () => {
               path={ROUTES.COACH_PROFILE_SURVEY}
               element={
                 <PrivateRoute>
-                  <CoachSurvey user={user} />
+                  <CoachSurvey
+                    coachProfile={
+                      isAdmin
+                        ? JSON.parse(
+                            localStorage.getItem("ADMIN_COACH_PROFILE_EDIT")
+                          )
+                        : user?.coachProfile
+                    }
+                    isAdmin={isAdmin}
+                    newCoachEmailId={user?.email}
+                    newCoachUsername={user?.username}
+                  />
                 </PrivateRoute>
               }
             />

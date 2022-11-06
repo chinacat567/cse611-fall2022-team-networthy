@@ -198,7 +198,7 @@ const ClientSurvey = ({
   };
 
   const onCancel = () => {
-    let url = isAdmin ? ROUTES.ADMIN_DASHBOARD : ROUTES.CLIENT_DASHBOARD;
+    let url = isAdmin ? ROUTES.ADMIN_CLIENT_DASHBOARD : ROUTES.CLIENT_DASHBOARD;
     window.location.href = "/" + url;
   };
 

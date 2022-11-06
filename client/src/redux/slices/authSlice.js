@@ -68,7 +68,7 @@ export const authSlice = createSlice({
       state.user.clientProfile = action?.payload;
       let isAdmin = state.user?.roles[0] === ROLE_CONFIG.ADMIN || false;
       if (isAdmin) {
-        window.location.href = "/" + ROUTES.ADMIN_DASHBOARD;
+        window.location.href = "/" + ROUTES.ADMIN_CLIENT_DASHBOARD;
       } else {
         localStorage.setItem("USER", JSON.stringify(state.user));
         window.location.href = "/" + ROUTES.CLIENT_DASHBOARD;
@@ -81,8 +81,13 @@ export const authSlice = createSlice({
     },
     [updateCoachProfile.fulfilled]: (state, action) => {
       state.user.coachProfile = action?.payload;
-      localStorage.setItem("USER", JSON.stringify(state.user));
-      window.location.href = "/" + ROUTES.COACH_DASHBOARD;
+      let isAdmin = state.user?.roles[0] === ROLE_CONFIG.ADMIN || false;
+      if (isAdmin) {
+        window.location.href = "/" + ROUTES.ADMIN_COACH_DASHBOARD;
+      } else {
+        localStorage.setItem("USER", JSON.stringify(state.user));
+        window.location.href = "/" + ROUTES.COACH_DASHBOARD;
+      }
     },
   },
 });
