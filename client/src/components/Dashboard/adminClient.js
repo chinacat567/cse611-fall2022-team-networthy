@@ -63,7 +63,7 @@ function createClientData(allClients) {
   );
 }
 
-const AdminDashboard = () => {
+const AdminClient = () => {
   const dispatch = useDispatch();
   const allClients = useSelector((state) => state?.client?.allClients);
   const clientData = createClientData(allClients);
@@ -180,4 +180,4 @@ const AdminDashboard = () => {
   );
 };
 
-export default AdminDashboard;
+export default AdminClient;

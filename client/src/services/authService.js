@@ -47,7 +47,7 @@ const _signin = (payload) => {
           "/" +
           (coachProfile ? ROUTES.COACH_DASHBOARD : ROUTES.COACH_PROFILE_SURVEY);
       else if (role.includes(ROLE_CONFIG.ADMIN))
-        window.location.href = "/" + ROUTES.ADMIN_DASHBOARD;
+        window.location.href = "/" + ROUTES.ADMIN_CLIENT_DASHBOARD;
       else
         toast.error("Role not found. Please try again later.", {
           className: "warn-toast",

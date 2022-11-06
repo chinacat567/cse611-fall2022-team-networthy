@@ -22,7 +22,7 @@ import Loader from "../Loading";
 import CoachSurvey from "../SurveyForm/coachSurvey";
 import CoachDashboard from "../Dashboard/coachDashboard";
 import GoalForm from "../Dashboard/goalForm";
-import AdminDashboard from "../Dashboard/adminDashboard";
+import AdminClient from "../Dashboard/adminClient";
 
 const App = () => {
   const { user, isLoggedIn } = useSelector((state) => state?.auth);
@@ -108,10 +108,10 @@ const App = () => {
               }
             />
             <Route
-              path={ROUTES.ADMIN_DASHBOARD}
+              path={ROUTES.ADMIN_CLIENT_DASHBOARD}
               element={
                 <PrivateRoute>
-                  <AdminDashboard />
+                  <AdminClient />
                 </PrivateRoute>
               }
             />
