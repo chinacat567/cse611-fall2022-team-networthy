@@ -11,4 +11,6 @@ import com.ub.networthy.models.CoachComment;
 public interface CoachCommentRepository extends MongoRepository<CoachComment, String> {
 
 	List<CoachComment> findAllByCoachId(String coachId);
+	
+	List<CoachComment> findAllByClientId(String clientId);
 }

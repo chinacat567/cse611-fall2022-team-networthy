@@ -63,7 +63,7 @@ public class CoachCommentController {
 		return ResponseEntity.ok(new MessageResponse("Comment added successfully. Comment ID - " + savedComment.getId()));
 	}
 	
-	@GetMapping("/getComments/{coachId}")
+	@GetMapping("/getComments/coach/{coachId}")
 	public ResponseEntity<?> getCommentsForCoach(@PathVariable String coachId) {
 		List<CoachComment> comments;
 		if(!utils.coachExists(coachId)) {
@@ -81,7 +81,29 @@ public class CoachCommentController {
                     .body(new MessageResponse("Error: " + e.getMessage()));
 		}
 		
-		return ResponseEntity.ok(new CoachCommentsCoachIdResponse(coachId, comments)); 
+		return ResponseEntity.ok(comments); 
+		
+	}
+	
+	@GetMapping("/getComments/client/{clientId}")
+	public ResponseEntity<?> getCommentsForClient(@PathVariable String clientId) {
+		List<CoachComment> comments;
+		if(!utils.clientExists(clientId)) {
+			return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: Client ID Does not exist " + clientId));
+		}
+		
+		try {
+			comments = coachCommentrepository.findAllByClientId(clientId);
+		}catch(Exception e) {
+			e.printStackTrace();
+			return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: " + e.getMessage()));
+		}
+		
+		return ResponseEntity.ok(comments); 
 		
 	}
 }
