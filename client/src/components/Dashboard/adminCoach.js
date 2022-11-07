@@ -119,7 +119,7 @@ const AdminCoach = () => {
               (window.location.href = "/" + ROUTES.ADMIN_CLIENT_DASHBOARD)
             }
           >
-            &nbsp; Client Profiles
+            &nbsp;Client Profiles
           </h2>
         </div>
 
