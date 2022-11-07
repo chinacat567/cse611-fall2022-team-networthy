@@ -109,14 +109,14 @@ const AdminClient = () => {
     <div className="adminDashboard">
       <div className="adminDashboard__client">
         <div className="actionNav">
-          <h2 className="actionNav--current">Client Profiles&nbsp;| </h2>
           <h2
             onClick={() =>
               (window.location.href = "/" + ROUTES.ADMIN_COACH_DASHBOARD)
             }
           >
-            &nbsp; Coach Profiles
+            Coach Profiles&nbsp;|
           </h2>
+          <h2 className="actionNav--current">&nbsp;Client Profiles </h2>
         </div>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
