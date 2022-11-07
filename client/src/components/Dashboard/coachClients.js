@@ -13,7 +13,12 @@ import GoalSummary from "./goalSummary";
 
 import "../../styles/coachClients.scss";
 
-const CoachClients = ({ username, selectedClientId, setSelectedClientId }) => {
+const CoachClients = ({
+  username,
+  profileStatus,
+  selectedClientId,
+  setSelectedClientId,
+}) => {
   const [selectedClient, setSelectedClient] = useState({});
   const [selectedGoal, setSelectedGoal] = useState(null);
   const dispatch = useDispatch();
@@ -59,8 +64,17 @@ const CoachClients = ({ username, selectedClientId, setSelectedClientId }) => {
             </div>
           ))
         ) : (
-          <div style={{ marginTop: "40px" }}>
-            You don't have any clients as of now!
+          <div style={{ marginTop: "40px", textAlign: "center" }}>
+            {profileStatus === false ? (
+              <p>Profile sent for admin approval.</p>
+            ) : profileStatus === true ? (
+              <>
+                <p>Profile approved by admin.</p>
+                <p>You don't have any clients as of now!</p>
+              </>
+            ) : (
+              ""
+            )}
           </div>
         )}
       </div>

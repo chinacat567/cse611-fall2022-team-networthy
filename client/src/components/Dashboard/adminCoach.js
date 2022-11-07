@@ -14,7 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   approveCoach,
   deleteCoachProfile,
-  getAllCoaches,
+  getAllCoachesAdmin,
 } from "../../redux/slices/coachSlice";
 import { Button } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
@@ -82,7 +82,7 @@ const AdminCoach = () => {
   const coachData = createCoachData(allCoaches);
 
   useEffect(() => {
-    dispatch(getAllCoaches());
+    dispatch(getAllCoachesAdmin());
   }, []);
 
   const onEditClick = (coachProfile) => {

@@ -69,6 +69,7 @@ const CoachDashboard = ({ user }) => {
         {tab === "clients" && (
           <CoachClients
             username={user?.username || ""}
+            profileStatus={user?.coachProfile?.profileStatus}
             selectedClientId={selectedClientId}
             setSelectedClientId={(clientId) => {
               setSelectedClientId(clientId);

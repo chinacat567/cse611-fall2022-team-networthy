@@ -16,6 +16,7 @@ export const API = {
   ADD_GOAL: "/api/clientGoal/addGoal",
   UPDATE_GOAL: "/api/clientGoal/editGoal",
   GET_ALL_COACHES: "/api/coach/getAll",
+  GET_ALL_COACHES_ADMIN: "/api/admin/getAll",
   GET_ASSIGNED_COACH: "/api/clientAndCoach/get/coach",
   DELETE_COACH_ASIGNMENT: "/api/clientAndCoach/delete",
   ASSIGN_COACH: "/api/clientAndCoach/add",

@@ -20,6 +20,24 @@ const _getAllCoaches = () => {
     });
 };
 
+const _getAllCoachesAdmin = () => {
+  return httpService
+    .get(getApi(API.GET_ALL_COACHES_ADMIN))
+    .then((res) => {
+      return res?.data || [];
+    })
+    .catch((err) => {
+      toast.error(
+        err?.data?.message ||
+          "Unable to fetch all coaches for admin, please try again.",
+        {
+          className: "warn-toast",
+        }
+      );
+      return [];
+    });
+};
+
 const _getAllCoachClients = ({ coachUserName }) => {
   return httpService
     .get(getApi(API.GET_ALL_COACH_CLIENTS) + "/" + coachUserName)
@@ -142,6 +160,7 @@ const _approveCoach = ({ username }) => {
 
 const coachService = {
   _getAllCoaches,
+  _getAllCoachesAdmin,
   _getAllCoachClients,
   _getAssignedCoach,
   _assignCoach,

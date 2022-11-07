@@ -9,6 +9,13 @@ export const getAllCoaches = createAsyncThunk(
   }
 );
 
+export const getAllCoachesAdmin = createAsyncThunk(
+  "coach/getAllCoachesAdmin",
+  async () => {
+    return await coachService._getAllCoachesAdmin();
+  }
+);
+
 export const getAllCoachClients = createAsyncThunk(
   "coach/getAllCoachClients",
   async (payload) => {
@@ -62,6 +69,9 @@ export const coachSlice = createSlice({
   reducers: {},
   extraReducers: {
     [getAllCoaches.fulfilled]: (state, action) => {
+      state.allCoaches = action?.payload;
+    },
+    [getAllCoachesAdmin.fulfilled]: (state, action) => {
       state.allCoaches = action?.payload;
     },
     [getAllCoachClients.fulfilled]: (state, action) => {
