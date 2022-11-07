@@ -64,7 +64,7 @@ const ClientCoaches = ({ username }) => {
                 {assignedCoach?.location}
               </p>
               <PopupButton
-                url="https://calendly.com/rahulsharma24/15min"
+                url={assignedCoach?.calendlyLink || ""}
                 rootElement={document.getElementById("root")}
                 text="Schedule Meet"
                 className="calendlyBtn"

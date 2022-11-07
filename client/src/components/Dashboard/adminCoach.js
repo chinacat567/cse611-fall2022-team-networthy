@@ -58,6 +58,7 @@ function createCoachData(allCoaches) {
       occupation,
       university,
       profileStatus,
+      calendlyLink,
     }) => ({
       firstName,
       lastName,
@@ -72,6 +73,7 @@ function createCoachData(allCoaches) {
       occupation,
       university,
       profileStatus,
+      calendlyLink,
     })
   );
 }
@@ -146,6 +148,9 @@ const AdminCoach = () => {
                   University
                 </StyledTableCell>
                 <StyledTableCell align="right" className="tableCell--xxl">
+                  Calendly Link
+                </StyledTableCell>
+                <StyledTableCell align="right" className="tableCell--xxl">
                   Action
                 </StyledTableCell>
               </StyledTableRow>
@@ -192,6 +197,9 @@ const AdminCoach = () => {
                     </StyledTableCell>
                     <StyledTableCell align="right">
                       {row.university}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {row.calendlyLink}
                     </StyledTableCell>
                     <StyledTableCell align="right">
                       {row.profileStatus ? (

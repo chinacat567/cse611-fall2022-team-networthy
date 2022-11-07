@@ -53,6 +53,7 @@ const INIT_VALUES = {
   state: "",
   general: "",
   credentials: "",
+  calendlyLink: "",
 };
 
 const ValidationSchema = Yup.object().shape({
@@ -67,6 +68,7 @@ const ValidationSchema = Yup.object().shape({
   state: Yup.string().required("State selection cannot be empty."),
   general: Yup.string().required("This cannot be empty."),
   credentials: Yup.string().required("Credentials selection cannot be empty."),
+  calendlyLink: Yup.string().required("Calendly link cannot be empty."),
 });
 
 const getDate = (date) => {
@@ -326,6 +328,18 @@ const CoachSurvey = ({
                   <p className="errorText">
                     <ErrorMessage name="state" />
                   </p>
+                </div>
+
+                <div>
+                  <InputLabel id="calendlyLink">Calendly Link</InputLabel>
+                  <TextField
+                    name="calendlyLink"
+                    className="surveyWizard__textField"
+                    value={values.calendlyLink}
+                    onChange={handleChange}
+                    error={Boolean(errors.calendlyLink)}
+                    helperText={errors.calendlyLink}
+                  />
                 </div>
               </div>
 
