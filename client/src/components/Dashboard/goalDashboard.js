@@ -34,7 +34,7 @@ const GoalDashboard = ({ username, selectedGoalId, setSelectedGoalId }) => {
         setSelectedGoalId(clientGoals[0]?.goalId);
       }
     }
-  }, [clientGoals]);
+  }, [clientGoals, selectedGoalId]);
 
   const onGoalClick = (goal) => {
     setSelectedGoalId(goal?.goalId);
@@ -118,6 +118,8 @@ const GoalDashboard = ({ username, selectedGoalId, setSelectedGoalId }) => {
                 </Select>
               </FormControl>
             </div>
+          </div>
+          <div>
             {selectedGoal.goalTags?.map((tag) => (
               <Chip label={tag} key={tag} style={{ marginRight: "5px" }} />
             ))}
