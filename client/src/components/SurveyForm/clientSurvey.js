@@ -79,6 +79,7 @@ const INIT_VALUES = {
   state: "",
   financialLevel: 0,
   learningMethod: "",
+  secondaryLearningMethod: "",
   income: "",
   debt: "",
   general: "",
@@ -142,6 +143,9 @@ const ValidationSchema = Yup.object().shape({
   state: Yup.string().required("State selection cannot be empty."),
   financialLevel: Yup.number().optional(),
   learningMethod: Yup.string().required("Preferred learning cannot be empty."),
+  secondaryLearningMethod: Yup.string().required(
+    "Secondary learning method cannot be empty."
+  ),
   income: Yup.string().required("Annual income cannot be empty."),
   debt: Yup.string().required("Debt cannot be empty."),
   general: Yup.string().optional(),
@@ -439,6 +443,32 @@ const ClientSurvey = ({
                   </Select>
                   <p className="errorText">
                     <ErrorMessage name="learningMethod" />
+                  </p>
+                </div>
+
+                <div>
+                  <InputLabel id="secondaryLearningMethod">
+                    Secondary learning method
+                  </InputLabel>
+                  <Select
+                    labelId="secondaryLearningMethod"
+                    name="secondaryLearningMethod"
+                    value={values.secondaryLearningMethod}
+                    className="surveyWizard__select"
+                    sx={{ width: 220 }}
+                    error={Boolean(errors.secondaryLearningMethod)}
+                    onChange={({ target }) => {
+                      setFieldValue("secondaryLearningMethod", target.value);
+                    }}
+                  >
+                    {LEARNING_METHODS.map((x) => (
+                      <MenuItem value={x} key={x}>
+                        {x}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                  <p className="errorText">
+                    <ErrorMessage name="secondaryLearningMethod" />
                   </p>
                 </div>
 

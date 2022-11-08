@@ -137,6 +137,14 @@ const Profile = ({ user, isClient }) => {
                 </p>
               </div>
               <div className="drawer__specificDetails">
+                <p className="drawer__specificDetails--label">
+                  Secondary Learning Method
+                </p>
+                <p className="drawer__specificDetails--value">
+                  {userProfile.secondaryLearningMethod}
+                </p>
+              </div>
+              <div className="drawer__specificDetails">
                 <p className="drawer__specificDetails--label">Income</p>
                 <p className="drawer__specificDetails--value">
                   {userProfile.income}
