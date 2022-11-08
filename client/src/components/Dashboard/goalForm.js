@@ -1,5 +1,5 @@
-import React from "react";
-import { Formik, Form } from "formik";
+import React, { useState } from "react";
+import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import Button from "@mui/material/Button";
 import TextareaAutosize from "@mui/material/TextareaAutosize";
@@ -25,9 +25,18 @@ const INIT_VALUES = {
   goalTags: [],
 };
 
-const ValidationSchema = Yup.object().shape({});
+const ValidationSchema = Yup.object().shape({
+  goalTittle: Yup.string().required("Goal title cannot be empty."),
+  goalDescription: Yup.string().required("Goal description cannot be empty."),
+  goalSpecific: Yup.string().required("Specific goal cannot be empty."),
+  goalMeasurable: Yup.string().required("Measurable goal cannot be empty."),
+  goalAttainable: Yup.string().required("Attainable goal cannot be empty."),
+  goalRelevant: Yup.string().required("Relevant goal cannot be empty."),
+  goalTimeBased: Yup.string().required("Time based goal cannot be empty."),
+});
 
 const GoalForm = ({ user }) => {
+  const [showTagErr, setShowTagErr] = useState(false);
   const editGoal = JSON.parse(localStorage.getItem("EDIT_GOAL"));
   const tagList = [
     "Budgeting",
@@ -56,6 +65,10 @@ const GoalForm = ({ user }) => {
   };
 
   const submitForm = async (values) => {
+    if (values?.goalTags?.length == 0) {
+      setShowTagErr(true);
+      return;
+    }
     values = {
       ...values,
       clientUsername: user?.username || "",
@@ -112,6 +125,7 @@ const GoalForm = ({ user }) => {
           values,
           errors,
           setFieldValue,
+          setFieldTouched,
           handleChange,
           touched,
           resetForm,
@@ -121,7 +135,6 @@ const GoalForm = ({ user }) => {
               <div className="addGoal__text">
                 <div className="addGoal__generic">
                   <InputLabel id="title">Goal Title</InputLabel>
-
                   <TextareaAutosize
                     aria-label="empt"
                     name="goalTittle"
@@ -129,10 +142,15 @@ const GoalForm = ({ user }) => {
                     value={values.goalTittle}
                     style={{ width: "400px" }}
                     onChange={({ target }) => {
+                      setFieldTouched("goalTittle", true);
                       setFieldValue("goalTittle", target.value);
                     }}
                     minRows={4}
                   />
+
+                  {errors.goalTittle && touched.goalTittle && (
+                    <div style={{ color: "red" }}>{errors.goalTittle}</div>
+                  )}
                 </div>
                 <div className="addGoal__generic">
                   <InputLabel id="goalDescription">Goal Description</InputLabel>
@@ -143,10 +161,14 @@ const GoalForm = ({ user }) => {
                     value={values.goalDescription}
                     style={{ width: "430px" }}
                     onChange={({ target }) => {
+                      setFieldTouched("goalDescription", true);
                       setFieldValue("goalDescription", target.value);
                     }}
                     minRows={4}
                   />
+                  {errors.goalDescription && touched.goalDescription && (
+                    <div style={{ color: "red" }}>{errors.goalDescription}</div>
+                  )}
                 </div>
               </div>
               <div className="addGoal__text">
@@ -156,16 +178,20 @@ const GoalForm = ({ user }) => {
 
                 <TextareaAutosize
                   aria-label="empty textarea"
-                  name="smart-s"
+                  name="goalSpecific"
                   placeholder="Specific"
                   className="addGoal__smart"
                   value={values.goalSpecific}
                   style={{ width: "60vw" }}
                   onChange={({ target }) => {
+                    setFieldTouched("goalSpecific", true);
                     setFieldValue("goalSpecific", target.value);
                   }}
                   minRows={4}
                 />
+                {errors.goalSpecific && touched.goalSpecific && (
+                  <div style={{ color: "red" }}>{errors.goalSpecific}</div>
+                )}
               </div>
               <div className="addGoal__text">
                 <InputLabel className="addGoal__smart" id="smart-m">
@@ -174,16 +200,20 @@ const GoalForm = ({ user }) => {
 
                 <TextareaAutosize
                   aria-label="empty textarea"
-                  name="smart-m"
+                  name="goalMeasurable"
                   placeholder="Measurable"
                   className="addGoal__smart"
                   value={values.goalMeasurable}
                   style={{ width: "60vw" }}
                   onChange={({ target }) => {
+                    setFieldTouched("goalMeasurable", true);
                     setFieldValue("goalMeasurable", target.value);
                   }}
                   minRows={4}
                 />
+                {errors.goalMeasurable && touched.goalMeasurable && (
+                  <div style={{ color: "red" }}>{errors.goalMeasurable}</div>
+                )}
               </div>
               <div className="addGoal__text">
                 <InputLabel className="addGoal__smart" id="smart-a">
@@ -192,16 +222,20 @@ const GoalForm = ({ user }) => {
 
                 <TextareaAutosize
                   aria-label="empty textarea"
-                  name="general"
+                  name="goalAttainable"
                   placeholder="Attainable"
                   className="addGoal__smart"
                   value={values.goalAttainable}
                   style={{ width: "60vw" }}
                   onChange={({ target }) => {
+                    setFieldTouched("goalAttainable", true);
                     setFieldValue("goalAttainable", target.value);
                   }}
                   minRows={4}
                 />
+                {errors.goalAttainable && touched.goalAttainable && (
+                  <div style={{ color: "red" }}>{errors.goalAttainable}</div>
+                )}
               </div>
               <div className="addGoal__text">
                 <InputLabel className="addGoal__smart" id="smart-r">
@@ -210,16 +244,20 @@ const GoalForm = ({ user }) => {
 
                 <TextareaAutosize
                   aria-label="empty textarea"
-                  name="general"
+                  name="goalRelevant"
                   placeholder="Relevant"
                   className="addGoal__smart"
                   value={values.goalRelevant}
                   style={{ width: "60vw" }}
                   onChange={({ target }) => {
+                    setFieldTouched("goalRelevant", true);
                     setFieldValue("goalRelevant", target.value);
                   }}
                   minRows={4}
                 />
+                {errors.goalRelevant && touched.goalRelevant && (
+                  <div style={{ color: "red" }}>{errors.goalRelevant}</div>
+                )}
               </div>
               <div className="addGoal__text">
                 <InputLabel className="addGoal__smart" id="smart-t">
@@ -228,16 +266,20 @@ const GoalForm = ({ user }) => {
 
                 <TextareaAutosize
                   aria-label="empty textarea"
-                  name="general"
+                  name="goalTimeBased"
                   placeholder="Time-Bound"
                   className="addGoal__smart"
                   value={values.goalTimeBased}
                   style={{ width: "60vw" }}
                   onChange={({ target }) => {
+                    setFieldTouched("goalTimeBased", true);
                     setFieldValue("goalTimeBased", target.value);
                   }}
                   minRows={4}
                 />
+                {errors.goalTimeBased && touched.goalTimeBased && (
+                  <div style={{ color: "red" }}>{errors.goalTimeBased}</div>
+                )}
               </div>
               <div className="addGoal__text">
                 <Autocomplete
@@ -245,9 +287,14 @@ const GoalForm = ({ user }) => {
                   id="checkboxes-tags"
                   value={values.goalTags}
                   onChange={(event, newValue) => {
-                    setFieldValue("goalTags", [
-                      ...new Set([...values.goalTags, ...newValue]),
-                    ]);
+                    if (values?.goalTags?.length == 3) {
+                      setShowTagErr(true);
+                    } else {
+                      setShowTagErr(false);
+                      setFieldValue("goalTags", [
+                        ...new Set([...values.goalTags, ...newValue]),
+                      ]);
+                    }
                   }}
                   options={tagList}
                   disableCloseOnSelect
@@ -259,6 +306,7 @@ const GoalForm = ({ user }) => {
                         label={option}
                         {...getTagProps({ index })}
                         onDelete={(e) => {
+                          setShowTagErr(false);
                           setFieldValue(
                             "goalTags",
                             values.goalTags.filter((x) => x !== option)
@@ -276,6 +324,11 @@ const GoalForm = ({ user }) => {
                     />
                   )}
                 />
+                {showTagErr && (
+                  <div style={{ color: "blue" }}>
+                    &nbsp;&nbsp;Please select upto 3 tags per goal.
+                  </div>
+                )}
               </div>
               <div className="addGoal__text">
                 <Button
