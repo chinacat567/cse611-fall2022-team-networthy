@@ -74,16 +74,6 @@ public class CoachProfile {
     @NotBlank
     private String calendlyLink;
 
-    /* resume, lor1, lor2 can be NULL */
-    @Field("COA_RESUME")
-    private Binary resume;
-
-    @Field("COA_LOR1")
-    private Binary lor1;
-
-    @Field("COA_LOR2")
-    private Binary lor2;
-
     public CoachProfile() {
 
     }
@@ -108,20 +98,6 @@ public class CoachProfile {
         this.profileStatus = profileStatus;
         this.general = general;
         this.calendlyLink = calendlyLink;
-    }
-
-    /* constructor for POSTING "multipart/form-data" */
-    public CoachProfile(@NotBlank String userId, @NotBlank String emailId, @NotBlank String firstName,
-                        @NotBlank String lastName, @NotBlank Date dateOfBirth, @NotBlank String gender, @NotBlank String occupation,
-                        @NotBlank String education, @NotBlank String university, @NotBlank String location, String credentials,
-                        @NotBlank boolean profileStatus, @NotBlank String general, @NotBlank String calendlyLink, @NotNull Binary resume, @NotNull Binary lor1, @NotNull Binary lor2) {
-
-        this(userId, emailId, firstName, lastName, dateOfBirth, gender, occupation,
-                education, university, location, credentials, profileStatus, general, calendlyLink);
-
-        this.resume = resume;
-        this.lor1 = lor1;
-        this.lor2 = lor2;
     }
 
     public String getUsername() {
@@ -239,28 +215,5 @@ public class CoachProfile {
 		this.calendlyLink = calendlyLink;
 	}
 
-    public void setResume(Binary resume) {
-        this.resume = resume;
-    }
-
-    public Binary getResume() {
-        return this.resume;
-    }
-
-    public void setLor1(Binary lor1) {
-        this.lor1 = lor1;
-    }
-
-    public Binary getLor1() {
-        return this.lor1;
-    }
-
-    public void setLor2(Binary lor2) {
-        this.lor2 = lor2;
-    }
-
-    public Binary getLor2() {
-        return this.lor2;
-    }
 }
 

@@ -11,4 +11,5 @@ import com.ub.networthy.models.Role;
 @EnableMongoRepositories
 public interface RoleRepository extends MongoRepository<Role, String> {
   Optional<Role> findByName(ERole name);
+  Optional<Role> findFirstByName(ERole roleCoach);
 }

@@ -3,9 +3,10 @@ package com.ub.networthy.payload.request;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.bson.types.Binary;
 
-import java.sql.Date;
+
 
 import javax.validation.constraints.NotBlank;
+import java.util.Date;
 
 public class CoachDataRequest {
 
