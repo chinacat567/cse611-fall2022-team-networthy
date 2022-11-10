@@ -2,6 +2,17 @@
 
 .coachClients {
   display: flex;
+
+  &__clientListMobile {
+    display: none;
+    margin-top: 24px;
+    padding: 10px 16px;
+
+    p {
+      color: $--slightly-dark-gray;
+    }
+  }
+
   &__clientList {
     width: 28%;
     min-height: 100vh;
@@ -34,6 +45,13 @@
 
   &__clientContent {
     width: 72%;
+
+    .goalWrapper {
+      display: flex;
+      flex-direction: column;
+      padding-left: 40px;
+      margin-top: 32px;
+    }
   }
   .clientGoalContent {
     width: 100%;
@@ -46,6 +64,9 @@
       p {
         color: $--slightly-dark-gray;
         word-wrap: break-word;
+      }
+      .headerWrapper {
+        display: flex;
       }
     }
 
@@ -63,6 +84,37 @@
           display: inline-flex;
           padding: 2px 5px;
           border-radius: 4px;
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 800px) {
+  .coachClients {
+    flex-direction: column;
+
+    &__clientList {
+      display: none;
+    }
+    &__clientListMobile {
+      display: block;
+    }
+    &__clientContent {
+      width: 100%;
+
+      .goalWrapper {
+        padding: 0px;
+        padding: 0px 12px;
+      }
+    }
+    .clientGoalContent {
+      padding: 40px 20px;
+
+      &__header {
+        .headerWrapper {
+          flex-direction: column;
+          margin-bottom: 24px;
         }
       }
     }

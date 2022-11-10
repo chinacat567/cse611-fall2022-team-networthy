@@ -2,8 +2,16 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import PermIdentityIcon from "@mui/icons-material/PermIdentity";
-import { Chip, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import {
+  Chip,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+} from "@mui/material";
 import Button from "@mui/material/Button";
+import { styled } from "@mui/material/styles";
 
 import {
   getAllClientGoals,
@@ -11,9 +19,21 @@ import {
 } from "../../redux/slices/goalSlice";
 
 import GoalSummary from "./goalSummary";
+import Comments from "../Comments";
 
 import "../../styles/coachClients.scss";
-import Comments from "../Comments";
+
+const CssTextField = styled(TextField)({
+  "& .MuiInput-input": {
+    border: "0px",
+  },
+  "& .MuiInput-root:before": {
+    display: "none",
+  },
+  "& .MuiInput-underline:after": {
+    display: "none",
+  },
+});
 
 const CoachClients = ({
   username,
@@ -52,7 +72,7 @@ const CoachClients = ({
   return (
     <div className="coachClients">
       <div className="coachClients__clientList">
-        {coachClients.length ? (
+        {!!coachClients.length ? (
           coachClients.map((client) => (
             <div
               key={client.username}
@@ -82,6 +102,27 @@ const CoachClients = ({
         )}
       </div>
 
+      <div className="coachClients__clientListMobile">
+        {!!coachClients.length && (
+          <>
+            <p>Client</p>
+            <CssTextField
+              select
+              className="selectClientOnMobile"
+              value={selectedClient}
+              onChange={(e) => onClientClick(e.target.value)}
+              variant="standard"
+            >
+              {coachClients.map((client) => (
+                <MenuItem key={client.username} value={client}>
+                  {client.firstName + " " + client.lastName}
+                </MenuItem>
+              ))}
+            </CssTextField>
+          </>
+        )}
+      </div>
+
       {!!selectedClient?.username && (
         <div className="coachClients__clientContent">
           {showComments && (
@@ -95,14 +136,7 @@ const CoachClients = ({
               goal={selectedGoal ?? {}}
             />
           )}
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              paddingLeft: "40px",
-              marginTop: "32px",
-            }}
-          >
+          <div className="goalWrapper">
             <GoalSummary
               selectedGoalId={null}
               setSelectedGoal={(goal) => {
@@ -114,7 +148,7 @@ const CoachClients = ({
           {!!selectedGoal?.goalId && (
             <div className="clientGoalContent">
               <div className="clientGoalContent__header">
-                <div style={{ display: "flex" }}>
+                <div className="headerWrapper">
                   <h2 style={{ flexGrow: "1" }}>{selectedGoal.goalTittle}</h2>
                   <FormControl sx={{ width: "200px" }}>
                     <InputLabel id="goal-status">Status</InputLabel>

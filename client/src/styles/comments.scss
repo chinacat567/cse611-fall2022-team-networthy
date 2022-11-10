@@ -47,3 +47,18 @@
     }
   }
 }
+
+@media only screen and (max-width: 500px) {
+  .comments {
+    width: 96vw;
+    padding: 12px;
+  }
+
+  .commentsList {
+    &__comment {
+      font-size: 14px;
+      padding: 12px 4px;
+      margin-bottom: 18px;
+    }
+  }
+}
