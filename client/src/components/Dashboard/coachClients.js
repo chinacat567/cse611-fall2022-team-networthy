@@ -86,6 +86,7 @@ const CoachClients = ({
         <div className="coachClients__clientContent">
           {showComments && (
             <Comments
+              coachId={username}
               clientId={selectedClient.username}
               isOpen={showComments}
               onClose={() => {

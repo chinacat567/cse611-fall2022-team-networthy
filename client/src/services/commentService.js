@@ -23,7 +23,7 @@ const _addClientComments = (payload) => {
   return httpService
     .post(getApi(API.ADD_COMMENTS_FOR_CLIENT), payload)
     .then((res) => {
-      toast.success("Client comments added");
+      toast.success("Client comment added");
       return payload;
     })
     .catch((err) => {

@@ -22,13 +22,8 @@ export const commentSlice = createSlice({
   },
   reducers: {},
   extraReducers: {
-    [getClientComments.fullfilled]: (state, action) => {
-      state.clientComments = action?.payload || [];
-    },
-    [addClientComments.fullfilled]: (state, action) => {
-      if (action.payload) {
-        state.clientComments.push(action.payload);
-      }
+    [getClientComments.fulfilled]: (state, action) => {
+      state.clientComments = action?.payload?.reverse() || [];
     },
   },
 });
