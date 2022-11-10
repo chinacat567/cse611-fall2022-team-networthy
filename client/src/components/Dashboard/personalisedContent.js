@@ -35,10 +35,6 @@ const PersonalisedContent = ({ goalId }) => {
     }
   }, [goalId]);
 
-  useEffect(() => {
-    console.log(goalContents);
-  }, [goalContents]);
-
   return (
     <div className="personalizedContent">
       {!!goalContents?.length

@@ -16,7 +16,6 @@ const sendVerificationEmail = (username, email) => {
       message: getEmailVerificationApi(username),
     },
   };
-  console.log(payload);
   return httpService
     .get(getAbstractEmailApi(email), payload)
     .then((res) => {

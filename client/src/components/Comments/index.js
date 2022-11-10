@@ -58,10 +58,6 @@ const Comments = ({ clientId, isOpen, onClose, goal, coachId }) => {
     );
   }, []);
 
-  useEffect(() => {
-    console.log(clientComments);
-  }, [clientComments]);
-
   const onSubmit = async (values, cb) => {
     values = {
       ...values,
