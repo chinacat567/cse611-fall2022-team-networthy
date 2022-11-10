@@ -9,7 +9,7 @@ const _signup = (payload) => {
   return httpService
     .post(getApi(API.SIGNUP), payload)
     .then((res) => {
-      toast("You are registered, Welcome to Gooroo Wealth");
+      toast("You are registered, Welcome to Goally!");
       toast("Check email for verification");
     })
     .catch((err) => {

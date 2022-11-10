@@ -105,6 +105,8 @@ const AdminClient = () => {
     dispatch(deleteClientProfile({ username }));
   };
 
+  return <></>;
+
   return (
     <div className="adminDashboard">
       <div className="adminDashboard__client">

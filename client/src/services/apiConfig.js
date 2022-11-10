@@ -26,6 +26,8 @@ export const API = {
   DELETE_COACH_PROFILE: "/api/admin/remove/coachProfile",
   APPROVE_COACH: "/api/admin/coachProfile/approve",
   GET_CONTENT_FOR_GOAL: "/api/content/getAll/goal",
+  GET_COMMENTS_FOR_CLIENT: "/api/comment/getComments/client",
+  ADD_COMMENTS_FOR_CLIENT: "/api/comment/add",
 };
 
 // Helper Functions

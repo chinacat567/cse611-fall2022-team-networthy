@@ -29,7 +29,7 @@ export default function App() {
         </div>
       </div>
 
-      <div className="footer__center">&copy; 2022 By Gooroo Wealth</div>
+      <div className="footer__center">&copy; 2022 By Goally</div>
 
       <div className="footer__right">
         <FacebookRoundedIcon className="socialIcon" />

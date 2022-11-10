@@ -21,7 +21,7 @@ export default function IconLabelTabs() {
       <div className="header__left">
         {/* <img src={logo} className="logo" /> */}
         <div className="header__title">
-          Gooroo Wealth
+          Goally
           {isLoggedIn && (
             <div className="roleTitle">
               {userRole === ROLE_CONFIG.CLIENT
