@@ -1,9 +1,19 @@
 @import "./common_styles/index.scss";
 
 .personalizedContent {
-  display: flex;
-  flex-wrap: wrap;
   padding: 24px 24px 100px 24px;
+
+  &__info {
+    padding: 8px 16px;
+    margin: 12px;
+    display: inline-block;
+    background-color: $--nw-primary-light-2;
+  }
+
+  &__wrapper {
+    display: flex;
+    flex-wrap: wrap;
+  }
 
   .content {
     max-width: 400px;

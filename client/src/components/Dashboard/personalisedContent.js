@@ -37,24 +37,34 @@ const PersonalisedContent = ({ goalId }) => {
 
   return (
     <div className="personalizedContent">
-      {!!goalContents?.length
-        ? goalContents.map((x) => (
-            <div key={x?.contentNumber} className="content">
-              <div className="content__length">{x?.length}</div>
-              <div className="content__icon">{getIcon(x?.learningMethod)}</div>
-              <div className="content__title">
-                <a href={x?.pcLink || "#"} target="_blank">
-                  {x?.title}
-                </a>
+      {!!goalContents?.length && goalContents.length < 5 && (
+        <div className="personalizedContent__info">
+          Assign more tags to view more content.
+        </div>
+      )}
+
+      <div className="personalizedContent__wrapper">
+        {!!goalContents?.length
+          ? goalContents.map((x) => (
+              <div key={x?.contentNumber} className="content">
+                <div className="content__length">{x?.length}</div>
+                <div className="content__icon">
+                  {getIcon(x?.learningMethod)}
+                </div>
+                <div className="content__title">
+                  <a href={x?.pcLink || "#"} target="_blank">
+                    {x?.title}
+                  </a>
+                </div>
+                <div className="content__author">
+                  {x?.pcAuthor || "Rahul Sharma"}
+                </div>
+                <div className="content__description">{x?.description}</div>
+                <div className="content__tag">{x?.tag}</div>
               </div>
-              <div className="content__author">
-                {x?.pcAuthor || "Rahul Sharma"}
-              </div>
-              <div className="content__description">{x?.description}</div>
-              <div className="content__tag">{x?.tag}</div>
-            </div>
-          ))
-        : "No content yet, coming soon!"}
+            ))
+          : "No content yet, coming soon!"}
+      </div>
     </div>
   );
 };
