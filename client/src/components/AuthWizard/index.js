@@ -105,7 +105,7 @@ const AuthWizard = ({ state }) => {
         })
       );
     }
-    if (isLogin) {
+    if (isLogin || isAdminLogin) {
       // Login
       await dispatch(signin(data));
     }
@@ -171,7 +171,9 @@ const AuthWizard = ({ state }) => {
                   type="submit"
                   className="authWizard_button"
                   variant="contained"
-                  disabled={Boolean(errors.password) || Boolean(errors.email)}
+                  disabled={
+                    Boolean(errors.password) || Boolean(errors.username)
+                  }
                 >
                   Login
                 </Button>
