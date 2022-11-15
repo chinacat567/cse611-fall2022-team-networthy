@@ -6,17 +6,20 @@ import {
   Typography,
 } from "@mui/material";
 import { Form, Formik } from "formik";
+import parse from "html-react-parser";
 import * as Yup from "yup";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import CommentIcon from "@mui/icons-material/Comment";
+import ReactQuill from "react-quill";
+
 import {
   addClientComments,
   getClientComments,
 } from "../../redux/slices/commentSlice";
-import CommentIcon from "@mui/icons-material/Comment";
-
 import { showLoader } from "../../redux/slices/loaderSlice";
 
+import "react-quill/dist/quill.snow.css";
 import "../../styles/comments.scss";
 
 const INIT_VALUES = {
@@ -46,6 +49,7 @@ const getDate = (date) => {
 };
 
 const Comments = ({ clientId, isOpen, onClose, goal, coachId }) => {
+  const [commentValue, setCommentValue] = useState("");
   const dispatch = useDispatch();
   const clientComments = useSelector((state) => state?.comment?.clientComments);
   const [formVisible, setFormVisible] = useState(false);
@@ -58,9 +62,9 @@ const Comments = ({ clientId, isOpen, onClose, goal, coachId }) => {
     );
   }, []);
 
-  const onSubmit = async (values, cb) => {
-    values = {
-      ...values,
+  const onSubmit = async () => {
+    let values = {
+      comment: commentValue,
       clientId,
       coachId,
       goalId: goal?.goalId || "",
@@ -72,9 +76,8 @@ const Comments = ({ clientId, isOpen, onClose, goal, coachId }) => {
     await dispatch(addClientComments(values));
     await dispatch(getClientComments({ clientId }));
     setFormVisible(false);
+    setCommentValue("");
     await dispatch(showLoader(false));
-
-    cb();
   };
 
   return (
@@ -98,7 +101,7 @@ const Comments = ({ clientId, isOpen, onClose, goal, coachId }) => {
         </div>
         {formVisible ? (
           <div className="commentsForm">
-            <Formik
+            {/* <Formik
               initialValues={INIT_VALUES}
               validationSchema={ValidationSchema}
               onSubmit={(values, { resetForm }) => {
@@ -148,7 +151,22 @@ const Comments = ({ clientId, isOpen, onClose, goal, coachId }) => {
                   </Button>
                 </Form>
               )}
-            </Formik>
+            </Formik> */}
+            <ReactQuill
+              theme="snow"
+              value={commentValue}
+              onChange={setCommentValue}
+            />
+            <Button
+              type="submit"
+              className="commentForm__button"
+              variant="contained"
+              disabled={false}
+              sx={{ width: 200, marginTop: "12px" }}
+              onClick={onSubmit}
+            >
+              Submit
+            </Button>
           </div>
         ) : (
           <div className="commentsList">
@@ -160,7 +178,7 @@ const Comments = ({ clientId, isOpen, onClose, goal, coachId }) => {
                     <div key={x.id} className="commentsList__comment">
                       <CommentIcon sx={{ marginTop: "2px" }} />
                       <div className="commentsList__commentWrapper">
-                        {x.comment}
+                        {parse(x?.comment)}
                         <div className="commentBy">
                           <p>
                             <i>By {x?.coachId || ""}</i>

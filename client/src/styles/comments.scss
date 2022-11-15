@@ -48,6 +48,10 @@
   }
 }
 
+.ql-editor {
+  min-height: 220px;
+}
+
 @media only screen and (max-width: 500px) {
   .comments {
     width: 96vw;
