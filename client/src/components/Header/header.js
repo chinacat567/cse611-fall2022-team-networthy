@@ -3,9 +3,8 @@ import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import Logout from "@mui/icons-material/Logout";
-
-import logo from "../../assets/Images/NWlogo.webp";
 import authService from "../../services/authService";
+import GoallyLogo from "../../assets/Images/NWLogo-nobg.png";
 
 import "../../styles/header.scss";
 
@@ -19,9 +18,8 @@ export default function IconLabelTabs() {
   return (
     <div className={`header ${user ? "header--solid" : "header--gradient"}`}>
       <div className="header__left">
-        {/* <img src={logo} className="logo" /> */}
         <div className="header__title">
-          Goally
+          <img src={GoallyLogo} />
           {isLoggedIn && (
             <div className="roleTitle">
               {userRole === ROLE_CONFIG.CLIENT
