@@ -3,13 +3,21 @@
 @import "@fontsource/roboto/500.css";
 @import "@fontsource/roboto/700.css";
 
-$--nw-primary: #415d32;
-$--nw-primary-light-2: #ebf9eb;
-$--nw-primary-lightest: #fcfffc;
-$--nw-primary-lightest-2: #e4efe4;
-$--nw-primary-lightest-4: #f3fff8;
-$--nw-primary-light: #d4e7d3;
-$--nw-secondary: #8ba872;
+// $--nw-primary: #415d32;
+$--nw-primary: #ac36de;
+
+// $--nw-primary-light: #d4e7d3;
+$--nw-primary-light: #bbb3e1;
+
+// $--nw-primary-light-2: #ebf9eb;
+$--nw-primary-light-2: #f1efff;
+
+$--nw-primary-lightest: #fffcff;
+$--nw-primary-lightest-4: #fef6ff;
+
+// $--nw-secondary: #8ba872;
+$--nw-secondary: #d6d0f3;
+
 $--white: #fff;
 $--gray: #d8d8d8;
 $--gray-1: #d6d6d6;
@@ -31,12 +39,12 @@ $--error-red: #d32f2f;
 html {
   // font-family: "Roboto", sans-serif;
   font-family: "Catamaran", sans-serif;
-  background: rgb(65, 93, 50);
+  background: rgb(137, 86, 205);
   background: linear-gradient(
     90deg,
-    rgba(65, 93, 50, 0.8113839285714286) 0%,
-    rgba(139, 168, 114, 0.8590029761904762) 39%,
-    rgba(126, 228, 24, 0.444437149859944) 100%
+    rgba(137, 86, 205, 1) 0%,
+    rgba(187, 179, 225, 1) 76%,
+    rgba(187, 179, 225, 1) 100%
   );
 }
 
