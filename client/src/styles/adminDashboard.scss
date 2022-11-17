@@ -34,3 +34,12 @@
     }
   }
 }
+
+@media only screen and (max-width: 800px) {
+  .adminDashboard {
+    padding: 80px 10px;
+  }
+  .actionNav {
+    font-size: 12px;
+  }
+}
