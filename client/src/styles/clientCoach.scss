@@ -118,3 +118,31 @@
     }
   }
 }
+
+@media only screen and (max-width: 800px) {
+  .clientCoach {
+    flex-direction: column;
+
+    &__assignedCoach {
+      width: 100%;
+      padding: 40px 10px;
+
+      div {
+        padding: 40px 10px;
+      }
+    }
+
+    &__allCoaches {
+      width: 100%;
+      padding: 40px 10px;
+    }
+  }
+
+  .coachActionPanel {
+    flex-direction: column;
+
+    .btn {
+      margin-top: 12px;
+    }
+  }
+}
