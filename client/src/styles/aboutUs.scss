@@ -16,6 +16,11 @@
 
   &__two {
     padding: 60px 100px;
+
+    &--inverse {
+      background-color: $--background-light-gray;
+    }
+
     .wrapper {
       display: flex;
       justify-content: center;

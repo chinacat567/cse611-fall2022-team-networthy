@@ -5,6 +5,10 @@ import SignalCellularAltIcon from "@mui/icons-material/SignalCellularAlt";
 import ChangeCircleIcon from "@mui/icons-material/ChangeCircle";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
+import PersonIcon from "@mui/icons-material/Person";
+import PeopleIcon from "@mui/icons-material/People";
+import GroupsIcon from "@mui/icons-material/Groups";
+import BusinessIcon from "@mui/icons-material/Business";
 
 import "../../styles/aboutUs.scss";
 
@@ -12,6 +16,28 @@ const About = () => {
   return (
     <div className="aboutUs">
       <div className="aboutUs__one">About us</div>
+
+      <div className="aboutUs__two aboutUs__two--inverse">
+        <div className="heading">Services We Provide</div>
+        <div className="wrapper">
+          <div className="iconWrapper">
+            <div className="iconWrapper__text">Individual Coaching</div>
+            <PersonIcon className="iconWrapper__icon" />
+          </div>
+          <div className="iconWrapper">
+            <div className="iconWrapper__text">Partner Coaching</div>
+            <PeopleIcon className="iconWrapper__icon" />
+          </div>
+          <div className="iconWrapper">
+            <div className="iconWrapper__text">Intimate Group Coaching</div>
+            <GroupsIcon className="iconWrapper__icon" />
+          </div>
+          <div className="iconWrapper">
+            <div className="iconWrapper__text">Coaching for Organizations</div>
+            <BusinessIcon className="iconWrapper__icon" />
+          </div>
+        </div>
+      </div>
 
       <div className="aboutUs__plain">
         <div className="heading">What is a financial coach?</div>
@@ -150,6 +176,49 @@ const About = () => {
 
       <div className="aboutUs__plain">
         <div className="heading">Skills that coaches possess</div>
+        <p>
+          <ul>
+            <li>Coaching & Consultation</li>
+            <li>Personal Finance Content</li>
+            <li>Financial & Consumer Protection</li>
+            <li>Counseling & Psychology</li>
+            <li>Behavioral Finance</li>
+            <li>Financial Education Methodologies</li>
+            <li>Defined Standards & Ethical Responsibilities</li>
+            <li>Clear Processes & Practice Standards</li>
+          </ul>
+        </p>
+      </div>
+
+      <div className="aboutUs__plain aboutUs__plain--inverse">
+        <div className="heading">Payments</div>
+        <p>
+          <b>
+            <i>How do I pay for a coach if I’m broke?</i>
+          </b>
+        </p>
+        <p>
+          The question you should be asking yourself is, Can I afford not to get
+          help from a coach? Coaches help you put money back into your pocket,
+          not take it out. In addition, working with a financial coach helps you
+          develop and maintain healthy money habits. There is no better way to
+          permanently establish and improve your financial habits than working
+          with a financial coach.
+        </p>
+        <br />
+        <p>
+          <b>
+            <i>How much does a coach cost?</i>
+          </b>
+        </p>
+        <p>
+          Every coach charges a different fee based on their level of
+          experience. However, every coach offers a free consultation session.
+          In this consultation session, coaches will ask questions to get to
+          know you better. In addition, they aim to understand your goals and
+          past and current pain points to assess whether you are a good fit for
+          them.
+        </p>
       </div>
     </div>
   );
