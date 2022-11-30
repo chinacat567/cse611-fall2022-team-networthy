@@ -9,6 +9,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import PeopleIcon from "@mui/icons-material/People";
 import GroupsIcon from "@mui/icons-material/Groups";
 import BusinessIcon from "@mui/icons-material/Business";
+import SelfImg from "../../assets/Images/Seth.png";
 
 import "../../styles/aboutUs.scss";
 
@@ -218,6 +219,37 @@ const About = () => {
           know you better. In addition, they aim to understand your goals and
           past and current pain points to assess whether you are a good fit for
           them.
+        </p>
+      </div>
+
+      <div className="aboutUs__plain">
+        <div className="heading">What is my Why?</div>
+        <div className="profilePhoto">
+          <img src={SelfImg} />
+        </div>
+        <p>
+          My name is Seth Blum, Founder of Goally, and I am passionate about
+          personal finance and empowering others. I am a Certified Personal
+          Finance Wellness Consultant and have my MBA in Finance and Consulting.
+        </p>
+        <br />
+        <p>
+          However, before that, I was in your position with poor financial
+          habits, lacking basic financial knowledge, and no access to a trusted
+          financial coach that could have supported and guided me in my
+          decision-making. I was looking at $100k+ in student loan debt when I
+          made my undergraduate college decision based on emotions with no
+          understanding of the financial mess I was putting myself in. When I
+          learned more about personal finance, I understood the weight of my
+          mistake and made it my mission to help others avoid major financial
+          mistakes. I am on a mission to educate, support, and empower other
+          ambitious people like myself. Together we can embark on our journeys
+          toward financial freedom.
+        </p>
+        <br />
+        <p>+1 (716)-481-4091 </p>
+        <p>
+          <a href="https://www.linkedin.com/in/siblum/">LinkedIn</a>
         </p>
       </div>
     </div>

@@ -36,6 +36,17 @@
       background-color: $--background-light-gray;
     }
 
+    .profilePhoto {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 32px;
+
+      img {
+        width: 300px;
+      }
+    }
+
     i {
       color: $--nw-primary-dark;
       font-weight: bold;
