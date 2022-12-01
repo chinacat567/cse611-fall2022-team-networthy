@@ -28,9 +28,9 @@ public class SwaggerConfig {
 	}
 
 	private ApiInfo apiInfo() {
-		return new ApiInfo("NetWorthy Spring Boot REST APIs", "Spring Boot REST API Documentation for NetWorthy", "1",
-				"Terms of service", new Contact("Amol Gharpure", "networthy.com", "amolnetworthy@gmail.com"), "License of API registered with NetWorthy",
-				"NetWorthy API Licence", Collections.emptyList());
+		return new ApiInfo("Goally Spring Boot REST APIs", "Spring Boot REST API Documentation for Goally", "1",
+				"Terms of service", new Contact("Amol Gharpure", "GoallyFinance.com", "amolGoally@gmail.com"), "License of API registered with Goally",
+				"Goally API Licence", Collections.emptyList());
 	}
 
 	@Bean

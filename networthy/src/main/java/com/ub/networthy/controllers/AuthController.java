@@ -208,7 +208,7 @@ public class AuthController {
 		user.setRoles(roles);
 		userRepository.save(user);
 		logger.info("Success: User registered successfully! " +signUpRequest.getUsername());
-		emailSenderService.sendEmail(signUpRequest.getEmail(), "Welcome To NetWorthy", "Hello "+signUpRequest.getUsername()+"\nPlease click on the link to verify your email - http://ec2-3-19-61-63.us-east-2.compute.amazonaws.com:8080/api/auth/verify/"+signUpRequest.getUsername()+ " \n\n Thank You,\n Team NetWorthy");
+		emailSenderService.sendEmail(signUpRequest.getEmail(), "Welcome To Goally", "Hello "+signUpRequest.getUsername()+"\nPlease click on the link to verify your email - http://ec2-18-220-177-210.us-east-2.compute.amazonaws.com:8080/api/auth/verify/"+signUpRequest.getUsername()+ " \n\n Thank You,\n Team Goally");
 		
 		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
 	}

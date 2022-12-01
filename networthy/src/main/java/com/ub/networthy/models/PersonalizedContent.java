@@ -26,7 +26,7 @@ public class PersonalizedContent
 	
 	@Field("PCO_AUTHOR")
 	@NotBlank
-	private String pcAuthor;
+	private String author;
 
 	@Field("PCO_LINK")
 	@NotBlank
@@ -39,18 +39,29 @@ public class PersonalizedContent
 	@Field("PCO_LENGTH")
 	@NotBlank
 	private String length;
+	
+	
 
 	public PersonalizedContent(@NotBlank int contentNumber, @NotBlank String tag, @NotBlank String title,
-			@NotBlank String description, @NotBlank String pcAuthor, @NotBlank String pcLink,
+			@NotBlank String description, @NotBlank String author, @NotBlank String pcLink,
 			@NotBlank String learningMethod, @NotBlank String length) {
+		super();
 		this.contentNumber = contentNumber;
 		this.tag = tag;
 		this.title = title;
 		this.description = description;
-		this.pcAuthor = pcAuthor;
+		this.author = author;
 		this.pcLink = pcLink;
 		this.learningMethod = learningMethod;
 		this.length = length;
+	}
+
+	public String getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(String author) {
+		this.author = author;
 	}
 
 	public int getContentNumber() {
@@ -85,13 +96,7 @@ public class PersonalizedContent
 		this.description = description;
 	}
 
-	public String getPcAuthor() {
-		return pcAuthor;
-	}
-
-	public void setPcAuthor(String pcAuthor) {
-		this.pcAuthor = pcAuthor;
-	}
+	
 
 	public String getPcLink() {
 		return pcLink;

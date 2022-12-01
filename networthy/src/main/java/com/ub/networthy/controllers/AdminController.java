@@ -241,15 +241,15 @@ public class AdminController
 			coachProfileRepository.save(existingCoachProfile.get());
 			
 			emailSenderService.sendEmail(existingCoachProfile.get().getEmailId(), 
-					"Networthy : Coach request approved.", 
-					"Hello "+ existingCoachProfile.get().getFirstName() + ", \n\nCongratulations, your Coach profile has been approved." + " \n\n Thank You,\n Team NetWorthy" );
+					"Goally : Coach request approved.", 
+					"Hello "+ existingCoachProfile.get().getFirstName() + ", \n\nCongratulations, your Coach profile has been approved." + " \n\n Thank You,\n Team Goally" );
 			
 			return ResponseEntity.ok(new MessageResponse("Coach Profile Approved Successfully"));
 		}
 		
 		emailSenderService.sendEmail(existingCoachProfile.get().getEmailId(), 
-				"Networthy : Coach request declined.", 
-				"Hello "+ existingCoachProfile.get().getFirstName() + ", \n\nYour Coach profile has been declined, please contact NetWorthy for further details." + " \n\n Thank You,\n Team NetWorthy" );
+				"Goally : Coach request declined.", 
+				"Hello "+ existingCoachProfile.get().getFirstName() + ", \n\nYour Coach profile has been declined, please contact NetWorthy for further details." + " \n\n Thank You,\n Team Goally" );
 		
 		
 		return ResponseEntity.ok(new MessageResponse("Coach Profile Declined"));
