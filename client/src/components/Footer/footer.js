@@ -25,7 +25,7 @@ export default function App() {
         </div>
         <div className="companyInfo">
           <MarkunreadIcon className="companyInfo__icon" />
-          <span>siblum@buffalo.edu</span>
+          <span>seth.goally@gmail.com</span>
         </div>
       </div>
 
