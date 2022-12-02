@@ -4,10 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ub.networthy.models.*;
 import com.ub.networthy.payload.request.CoachDataRequest;
 import com.ub.networthy.payload.request.SignupRequest;
-import com.ub.networthy.repository.ClientProfileRepository;
-import com.ub.networthy.repository.CoachProfileRepository;
-import com.ub.networthy.repository.RoleRepository;
-import com.ub.networthy.repository.UserRepository;
+import com.ub.networthy.repository.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.Collections;
-import java.util.Date;
-import java.util.Optional;
+import java.util.*;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -51,6 +46,9 @@ public class NetWorthyApplicationTests {
 
 	@Autowired
 	private UserRepository userRepository;
+
+	@Autowired
+	private ClientAndCoachRelationRepository clientAndCoachRelationRepository;
 
 	@Autowired
 	ObjectMapper objectMapper;
@@ -219,5 +217,351 @@ public class NetWorthyApplicationTests {
 						.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
 				.andExpect(content().string(""));
+
 	}
+
+	@Test
+	public void testAddCoachForClientHappyCase() throws Exception {
+		/* Add roles */
+		addRolesToRepo();
+		/* Add Client and Coach to Repo */
+		ClientProfile clientProfile = new ClientProfile("testUsernameCCRClient1", "testEmailClientCoach@domain.com",
+				"firstName", "lastName", new Date(12101994), "testGender", "testOccupation",
+				"testEducation", "testUniversity", "testLocation",
+				10 , "testLearningMethod", "testSecondaryLearningMethod",
+				"testIncome", "testDebt", "testGeneral", true);
+
+		CoachProfile coachProfile = new CoachProfile("testUsernameCCRCoach1", "testEmailCoachRead@domain.com",
+				"firstName", "lastName", new Date(12101994),
+				"testGender", "testOccupation", "testEducation",
+				"testUniversity", "testLocation", "testCredentials",
+				true, "testGeneral", "testCalendlyLink");
+
+		clientProfileRepository.save(clientProfile);
+		coachProfileRepository.save(coachProfile);
+
+		mockMvc.perform(post("http://localhost:" + port + "/api/clientAndCoach/add/{coachId}/{clientId}", "testUsernameCCRCoach1","testUsernameCCRClient1")
+						.contentType(MediaType.APPLICATION_JSON))
+						.andExpect(status().isOk())
+						.andExpect(content().string(containsString("ClientCoach Relation Added Successfully!")));
+
+		ClientAndCoachRelation expectedClientCoachRelation = new ClientAndCoachRelation("testUsernameCCRClient1", "testUsernameCCRCoach1");
+
+		/* Read CCR from DB */
+		Optional<ClientAndCoachRelation> clientCoachRelation = clientAndCoachRelationRepository.findFirstByClientUsername("testUsernameCCRClient1");
+		assertEquals(objectMapper.writeValueAsString(expectedClientCoachRelation), objectMapper.writeValueAsString(clientCoachRelation));
+	}
+
+	@Test
+	public void testAddCoachForClientWhenCoachDoesNotExists() throws Exception {
+		/* Add roles */
+		addRolesToRepo();
+		/* Add Client and Coach to Repo */
+		ClientProfile clientProfile = new ClientProfile("testUsernameCCRClient2", "testEmailClientCoach@domain.com",
+				"firstName", "lastName", new Date(12101994), "testGender", "testOccupation",
+				"testEducation", "testUniversity", "testLocation",
+				10 , "testLearningMethod", "testSecondaryLearningMethod",
+				"testIncome", "testDebt", "testGeneral", true);
+		
+		clientProfileRepository.save(clientProfile);
+
+		mockMvc.perform(post("http://localhost:" + port + "/api/clientAndCoach/add/{coachId}/{clientId}", "testUsernameCCRCoach2","testUsernameCCRClient2")
+						.contentType(MediaType.APPLICATION_JSON))
+						.andExpect(status().isBadRequest())
+						.andExpect(content().string(containsString("Error: Coach/Client do not exist")));
+	}
+
+	@Test
+	public void testAddCoachForClientWhenClientDoesNotExists() throws Exception {
+		CoachProfile coachProfile = new CoachProfile("testUsernameCCRCoach3", "testEmailCoachRead@domain.com",
+				"firstName", "lastName", new Date(12101994),
+				"testGender", "testOccupation", "testEducation",
+				"testUniversity", "testLocation", "testCredentials",
+				true, "testGeneral", "testCalendlyLink");
+
+		coachProfileRepository.save(coachProfile);
+
+		mockMvc.perform(post("http://localhost:" + port + "/api/clientAndCoach/add/{coachId}/{clientId}", "testUsernameCCRCoach3","testUsernameCCRClient3")
+						.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isBadRequest())
+				.andExpect(content().string(containsString("Error: Coach/Client do not exist")));
+	}
+
+	@Test
+	public void testAddCoachForClientWhenBothClientAndCoachDoNotExist() throws Exception {
+		mockMvc.perform(post("http://localhost:" + port + "/api/clientAndCoach/add/{coachId}/{clientId}", "testUsernameCCRCoach4","testUsernameCCRClient4")
+						.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isBadRequest())
+				.andExpect(content().string(containsString("Error: Coach/Client do not exist")));
+	}
+
+	@Test
+	public void testGetCoachForClientHappyCase() throws Exception {
+		/* Add roles */
+		addRolesToRepo();
+		/* Add Client  to Repo */
+		ClientProfile clientProfile = new ClientProfile("testUsernameCCRClient5", "testEmailClientCoach@domain.com",
+				"firstName", "lastName", new Date(12101994), "testGender", "testOccupation",
+				"testEducation", "testUniversity", "testLocation",
+				10 , "testLearningMethod", "testSecondaryLearningMethod",
+				"testIncome", "testDebt", "testGeneral", true);
+
+		clientProfileRepository.save(clientProfile);
+		/* Add coach to Repo */
+		CoachProfile coachProfile = new CoachProfile("testUsernameCCRCoach5", "testEmailCoachRead@domain.com",
+				"firstName", "lastName", new Date(12101994),
+				"testGender", "testOccupation", "testEducation",
+				"testUniversity", "testLocation", "testCredentials",
+				true, "testGeneral", "testCalendlyLink");
+
+		coachProfileRepository.save(coachProfile);
+		/* Add relation to Repo */
+		ClientAndCoachRelation clientAndCoachRelation = new ClientAndCoachRelation("testUsernameCCRClient5", "testUsernameCCRCoach5");
+
+		clientAndCoachRelationRepository.save(clientAndCoachRelation);
+		/* Hit API */
+		mockMvc.perform(get("http://localhost:" + port + "/api/clientAndCoach/get/coach/{clientId}", "testUsernameCCRClient5")
+						.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk())
+				.andExpect(content().string(objectMapper.writeValueAsString(coachProfile)));
+	}
+	@Test
+	public void testGetCoachForClientWhenClientDoesNotExistsButRelationAndCoachExists() throws Exception {
+		/* Add roles */
+		addRolesToRepo();
+		/* Add coach to Repo */
+		CoachProfile coachProfile = new CoachProfile("testUsernameCCRCoach6", "testEmailCoachRead@domain.com",
+				"firstName", "lastName", new Date(12101994),
+				"testGender", "testOccupation", "testEducation",
+				"testUniversity", "testLocation", "testCredentials",
+				true, "testGeneral", "testCalendlyLink");
+
+		coachProfileRepository.save(coachProfile);
+		/* Add relation to Repo */
+		ClientAndCoachRelation clientAndCoachRelation = new ClientAndCoachRelation("testUsernameCCRClient6", "testUsernameCCRCoach6");
+
+		clientAndCoachRelationRepository.save(clientAndCoachRelation);
+		/* Hit API */
+		mockMvc.perform(get("http://localhost:" + port + "/api/clientAndCoach/get/coach/{clientId}", "testUsernameCCRClient6")
+						.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isBadRequest())
+				.andExpect(content().string(containsString("Error: Client does not exist")));
+	}
+
+	@Test
+	public void testGetCoachForClientWhenClientAndCoachDoNotExistButRelationExists() throws Exception {
+		/* Add roles */
+		addRolesToRepo();
+		/* Add relation to Repo */
+		ClientAndCoachRelation clientAndCoachRelation = new ClientAndCoachRelation("testUsernameCCRClient7", "testUsernameCCRCoach7");
+		clientAndCoachRelationRepository.save(clientAndCoachRelation);
+		/* Hit API */
+		mockMvc.perform(get("http://localhost:" + port + "/api/clientAndCoach/get/coach/{clientId}", "testUsernameCCRClient7")
+						.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isBadRequest())
+				.andExpect(content().string(containsString("Error: Client does not exist")));
+	}
+
+	@Test
+	public void testGetCoachForClientWhenClientHasNoCoach() throws Exception {
+		/* Add roles */
+		addRolesToRepo();
+		/* Add Client  to Repo */
+		ClientProfile clientProfile = new ClientProfile("testUsernameCCRClient8", "testEmailClientCoach@domain.com",
+				"firstName", "lastName", new Date(12101994), "testGender", "testOccupation",
+				"testEducation", "testUniversity", "testLocation",
+				10 , "testLearningMethod", "testSecondaryLearningMethod",
+				"testIncome", "testDebt", "testGeneral", true);
+
+		clientProfileRepository.save(clientProfile);
+		/* Hit API */
+		mockMvc.perform(get("http://localhost:" + port + "/api/clientAndCoach/get/coach/{clientId}", "testUsernameCCRClient8")
+						.contentType(MediaType.APPLICATION_JSON))
+						.andExpect(status().isNoContent());
+	}
+
+	@Test
+	public void testGetCoachForClientWhenRelationExistsButCoachDoesNot() throws Exception {
+		/* Add roles */
+		addRolesToRepo();
+		/* Add Client  to Repo */
+		ClientProfile clientProfile = new ClientProfile("testUsernameCCRClient9", "testEmailClientCoach@domain.com",
+				"firstName", "lastName", new Date(12101994), "testGender", "testOccupation",
+				"testEducation", "testUniversity", "testLocation",
+				10 , "testLearningMethod", "testSecondaryLearningMethod",
+				"testIncome", "testDebt", "testGeneral", true);
+
+		clientProfileRepository.save(clientProfile);
+		/* Add relation to Repo */
+		ClientAndCoachRelation clientAndCoachRelation = new ClientAndCoachRelation("testUsernameCCRClient9", "testUsernameCCRCoach9");
+		clientAndCoachRelationRepository.save(clientAndCoachRelation);
+		/* Hit API */
+		mockMvc.perform(get("http://localhost:" + port + "/api/clientAndCoach/get/coach/{clientId}", "testUsernameCCRClient9")
+						.contentType(MediaType.APPLICATION_JSON))
+						.andExpect(status().isNoContent());
+	}
+
+    @Test
+    public void testGetAllClientsForCoachHappyCase() throws Exception {
+        /* Add roles */
+        addRolesToRepo();
+		/* Add coach to Repo */
+		CoachProfile coachProfile = new CoachProfile("testUsernameCCRCoach10", "testEmailCoachRead@domain.com",
+				"firstName", "lastName", new Date(12101994),
+				"testGender", "testOccupation", "testEducation",
+				"testUniversity", "testLocation", "testCredentials",
+				true, "testGeneral", "testCalendlyLink");
+
+		coachProfileRepository.save(coachProfile);
+
+        List<ClientProfile> expectedClientProfiles = new ArrayList<>();
+		/* Add 3 test Clients to Repo */
+        for (int i = 0; i < 3 ; i ++) {
+            String testUsername = "testUsername" + i + "CCRClient10";
+
+            ClientProfile clientProfile = new ClientProfile(testUsername, "testEmailClientCoach@domain.com",
+                    "firstName", "lastName", new Date(12101994), "testGender", "testOccupation",
+                    "testEducation", "testUniversity", "testLocation",
+                    10 , "testLearningMethod", "testSecondaryLearningMethod",
+                    "testIncome", "testDebt", "testGeneral", true);
+
+			expectedClientProfiles.add(clientProfile);
+
+			ClientAndCoachRelation clientAndCoachRelation = new ClientAndCoachRelation(testUsername, "testUsernameCCRCoach10");
+
+            clientProfileRepository.save(clientProfile);
+			clientAndCoachRelationRepository.save(clientAndCoachRelation);
+        }
+		/* Hit API */
+		mockMvc.perform(get("http://localhost:" + port + "/api/clientAndCoach/get/clients/{coachId}", "testUsernameCCRCoach10")
+						.contentType(MediaType.APPLICATION_JSON))
+						.andExpect(status().isOk())
+						.andExpect(content().string(objectMapper.writeValueAsString(expectedClientProfiles)));
+    }
+
+	@Test
+	public void testGetAllClientsForCoachWhenCoachDoesNotExistsButClientsAndCCRDo() throws Exception {
+		/* Add roles */
+		addRolesToRepo();
+		/* Add 3 test Clients to Repo */
+		for (int i = 0; i < 3 ; i ++) {
+			String testUsername = "testUsername" + i + "CCRClient11";
+
+			ClientProfile clientProfile = new ClientProfile(testUsername, "testEmailClientCoach@domain.com",
+					"firstName", "lastName", new Date(12101994), "testGender", "testOccupation",
+					"testEducation", "testUniversity", "testLocation",
+					10 , "testLearningMethod", "testSecondaryLearningMethod",
+					"testIncome", "testDebt", "testGeneral", true);
+
+
+			ClientAndCoachRelation clientAndCoachRelation = new ClientAndCoachRelation(testUsername, "testUsernameCCRCoach11");
+
+			clientProfileRepository.save(clientProfile);
+			clientAndCoachRelationRepository.save(clientAndCoachRelation);
+		}
+		/* Hit API */
+		mockMvc.perform(get("http://localhost:" + port + "/api/clientAndCoach/get/clients/{coachId}", "testUsernameCCRCoach11")
+						.contentType(MediaType.APPLICATION_JSON))
+						.andExpect(status().isBadRequest());
+	}
+
+	@Test
+	public void testGetAllClientsForCoachWhenCoachDoesNotExistsAndOnlyClientsExists() throws Exception {
+		/* Add roles */
+		addRolesToRepo();
+		/* Add 3 test Clients to Repo */
+		for (int i = 0; i < 3 ; i ++) {
+			String testUsername = "testUsername" + i + "CCRClient12";
+
+			ClientProfile clientProfile = new ClientProfile(testUsername, "testEmailClientCoach@domain.com",
+					"firstName", "lastName", new Date(12101994), "testGender", "testOccupation",
+					"testEducation", "testUniversity", "testLocation",
+					10 , "testLearningMethod", "testSecondaryLearningMethod",
+					"testIncome", "testDebt", "testGeneral", true);
+
+			clientProfileRepository.save(clientProfile);
+		}
+		/* Hit API */
+		mockMvc.perform(get("http://localhost:" + port + "/api/clientAndCoach/get/clients/{coachId}", "testUsernameCCRCoach12")
+						.contentType(MediaType.APPLICATION_JSON))
+						.andExpect(status().isBadRequest());
+	}
+
+	@Test
+	public void testGetAllClientsForCoachWhenNothingExists() throws Exception {
+		/* Add roles */
+		addRolesToRepo();
+		/* Hit API */
+		mockMvc.perform(get("http://localhost:" + port + "/api/clientAndCoach/get/clients/{coachId}", "testUsernameCCRCoach13")
+						.contentType(MediaType.APPLICATION_JSON))
+						.andExpect(status().isBadRequest());
+	}
+
+	@Test
+	public void testGetAllClientsForCoachWhenCCRExistsButClientDoesNot() throws Exception {
+		/* Add roles */
+		addRolesToRepo();
+		/* Add coach to Repo */
+		CoachProfile coachProfile = new CoachProfile("testUsernameCCRCoach14", "testEmailCoachRead@domain.com",
+				"firstName", "lastName", new Date(12101994),
+				"testGender", "testOccupation", "testEducation",
+				"testUniversity", "testLocation", "testCredentials",
+				true, "testGeneral", "testCalendlyLink");
+
+		coachProfileRepository.save(coachProfile);
+
+		List<ClientProfile> expectedClientProfiles = new ArrayList<>();
+		boolean skipped = false;
+		/* Add 3 test Clients to Repo  */
+		for (int i = 0; i < 3 ; i ++) {
+			String testUsername = "testUsername" + i + "CCRClient14";
+
+			ClientProfile clientProfile = new ClientProfile(testUsername, "testEmailClientCoach@domain.com",
+					"firstName", "lastName", new Date(12101994), "testGender", "testOccupation",
+					"testEducation", "testUniversity", "testLocation",
+					10 , "testLearningMethod", "testSecondaryLearningMethod",
+					"testIncome", "testDebt", "testGeneral", true);
+
+			ClientAndCoachRelation clientAndCoachRelation = new ClientAndCoachRelation(testUsername, "testUsernameCCRCoach14");
+			clientAndCoachRelationRepository.save(clientAndCoachRelation);
+			/* Skip creating 1 ClientProfile */
+			if (!skipped) {
+				skipped = true;
+				continue;
+			}
+			clientProfileRepository.save(clientProfile);
+			expectedClientProfiles.add(clientProfile);
+		}
+
+		/* Hit API */
+		mockMvc.perform(get("http://localhost:" + port + "/api/clientAndCoach/get/clients/{coachId}", "testUsernameCCRCoach14")
+						.contentType(MediaType.APPLICATION_JSON))
+						.andExpect(status().isOk())
+						.andExpect(content().string(objectMapper.writeValueAsString(expectedClientProfiles)));
+
+	}
+
+
+
+	@Test
+	public void testSignUpWhenUserAlreadyExists() {
+
+
+	}
+
+	@Test
+	public void testSignUpHappyCase() {
+
+	}
+
+	@Test
+	public void testSignInHappyCase() {
+
+	}
+
+	@Test
+	public void testSignInWhenUserDoesNotExists() {
+
+	}
+
 }

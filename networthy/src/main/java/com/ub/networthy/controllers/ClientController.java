@@ -80,8 +80,9 @@ public class ClientController {
 	 * 
 	 * }
 	 */
-	
-	
+
+
+//	@PreAuthorize("hasAuthority('ROLE_CLIENT')")
 	@PostMapping("/add/clientProfile")
 	public ResponseEntity<?> addClientProfile(@RequestBody ClientProfile clientProfileRequest) {
 		
