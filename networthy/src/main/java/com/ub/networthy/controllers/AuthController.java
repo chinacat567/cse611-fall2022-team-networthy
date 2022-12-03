@@ -147,7 +147,7 @@ public class AuthController {
 		
 		User user = userRepository.findByUsername(userId).get();
 		
-		emailSenderService.sendEmail(user.getEmail(), "Welcome To NetWorthy !", "Hello "+user.getUsername()+",\n\nPlease click on the link to verify your email - http://localhost:8080/api/auth/verify/"+user.getUsername()+ " \n\n Thank You,\n Team NetWorthy");
+		emailSenderService.sendEmail(user.getEmail(), "Welcome To NetWorthy !", "Hello "+user.getUsername()+",\n\nPlease click on the link to verify your email - http://ec2-18-220-177-210.us-east-2.compute.amazonaws.com:8080/api/auth/verify/"+user.getUsername()+ " \n\n Thank You,\n Team NetWorthy");
 		logger.info("Success: Resend User Verification URL for -  " +user.getUsername());
 		return ResponseEntity.ok(new MessageResponse("User verification successfully!"));
 		
