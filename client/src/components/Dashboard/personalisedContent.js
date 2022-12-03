@@ -56,9 +56,7 @@ const PersonalisedContent = ({ goalId }) => {
                     {x?.title}
                   </a>
                 </div>
-                <div className="content__author">
-                  {x?.pcAuthor || "Rahul Sharma"}
-                </div>
+                <div className="content__author">{x?.author || ""}</div>
                 <div className="content__description">{x?.description}</div>
                 <div className="content__tag">{x?.tag}</div>
               </div>

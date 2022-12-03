@@ -219,9 +219,7 @@ const About = () => {
       </div>
 
       <div className="aboutUs__plain">
-        <div className="heading">
-          What is my Why?: We are on a mission to help YOU
-        </div>
+        <div className="heading">We are on a mission to help YOU</div>
         <div className="profilePhoto">
           <img src={SelfImg} />
         </div>
