@@ -49,3 +49,15 @@
     }
   }
 }
+
+@media only screen and (max-width: 420px) {
+  .footer {
+    flex-direction: column;
+    padding: 40px 20px 60px 20px;
+    align-items: flex-start;
+
+    &__right {
+      margin-top: 12px;
+    }
+  }
+}
