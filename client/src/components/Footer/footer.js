@@ -51,7 +51,10 @@ export default function App() {
         <Link href="https://twitter.com/GoallyFinance" target="_blank">
           <TwitterIcon className="socialIcon" />
         </Link>
-        <Link href="#">
+        <Link
+          href="https://www.linkedin.com/company/goallyfinance/"
+          target="_blank"
+        >
           <LinkedInIcon className="socialIcon" />
         </Link>
       </div>
